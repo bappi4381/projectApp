@@ -1,39 +1,37 @@
 {{-- resources/views/graphics/partials/clients.blade.php --}}
-<section class="relative py-16 bg-slate-950 overflow-hidden border-y border-white/[0.04]">
+<section class="relative py-16 bg-white overflow-hidden border-y border-slate-100">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10 reveal">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-            <i class="ri-verified-badge-line text-emerald-400"></i> Renowned Clients
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
+            <i class="ri-verified-badge-line text-[#1ebba3]"></i> Trusted Globally
         </span>
-        <h2 class="text-2xl font-bold text-white">Trusted by <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">industry leaders</span> across 30+ countries</h2>
+        <h2 class="text-3xl font-black text-[#1a1a1a]">Leading Brands <span class="text-[#0984e3]">Choose Us</span> Across 30+ Countries</h2>
     </div>
 
     {{-- Marquee Row 1 --}}
-    <div class="relative overflow-hidden mb-5">
-        <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
+    <div class="relative overflow-hidden mb-6">
+        <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
-        <div class="flex gap-5 animate-marquee w-max">
+        <div class="flex gap-6 animate-marquee w-max">
             @php
             $clients1 = [
                 ['Amazon',      'ri-amazon-fill',      '#FF9900'],
-                ['Apple',       'ri-apple-fill',       '#A2A2A2'],
+                ['Apple',       'ri-apple-fill',       '#000000'],
                 ['Adobe',       'ri-adobe-line',       '#FF0000'],
                 ['Shopify',     'ri-shopping-bag-3-line','#96BF48'],
                 ['eBay',        'ri-price-tag-3-line',  '#E43137'],
                 ['Zalando',     'ri-shirt-line',        '#F4792F'],
                 ['ASOS',        'ri-handbag-line',      '#2D2D2D'],
-                ['Getty Images','ri-image-2-line',      '#C9A84C'],
-                ['Shutterstock','ri-camera-3-line',     '#FF4081'],
                 ['Wayfair',     'ri-sofa-line',         '#7B4397'],
                 ['Target',      'ri-focus-3-line',      '#CC0000'],
                 ['Walmart',     'ri-store-2-line',      '#0071CE'],
             ];
             @endphp
             @foreach(array_merge($clients1, $clients1) as [$name, $icon, $color])
-            <div class="flex items-center gap-3 px-7 py-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.07] hover:border-white/10 transition-all duration-300 cursor-default flex-shrink-0 group">
-                <i class="{{ $icon }} text-xl opacity-60 group-hover:opacity-100 transition-opacity" style="color:{{ $color }}"></i>
-                <span class="text-sm font-semibold text-slate-400 group-hover:text-slate-200 transition-colors whitespace-nowrap">{{ $name }}</span>
+            <div class="flex items-center gap-4 px-8 py-5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-[#1ebba3]/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 cursor-default flex-shrink-0 group">
+                <i class="{{ $icon }} text-2xl opacity-70 group-hover:opacity-100 transition-opacity" style="color:{{ $color }}"></i>
+                <span class="text-sm font-bold text-slate-600 group-hover:text-[#1a1a1a] transition-colors whitespace-nowrap">{{ $name }}</span>
             </div>
             @endforeach
         </div>
@@ -41,30 +39,28 @@
 
     {{-- Marquee Row 2 (reverse) --}}
     <div class="relative overflow-hidden">
-        <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
-        <div class="flex gap-5 w-max" style="animation: marquee 35s linear infinite reverse;">
+        <div class="flex gap-6 w-max" style="animation: marquee 40s linear infinite reverse;">
             @php
             $clients2 = [
                 ['H&M',         'ri-t-shirt-2-line',    '#D0021B'],
-                ['Zara',        'ri-handbag-2-line',    '#111111'],
-                ['Nike',        'ri-run-line',          '#111111'],
+                ['Zara',        'ri-handbag-2-line',    '#333333'],
+                ['Nike',        'ri-run-line',          '#000000'],
                 ['Adidas',      'ri-footprint-fill',    '#000000'],
                 ['IKEA',        'ri-table-line',        '#0058A3'],
                 ['Etsy',        'ri-store-line',        '#F1641E'],
-                ['Poshmark',    'ri-shopping-cart-2-line','#C13584'],
                 ['Farfetch',    'ri-award-line',        '#2E2E2E'],
-                ['Revolve',     'ri-sparkle-line',      '#222222'],
                 ['LVMH',        'ri-vip-crown-line',    '#B8860B'],
-                ['Nordstrom',   'ri-building-line',     '#1A1A1A'],
-                ['Bloomingdale\'s','ri-flower-line',    '#333333'],
+                ['Walmart',     'ri-store-2-line',      '#0071CE'],
+                ['Getty Images','ri-image-2-line',      '#C9A84C'],
             ];
             @endphp
             @foreach(array_merge($clients2, $clients2) as [$name, $icon, $color])
-            <div class="flex items-center gap-3 px-7 py-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.07] hover:border-white/10 transition-all duration-300 cursor-default flex-shrink-0 group">
-                <i class="{{ $icon }} text-xl opacity-60 group-hover:opacity-100 transition-opacity" style="color:{{ $color }}"></i>
-                <span class="text-sm font-semibold text-slate-400 group-hover:text-slate-200 transition-colors whitespace-nowrap">{{ $name }}</span>
+            <div class="flex items-center gap-4 px-8 py-5 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-[#1ebba3]/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 cursor-default flex-shrink-0 group">
+                <i class="{{ $icon }} text-2xl opacity-70 group-hover:opacity-100 transition-opacity" style="color:{{ $color }}"></i>
+                <span class="text-sm font-bold text-slate-600 group-hover:text-[#1a1a1a] transition-colors whitespace-nowrap">{{ $name }}</span>
             </div>
             @endforeach
         </div>

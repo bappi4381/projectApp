@@ -203,7 +203,7 @@
 
         {{-- Premium Actions --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-up" style="animation-delay: 0.4s">
-            <a href="{{ route('graphics.index') }}" 
+            <a href="{{ route('graphics.index') }}" target="_blank"
                class="group relative px-10 py-5 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                 <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl shadow-indigo-600/20"></div>
                 <span class="relative flex items-center gap-3">

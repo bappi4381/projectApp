@@ -61,7 +61,11 @@
     </div>
 
     {{-- Navbar --}}
-    @include('partials.navbar')
+    @if(Request::routeIs('graphics.index'))
+        @include('graphics.partials.graphics-navbar')
+    @else
+        @include('partials.navbar')
+    @endif
 
     {{-- Main Content --}}
     <main>
