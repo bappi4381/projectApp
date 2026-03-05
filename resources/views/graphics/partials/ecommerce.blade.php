@@ -1,5 +1,5 @@
 {{-- resources/views/graphics/partials/ecommerce.blade.php --}}
-<section class="relative py-16 overflow-hidden bg-[#0f172a]"> {{-- Reduced Padding --}}
+<section id="portfolio" class="relative py-16 overflow-hidden bg-[#0f172a]"> {{-- Reduced Padding --}}
     
     {{-- Decorative High-End Background --}}
     <div class="absolute inset-0 pointer-events-none">

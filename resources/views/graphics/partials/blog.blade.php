@@ -1,5 +1,5 @@
 {{-- resources/views/graphics/partials/blog.blade.php --}}
-<section id="blog" class="relative py-24 md:py-32 bg-slate-900/50">
+<section id="offers" class="relative py-24 md:py-32 bg-slate-900/50">
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header --}}
         <div class="text-center mb-16 reveal">

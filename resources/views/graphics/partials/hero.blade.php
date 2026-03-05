@@ -47,7 +47,7 @@
 </style>
 @endpush
 
-<section class="relative swiper hero-swiper noise-overlay">
+<section id="home" class="relative swiper hero-swiper noise-overlay">
     
     {{-- Decorative Orbs --}}
     <div class="floating-orb w-[500px] h-[500px] bg-indigo-600 -top-20 -left-20"></div>

@@ -1,6 +1,26 @@
 {{-- resources/views/partials/graphics-navbar.blade.php --}}
 <nav id="graphics-navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out"
-     x-data="{ open: false, servicesOpen: false, offersOpen: false }">
+     x-data="{ 
+        open: false, 
+        servicesOpen: false, 
+        offersOpen: false,
+        activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') ? 'blog' : ''))) }}',
+        init() {
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('graphics-navbar');
+                const inner = document.getElementById('studio-nav-inner');
+                
+                // Shrinking effect
+                if (window.scrollY > 40) {
+                    nav.classList.add('nav-scrolled');
+                    if(inner) inner.style.height = '76px';
+                } else {
+                    nav.classList.remove('nav-scrolled');
+                    if(inner) inner.style.height = '100px';
+                }
+            });
+        }
+     }">
 
     <style>
         #graphics-navbar { 
@@ -26,11 +46,17 @@
             transition: all 0.3s ease;
         }
         .studio-link-dot {
-            position: absolute; bottom: -6px; left: 50%; width: 3px; height: 3px;
+            position: absolute; bottom: -6px; left: 50%; width: 4px; height: 4px;
             background: #facc15; border-radius: 50%; opacity: 0;
             transform: translateX(-50%) scale(0); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .studio-nav-link:hover .studio-link-dot { opacity: 1; transform: translateX(-50%) scale(1); }
+        .active-dot { opacity: 1 !important; transform: translateX(-50%) scale(1.5) !important; }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow { animation: spin-slow 15s linear infinite; }
     </style>
 
     <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-12">
@@ -54,55 +80,72 @@
 
             {{-- Desktop Hub Navigation --}}
             <div class="hidden xl:flex items-center gap-10">
-                <a href="{{ route('graphics.index') }}" class="studio-nav-link text-white hover:text-yellow-400">
+                <a href="{{ route('home') }}" class="studio-nav-link transition-colors"
+                   :class="activeSection === 'home' ? 'text-yellow-400' : 'text-white hover:text-white/80'">
                     Home
-                    <span class="studio-link-dot"></span>
+                    <span class="studio-link-dot" :class="activeSection === 'home' ? 'active-dot' : ''"></span>
                 </a>
                 
                 {{-- Refinement: Services Mega-style --}}
                 <div class="relative group" @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
-                    <button class="studio-nav-link text-yellow-400 flex items-center gap-2">
-                        Services
+                    <button class="studio-nav-link flex items-center gap-2 transition-colors"
+                            :class="activeSection === 'services' || '{{ Request::routeIs('graphics.services') }}' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                        Service
                         <i class="ri-arrow-down-s-line text-sm transition-transform" :class="servicesOpen ? 'rotate-180' : ''"></i>
-                        <span class="studio-link-dot !bg-white"></span>
+                        <span class="studio-link-dot" :class="activeSection === 'services' || '{{ Request::routeIs('graphics.services') }}' ? 'active-dot' : ''"></span>
                     </button>
                     <div x-show="servicesOpen" x-cloak
-                         class="absolute top-full left-1/2 -translate-x-1/2 w-[480px] bg-slate-900/95 backdrop-blur-3xl rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.8)] p-8 mt-4 grid grid-cols-2 gap-x-8 gap-y-3 border border-white/10"
+                         class="absolute top-full left-1/2 -translate-x-1/2 w-[580px] bg-slate-900/95 backdrop-blur-3xl rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.8)] p-8 mt-4 grid grid-cols-2 gap-x-8 gap-y-2 border border-white/10"
                          x-transition:enter="transition ease-out duration-300"
                          x-transition:enter-start="opacity-0 translate-y-4"
                          x-transition:enter-end="opacity-100 translate-y-0">
                         @php
                             $studio_services = [
-                                ['Clipping Path', 'ri-scissors-cut-line'],
-                                ['Ghost Mannequin', 'ri-user-smile-line'],
-                                ['Multi-Clipping', 'ri-layout-grid-line'],
+                                ['Graphics Studio', 'ri-layout-masonry-line'],
                                 ['Photo Retouching', 'ri-magic-line'],
-                                ['Jewelry Edit', 'ri-sparkling-fill'],
-                                ['Color Correction', 'ri-palette-line'],
-                                ['Shadow Work', 'ri-contrast-drop-2-line'],
-                                ['E-com Optimize', 'ri-shopping-bag-3-line'],
+                                ['Video Editing', 'ri-video-line'],
+                                ['3D Modeling', 'ri-instance-line'],
+                                ['Clipping Path', 'ri-scissors-cut-line'],
+                                ['Product Editing', 'ri-shopping-bag-3-line'],
+                                ['Background Removal', 'ri-shadow-line'],
+                                ['Real Estate Editing', 'ri-home-4-line'],
+                                ['Ghost Mannequin', 'ri-shirt-line'],
+                                ['Vector Conversion', 'ri-vector-line'],
                             ];
                         @endphp
                         @foreach($studio_services as [$name, $icon])
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/5 group/link transition-all">
-                                <i class="{{ $icon }} text-yellow-400 text-lg"></i>
-                                <span class="text-[13px] font-bold text-slate-300 group-hover/link:text-white">{{ $name }}</span>
+                            <a href="{{ route('graphics.services') }}" class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-white/5 group/link transition-all">
+                                <div class="w-8 h-8 rounded-lg bg-yellow-400/10 flex items-center justify-center group-hover/link:bg-yellow-400/20 transition-colors">
+                                    <i class="{{ $icon }} text-yellow-400 text-base"></i>
+                                </div>
+                                <span class="text-[12px] font-bold text-slate-300 group-hover/link:text-white whitespace-nowrap">{{ $name }}</span>
                             </a>
                         @endforeach
                     </div>
                 </div>
 
+                <a href="{{ route('graphics.portfolio') }}" class="studio-nav-link transition-colors"
+                   :class="activeSection === 'portfolio' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                    Our Work
+                    <span class="studio-link-dot" :class="activeSection === 'portfolio' ? 'active-dot' : ''"></span>
+                </a>
+
+                <a href="{{ route('graphics.blog') }}" class="studio-nav-link transition-colors"
+                   :class="activeSection === 'blog' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                    Blog
+                    <span class="studio-link-dot" :class="activeSection === 'blog' ? 'active-dot' : ''"></span>
+                </a>
+
                 @php
                     $studioLinks = [
-                        ['Our Work', '#portfolio'],
-                        ['Price', '#pricing'],
-                        ['Payment', '#payment'],
-                        ['Offers', '#offers'],
-                        ['Get Quote', '#quote'],
+                        ['Price', 'pricing'],
+                        ['Payment', 'payment'],
+                        ['Offers', 'offers'],
+                        ['Get Quote', 'quote'],
                     ];
                 @endphp
-                @foreach($studioLinks as [$label, $url])
-                <a href="{{ $url }}" class="studio-nav-link text-white/70 hover:text-white">
+                @foreach($studioLinks as [$label, $id])
+                <a href="{{ route('home') }}#{{ $id }}" class="studio-nav-link transition-colors hover:text-white text-white/70">
                     {{ $label }}
                     <span class="studio-link-dot"></span>
                 </a>
@@ -130,22 +173,39 @@
 
         {{-- Mobile Hub Overlay --}}
         <div x-show="open" x-cloak class="xl:hidden bg-slate-900/98 backdrop-blur-3xl border-t border-white/5 py-10 space-y-6 px-6 overflow-y-auto max-h-[85vh] rounded-b-[40px]">
-            <a href="#" class="block text-2xl font-black text-white hover:text-yellow-400 tracking-tighter">HOME</a>
+            <a href="{{ route('graphics.index') }}" @click="open = false" 
+               class="block text-2xl font-black tracking-tighter transition-colors"
+               :class="activeSection === 'home' || '{{ Request::routeIs('graphics.index') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">HOME</a>
+            
             <div x-data="{ sub: false }">
-                <button @click="sub = !sub" class="flex items-center justify-between w-full text-2xl font-black text-yellow-400 tracking-tighter">
-                    SERVICES <i :class="sub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
+                <button @click="sub = !sub" 
+                        class="flex items-center justify-between w-full text-2xl font-black tracking-tighter transition-colors"
+                        :class="activeSection === 'services' || '{{ Request::routeIs('graphics.services') }}' ? 'text-yellow-400' : 'text-white/70'">
+                    SERVICE <i :class="sub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
                 </button>
                 <div x-show="sub" class="mt-4 grid grid-cols-2 gap-4">
                     @foreach($studio_services as [$name, $icon])
-                        <a href="#" class="text-sm font-bold text-white/60 hover:text-white uppercase tracking-widest">{{ $name }}</a>
+                        <a href="{{ route('graphics.services') }}" @click="open = false" class="text-sm font-bold text-white/60 hover:text-white uppercase tracking-widest">{{ $name }}</a>
                     @endforeach
                 </div>
             </div>
-            @foreach($studioLinks as [$label, $url])
-            <a href="{{ $url }}" class="block text-2xl font-black text-white hover:text-yellow-400 tracking-tighter uppercase">{{ $label }}</a>
+
+            <a href="{{ route('graphics.portfolio') }}" @click="open = false" 
+               class="block text-2xl font-black tracking-tighter uppercase transition-colors"
+               :class="activeSection === 'portfolio' || '{{ Request::routeIs('graphics.portfolio') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">OUR WORK</a>
+
+            <a href="{{ route('graphics.blog') }}" @click="open = false" 
+               class="block text-2xl font-black tracking-tighter uppercase transition-colors"
+               :class="activeSection === 'blog' || '{{ Request::routeIs('graphics.blog') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">BLOG</a>
+
+            @foreach($studioLinks as [$label, $id])
+            <a href="{{ route('graphics.index') }}#{{ $id }}" @click="open = false" 
+               class="block text-2xl font-black tracking-tighter uppercase transition-colors"
+               :class="activeSection === '{{ $id }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">{{ $label }}</a>
             @endforeach
+
             <div class="pt-8">
-                <a href="#" class="block w-full py-5 rounded-3xl bg-yellow-400 text-slate-900 font-black text-center text-sm uppercase tracking-widest">
+                <a href="#" class="block w-full py-5 rounded-3xl bg-yellow-400 text-slate-900 font-black text-center text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">
                     UPLOAD FILES
                 </a>
             </div>
@@ -153,24 +213,4 @@
     </div>
 </nav>
 
-<script>
-    window.addEventListener('scroll', function() {
-        const nav = document.getElementById('graphics-navbar');
-        const inner = document.getElementById('studio-nav-inner');
-        if (window.scrollY > 40) {
-            nav.classList.add('nav-scrolled');
-            if(inner) inner.style.height = '76px';
-        } else {
-            nav.classList.remove('nav-scrolled');
-            if(inner) inner.style.height = '100px';
-        }
-    });
-</script>
 
-<style>
-    @keyframes spin-slow {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .animate-spin-slow { animation: spin-slow 15s linear infinite; }
-</style>

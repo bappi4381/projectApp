@@ -14,6 +14,9 @@
     {{-- Remix Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
+    {{-- Alpine.js (Essential for Interactivity) --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
@@ -73,7 +76,11 @@
     </main>
 
     {{-- Footer --}}
-    @include('partials.footer')
+    @if(Request::routeIs('graphics.index'))
+        @include('graphics.partials.footer')
+    @else
+        @include('partials.footer')
+    @endif
 
     @stack('scripts')
 

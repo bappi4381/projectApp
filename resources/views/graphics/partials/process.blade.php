@@ -1,5 +1,5 @@
 {{-- resources/views/graphics/partials/process.blade.php --}}
-<section id="process" class="relative py-24 md:py-32 bg-slate-950 overflow-hidden">
+<section id="payment" class="relative py-24 md:py-32 bg-slate-950 overflow-hidden">
 
     <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/15 to-transparent"></div>
