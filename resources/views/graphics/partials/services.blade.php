@@ -97,27 +97,27 @@
 
                 <div class="grid grid-cols-2 gap-4 flex-grow">
                     {{-- Clipping Path --}}
-                    <div class="bg-[#6ab04c] rounded-sm p-6 relative h-[160px] flex items-center group cursor-pointer overflow-hidden">
-                        <h4 class="text-white text-xl font-bold uppercase relative z-10 select-none">Clipping<br>Path</h4>
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80" alt="Shoe" class="absolute -right-2 -bottom-2 w-28 h-auto drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
+                    <div class="bg-[#6ab04c] rounded-sm p-5 relative h-[100px] flex items-center group cursor-pointer overflow-hidden">
+                        <h4 class="text-white text-lg font-bold uppercase relative z-10 select-none">Clipping<br>Path</h4>
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" alt="Shoe" class="absolute right-0 top-0 h-full w-[100px] object-cover drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                     {{-- Image Masking --}}
-                    <div class="bg-[#f0932b] rounded-sm p-6 relative h-[160px] flex items-center group cursor-pointer overflow-hidden">
-                        <h4 class="text-white text-xl font-bold uppercase relative z-10 select-none">Image<br>Masking</h4>
-                        <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=200&q=80" alt="Plant" class="absolute -right-2 -bottom-2 w-28 h-auto drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
+                    <div class="bg-[#f0932b] rounded-sm p-5 relative h-[100px] flex items-center group cursor-pointer overflow-hidden">
+                        <h4 class="text-white text-lg font-bold uppercase relative z-10 select-none">Image<br>Masking</h4>
+                        <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&q=80" alt="Plant" class="absolute right-0 top-0 h-full w-[100px] object-cover drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                     {{-- Photo Retouching --}}
-                    <div class="bg-[#3498db] rounded-sm p-6 relative h-[160px] flex items-center group cursor-pointer overflow-hidden">
-                        <h4 class="text-white text-xl font-bold uppercase relative z-10 select-none">Photo<br>Retouching</h4>
-                        <img src="https://images.unsplash.com/photo-1605100801754-ef84968fb710?w=200&q=80" alt="Jewelry" class="absolute -right-2 -bottom-2 w-28 h-auto drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
+                    <div class="bg-[#3498db] rounded-sm p-5 relative h-[100px] flex items-center group cursor-pointer overflow-hidden">
+                        <h4 class="text-white text-lg font-bold uppercase relative z-10 select-none">Photo<br>Retouching</h4>
+                        <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80" alt="Jewelry" class="absolute right-0 top-0 h-full w-[100px] object-cover drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
                     </div>
 
                     {{-- Ghost Mannequin --}}
-                    <div class="bg-[#004e67] rounded-sm p-6 relative h-[160px] flex items-center group cursor-pointer overflow-hidden">
-                        <h4 class="text-white text-xl font-bold uppercase relative z-10 select-none">Ghost<br>Mannequin</h4>
-                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&q=80" alt="Jacket" class="absolute -right-2 -bottom-2 w-28 h-auto drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
+                    <div class="bg-[#004e67] rounded-sm p-5 relative h-[100px] flex items-center group cursor-pointer overflow-hidden">
+                        <h4 class="text-white text-lg font-bold uppercase relative z-10 select-none">Ghost<br>Mannequin</h4>
+                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80" alt="Jacket" class="absolute right-0 top-0 h-full w-[100px] object-cover drop-shadow-xl transform group-hover:scale-110 transition-transform duration-500">
                     </div>
                 </div>
 
