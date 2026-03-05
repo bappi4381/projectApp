@@ -45,7 +45,7 @@
                     $navItems = [
                         ['Home', url('/'), 'indigo-400', false],
                         ['Graphics Studio', route('graphics.index'), 'purple-400', true],
-                        ['IT Solutions', url('/#it-solutions'), 'cyan-400', false],
+                        ['IT Solutions', route('it.index'), 'cyan-400', true],
                         ['Why Us', url('/#why-us'), 'slate-400', false],
                     ];
                 @endphp

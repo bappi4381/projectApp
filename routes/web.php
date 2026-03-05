@@ -2,11 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes — PixelForge Group
-|--------------------------------------------------------------------------
-*/
+/* |-------------------------------------------------------------------------- | Web Routes — PixelForge Group |-------------------------------------------------------------------------- */
 
 // Home Page
 Route::get('/', function () {
@@ -35,5 +31,5 @@ Route::get('/graphics-studio/blog', function () {
 
 // IT Solutions Page
 Route::get('/it-solutions', function () {
-    return view('home'); // Placeholder
+    return view('it.index');
 })->name('it.index');

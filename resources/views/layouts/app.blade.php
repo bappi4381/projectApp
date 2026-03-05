@@ -66,6 +66,8 @@
     {{-- Navbar --}}
     @if(Request::routeIs('graphics.index'))
         @include('graphics.partials.graphics-navbar')
+    @elseif(Request::routeIs('it.index'))
+        @include('it.partials.it-navbar')
     @else
         @include('partials.navbar')
     @endif
