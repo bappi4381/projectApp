@@ -66,7 +66,8 @@
 
 @section('content')
 
-<section class="relative min-h-[95vh] flex items-center pt-24 pb-32">
+<!-- Wrapper for boxed layout -->
+<section class="relative min-h-[75vh] flex items-center pt-16 pb-24">
     {{-- Background Image & Overlays --}}
     <div class="absolute inset-0 z-0">
         {{-- Professional IT Team Image --}}
@@ -86,15 +87,15 @@
     </div>
 
     <div class="container mx-auto px-6 relative z-10 pt-10">
-        <div class="max-w-4xl reveal">
+        <div class="max-w-3xl reveal">
             {{-- Subheading --}}
-            <h5 class="text-[#3ABEF9] font-bold text-[11px] tracking-[0.2em] uppercase mb-4">
+            <h5 class="text-[#3ABEF9] font-bold text-[9px] tracking-[0.2em] uppercase mb-3">
                 Point of Sale, Enterprise Resource Planning (ERP).
             </h5>
             
             {{-- Main Heading --}}
-            <h1 class="text-5xl md:text-[5rem] lg:text-[6rem] font-black text-white leading-[1.05] mb-10 uppercase font-sans">
-                <span style="-webkit-text-stroke: 2px white; color: transparent;">Customize</span> Software<br>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.05] mb-6 uppercase font-sans">
+                <span class="text-transparent" style="-webkit-text-stroke: 1.2px white;">Customize</span> Software<br>
                 Development.
             </h1>
             
@@ -121,33 +122,33 @@
         <div class="container mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 lg:max-w-6xl mx-auto">
                 <!-- Card 1 -->
-                <div class="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-white hover:border-[#3ABEF9]/40 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.1s;">
-                    <div class="w-[55px] h-[55px] rounded-full bg-white/90 shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
+                <div class="bg-sky-950/60 backdrop-blur-xl border border-[#3ABEF9]/20 shadow-[0_15px_40px_rgba(0,0,0,0.2)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-sky-900/80 hover:border-[#3ABEF9]/50 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.1s;">
+                    <div class="w-[55px] h-[55px] rounded-full bg-sky-900/50 shadow-sm border border-[#3ABEF9]/30 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
                         <i class="ri-server-line text-[26px] group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="pt-1">
-                        <h4 class="text-slate-900 font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">WEB HOSTING</h4>
-                        <p class="text-slate-600 font-medium text-[13px] leading-relaxed group-hover:text-slate-500 transition-colors">Fast, secure, and affordable hosting plans for any budget.</p>
+                        <h4 class="text-white font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">WEB HOSTING</h4>
+                        <p class="text-slate-300 font-medium text-[13px] leading-relaxed group-hover:text-slate-200 transition-colors">Fast, secure, and affordable hosting plans for any budget.</p>
                     </div>
                 </div>
                 <!-- Card 2 -->
-                <div class="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-white hover:border-[#3ABEF9]/40 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.2s;">
-                    <div class="w-[55px] h-[55px] rounded-full bg-white/90 shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
+                <div class="bg-sky-950/60 backdrop-blur-xl border border-[#3ABEF9]/20 shadow-[0_15px_40px_rgba(0,0,0,0.2)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-sky-900/80 hover:border-[#3ABEF9]/50 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.2s;">
+                    <div class="w-[55px] h-[55px] rounded-full bg-sky-900/50 shadow-sm border border-[#3ABEF9]/30 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
                         <i class="ri-computer-line text-[26px] group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="pt-1">
-                        <h4 class="text-slate-900 font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">WEB DEVELOPMENT</h4>
-                        <p class="text-slate-600 font-medium text-[13px] leading-relaxed group-hover:text-slate-500 transition-colors">The beautiful, easy website Development.</p>
+                        <h4 class="text-white font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">WEB DEVELOPMENT</h4>
+                        <p class="text-slate-300 font-medium text-[13px] leading-relaxed group-hover:text-slate-200 transition-colors">The beautiful, easy website Development.</p>
                     </div>
                 </div>
                 <!-- Card 3 -->
-                <div class="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-white hover:border-[#3ABEF9]/40 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.3s;">
-                    <div class="w-[55px] h-[55px] rounded-full bg-white/90 shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
+                <div class="bg-sky-950/60 backdrop-blur-xl border border-[#3ABEF9]/20 shadow-[0_15px_40px_rgba(0,0,0,0.2)] rounded-2xl px-8 py-10 transition-all flex items-start gap-5 group cursor-pointer reveal hover:-translate-y-2 hover:bg-sky-900/80 hover:border-[#3ABEF9]/50 hover:shadow-[0_25px_50px_rgba(58,190,249,0.15)]" style="animation-delay: 0.3s;">
+                    <div class="w-[55px] h-[55px] rounded-full bg-sky-900/50 shadow-sm border border-[#3ABEF9]/30 flex items-center justify-center flex-shrink-0 text-[#3ABEF9] transition-all group-hover:bg-[#3ABEF9] group-hover:text-white group-hover:border-[#3ABEF9]">
                         <i class="ri-code-s-slash-line text-[26px] group-hover:scale-110 transition-transform"></i>
                     </div>
                     <div class="pt-1">
-                        <h4 class="text-slate-900 font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">CUSTOM SOFTWARE</h4>
-                        <p class="text-slate-600 font-medium text-[13px] leading-relaxed group-hover:text-slate-500 transition-colors">Custom software development is perfect for enterprise.</p>
+                        <h4 class="text-white font-extrabold text-[15px] group-hover:text-[#3ABEF9] transition-colors uppercase mb-2">CUSTOM SOFTWARE</h4>
+                        <p class="text-slate-300 font-medium text-[13px] leading-relaxed group-hover:text-slate-200 transition-colors">Custom software development is perfect for enterprise.</p>
                     </div>
                 </div>
             </div>
@@ -158,48 +159,59 @@
 {{-- ══════════════════════════════════════════
      ABOUT / EXECUTION SECTION
 ══════════════════════════════════════════ --}}
-<section class="py-24 bg-white">
+<section class="py-16 lg:py-28 bg-white">
     <div class="container mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="relative reveal">
-                <div class="relative rounded-[40px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000" alt="Team" class="w-full">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            {{-- Image Side --}}
+            <div class="relative reveal mx-auto w-full max-w-md lg:max-w-none lg:pr-8">
+                <div class="relative rounded-[2rem] overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 bg-[#3ABEF9]/10 mix-blend-multiply z-10 pointer-events-none"></div>
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000" alt="Team" class="w-full object-cover aspect-square sm:aspect-[4/5] relative z-0">
                 </div>
-                <div class="absolute -bottom-10 -right-10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-10 rounded-[40px] border border-slate-100">
-                    <div class="text-6xl font-black text-slate-900 mb-2 line-height-1">2K+</div>
-                    <div class="text-[#3ABEF9] font-bold tracking-widest uppercase text-sm">Global Clients</div>
+                
+                {{-- Floating Stats Card --}}
+                <div class="absolute -bottom-6 -right-6 lg:-bottom-12 lg:-right-4 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-6 lg:p-8 rounded-[2rem] border border-slate-100 z-20 hidden sm:block">
+                    <div class="text-5xl lg:text-6xl font-black text-slate-900 mb-2 line-height-1">2K<span class="text-[#3ABEF9]">+</span></div>
+                    <div class="text-slate-500 font-bold tracking-widest uppercase text-[10px] lg:text-xs">Global Clients</div>
                 </div>
             </div>
             
-            <div class="reveal" style="animation-delay: 0.2s">
-                <span class="text-[#3ABEF9] font-bold uppercase tracking-widest text-sm mb-4 block">About Our Company</span>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight">
-                    WE EXECUTE OUR IDEAS FROM THE <span class="text-gradient-it">BEGINNING TO FINISH.</span>
+            {{-- Text Side --}}
+            <div class="reveal mt-8 lg:mt-0" style="animation-delay: 0.2s">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-[#3ABEF9] font-bold uppercase tracking-[0.2em] text-[10px] mb-5">
+                    About Our Company
+                </span>
+                
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-6 leading-[1.15] ">
+                    <span class="uppercase">We Execute Ideas From</span> <span class="text-gradient-it uppercase">Beginning To Finish.</span>
                 </h2>
-                <p class="text-slate-600 leading-relaxed mb-10">
-                    Our multi-disciplinary team follow an agile deployment strategy, ensuring every pixel and every line of code aligns with your business goals. We don't just build software; we build market advantages.
+                
+                <p class="text-slate-600 leading-relaxed text-[15px] mb-10">
+                    Our multi-disciplinary team follows an agile deployment strategy, ensuring every pixel and every line of code aligns with your business goals. We don't just build software; we architect market advantages.
                 </p>
+                
                 <div class="grid sm:grid-cols-2 gap-6 mb-12">
                     @php
                         $features = [
-                            ['Expert Tech Advice', 'ri-lightbulb-line'],
-                            ['Agile Development', 'ri-refresh-line'],
-                            ['Quality Assurance', 'ri-checkbox-circle-line'],
-                            ['24/7 Tech Support', 'ri-headphone-line'],
+                            ['Expert Tech Advice', 'ri-lightbulb-flash-line'],
+                            ['Agile Development', 'ri-loop-right-line'],
+                            ['Quality Assurance', 'ri-shield-check-line'],
+                            ['24/7 Tech Support', 'ri-customer-service-2-line'],
                         ];
                     @endphp
                     @foreach($features as [$feat, $icon])
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center flex-shrink-0">
-                            <i class="{{ $icon }} text-[#3ABEF9]"></i>
+                    <div class="flex items-center gap-4 group">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center flex-shrink-0 group-hover:bg-[#3ABEF9] transition-colors">
+                            <i class="{{ $icon }} text-[#3ABEF9] text-xl group-hover:text-white transition-colors"></i>
                         </div>
-                        <span class="text-slate-800 font-bold">{{ $feat }}</span>
+                        <span class="text-slate-800 font-bold text-[14px]">{{ $feat }}</span>
                     </div>
                     @endforeach
                 </div>
-                <a href="/about" class="text-[#3ABEF9] font-bold flex items-center gap-3 group border-b-2 border-transparent hover:border-[#3ABEF9] w-max pb-1 transition-all">
+                
+                <a href="/about" class="inline-flex items-center gap-3 text-white bg-[#3ABEF9] hover:bg-sky-500 px-8 py-4 rounded-xl font-bold tracking-[0.1em] text-[13px] uppercase transition-all hover:-translate-y-1 hover:shadow-xl shadow-sky-500/30">
                     LEARN MORE ABOUT US
-                    <i class="ri-arrow-right-line group-hover:translate-x-2 transition-transform"></i>
+                    <i class="ri-arrow-right-line text-lg"></i>
                 </a>
             </div>
         </div>
@@ -292,82 +304,84 @@
 </section>
 
 {{-- ══════════════════════════════════════════
-     PORTFOLIO / SOLUTIONS SECTION
+     STATISTICS & GROWTH SECTION
 ══════════════════════════════════════════ --}}
-<section class="py-24 bg-slate-950">
-    <div class="container mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-end justify-between mb-16 reveal">
-            <div class="max-w-xl">
-                <span class="text-sky-500 font-bold uppercase tracking-widest text-sm mb-4 block">Our Portfolio</span>
-                <h2 class="text-4xl md:text-5xl font-black text-white leading-tight">
-                    WE PROVIDE <span class="text-gradient-it">BEST SOLUTIONS</span> FOR FORECASTING YOUR SUCCESS
-                </h2>
+<section class="py-24 bg-white relative overflow-hidden">
+    {{-- Decorative World Map Background (simulated using light pattern or subtle svg) --}}
+    <div class="absolute inset-0 z-0 opacity-[0.03]" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+        {{-- Section Title --}}
+        <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="w-12 h-px bg-[#3ABEF9]"></div>
+                <span class="text-[#3ABEF9] font-bold uppercase tracking-widest text-[10px]">Numbers Are Talking</span>
+                <div class="w-12 h-px bg-[#3ABEF9]"></div>
             </div>
-            <div class="flex gap-4 mt-8 md:mt-0">
-                <button class="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-sky-500 hover:border-sky-500 transition-all"><i class="ri-arrow-left-line"></i></button>
-                <button class="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-sky-500 hover:border-sky-500 transition-all"><i class="ri-arrow-right-line"></i></button>
-            </div>
+            <h2 class="text-3xl md:text-[32px] font-black text-slate-800 uppercase leading-[1.3]">
+                Let's talk about our business growth in<br>IT consulting solution
+            </h2>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            @php
-                $portfolio = [
-                    ['Financial Analysis', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'],
-                    ['Cloud Storage', 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800'],
-                    ['Digital Marketing', 'https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&q=80&w=800'],
-                ];
-            @endphp
-            @foreach($portfolio as $index => [$title, $img])
-            <div class="group relative rounded-[40px] overflow-hidden reveal" style="animation-delay: {{ $index * 0.1 }}s">
-                <img src="{{ $img }}" alt="{{ $title }}" class="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-x-6 bottom-6 p-8 card-glass rounded-[32px] translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <h4 class="text-xl font-bold text-white mb-2">{{ $title }}</h4>
-                    <p class="text-slate-400 text-sm">Enterprise Solution</p>
+        {{-- Stats Content --}}
+        <div class="max-w-5xl mx-auto grid md:grid-cols-12 gap-12 items-center reveal" style="animation-delay: 0.1s">
+            <div class="md:col-span-5 text-center flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-100 pb-10 md:pb-0 md:pr-10">
+                <div class="text-[140px] font-black leading-none text-slate-900 relative inline-block tracking-tighter">
+                    12<span class="text-[#3ABEF9] absolute text-[60px] -top-2 -right-14">+</span>
                 </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- ══════════════════════════════════════════
-     STATS / GROWTH SECTION
-══════════════════════════════════════════ --}}
-<section class="py-24 bg-slate-900 overflow-hidden">
-    <div class="container mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="reveal">
-                <h2 class="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
-                    LET'S TALK ABOUT OUR BUSINESS GROWTH IN <span class="text-gradient-it">CONSULTING SOLUTIONS</span>
-                </h2>
-                <div class="flex items-center gap-12 mt-12">
-                    <div class="text-center">
-                        <div class="text-7xl font-black text-white mb-2 line-height-1">12<span class="text-sky-500">+</span></div>
-                        <p class="text-slate-500 uppercase tracking-widest font-bold text-xs">Years of Experience</p>
-                    </div>
-                </div>
+                <p class="text-slate-500 font-bold text-[12px] tracking-wide mt-2">Learn more about our Success Stories</p>
             </div>
             
-            <div class="grid grid-cols-2 gap-6 reveal" style="animation-delay: 0.2s">
-                <div class="card-glass p-10 rounded-3xl flex flex-col items-center gap-4 text-center">
-                    <i class="ri-user-heart-line text-4xl text-sky-400"></i>
-                    <div class="text-3xl font-black text-white">9,700+</div>
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Happy Clients</p>
+            <div class="md:col-span-7 grid sm:grid-cols-2 gap-y-12 gap-x-8 pl-0 md:pl-6">
+                @php
+                    $stats = [
+                        ['8792', 'Delivered Goods', 'ri-macbook-line'],
+                        ['20', 'IT Consultant', 'ri-user-settings-line'],
+                        ['7000', 'Project Complete', 'ri-focus-3-line'],
+                        ['150', 'Total Team Member', 'ri-team-line'],
+                    ];
+                @endphp
+                @foreach($stats as [$num, $label, $icon])
+                <div class="flex items-start gap-4">
+                    <i class="{{ $icon }} text-[40px] text-[#3ABEF9] font-light"></i>
+                    <div class="pt-1">
+                        <div class="text-xl font-black text-slate-900 mb-1 leading-none tracking-tight">{{ $num }} <span class="text-slate-900 absolute text-sm ml-0.5 rounded-full overflow-hidden top-0">+</span></div>
+                        <div class="text-slate-500 text-[10px] font-bold uppercase tracking-wide">{{ $label }}</div>
+                    </div>
                 </div>
-                <div class="card-glass p-10 rounded-3xl flex flex-col items-center gap-4 text-center">
-                    <i class="ri-medal-fill text-4xl text-sky-400"></i>
-                    <div class="text-3xl font-black text-white">40+</div>
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Awards Win</p>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ══════════════════════════════════════════
+     VIDEO PROMO BANNER
+══════════════════════════════════════════ --}}
+<section class="pb-24 bg-white relative z-20 overflow-hidden">
+    <div class="container mx-auto px-6 max-w-[1000px]">
+        <div class="relative bg-white shadow-2xl shadow-slate-200/50 rounded-xl overflow-hidden flex flex-col md:flex-row reveal min-h-[300px]">
+            {{-- Image Side --}}
+            <div class="w-full md:w-2/3 h-[250px] md:h-auto relative">
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1200" alt="Team" class="w-full h-full object-cover">
+                {{-- Play Button --}}
+                <div class="absolute inset-0 flex items-center justify-end pr-10">
+                    <button class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#3ABEF9] text-xl shadow-xl hover:scale-110 transition-transform relative z-20 translate-x-12 md:translate-x-10">
+                        <i class="ri-play-fill ml-1"></i>
+                    </button>
                 </div>
-                <div class="card-glass p-10 rounded-3xl flex flex-col items-center gap-4 text-center">
-                    <i class="ri-checkbox-circle-line text-4xl text-sky-400"></i>
-                    <div class="text-3xl font-black text-white">4,800</div>
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Finished Projects</p>
-                </div>
-                <div class="card-glass p-10 rounded-3xl flex flex-col items-center gap-4 text-center">
-                    <i class="ri-briefcase-line text-4xl text-sky-400"></i>
-                    <div class="text-3xl font-black text-white">150+</div>
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Experts Team</p>
+            </div>
+            {{-- Solid Blue Graphic Side --}}
+            <div class="w-full md:w-1/3 bg-[#3ABEF9] relative flex flex-col justify-center px-10 py-12 md:py-0 text-white">
+                {{-- Curved styling on left border --}}
+                <div class="hidden md:block absolute -left-[70px] top-1/2 -translate-y-1/2 w-[140px] h-[340px] bg-white rounded-full mix-blend-overlay opacity-10 pointer-events-none"></div>
+                <div class="hidden md:block absolute -left-12 top-0 bottom-0 w-24 bg-white rounded-r-[100px]"></div>
+                
+                <div class="relative z-10 flex flex-col justify-end h-full pl-6 md:pl-8">
+                    <h3 class="text-[19px] font-black uppercase leading-[1.3] mb-6 tracking-wide mt-auto">
+                        Agency Excited With<br>Our Solutions
+                    </h3>
+                    <a href="#" class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase border-b border-white pb-0.5 w-max hover:text-slate-100 mb-6 transition-colors">Read More</a>
                 </div>
             </div>
         </div>
@@ -375,97 +389,115 @@
 </section>
 
 {{-- ══════════════════════════════════════════
-     VIDEO SECTION
+     TESTIMONIALS (CLIENTS REVIEW)
 ══════════════════════════════════════════ --}}
-<section class="relative h-[600px] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000" alt="Video Background" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-slate-950/40"></div>
-    </div>
-    
-    <div class="relative z-10 text-center reveal">
-        <button class="w-24 h-24 rounded-full bg-white text-sky-600 flex items-center justify-center text-4xl shadow-3xl hover:scale-110 transition-transform mb-8 mx-auto">
-            <i class="ri-play-fill"></i>
-        </button>
-        <h2 class="text-4xl md:text-5xl font-black text-white mb-4 uppercase">JUST WATCHING WITH EVERY STEP</h2>
-        <a href="#" class="text-sm font-bold text-sky-400 uppercase tracking-[0.3em]">Learn More</a>
-    </div>
-</section>
-
-{{-- ══════════════════════════════════════════
-     BRAND LOGOS
-══════════════════════════════════════════ --}}
-<section class="py-16 bg-slate-950 border-y border-white/5">
-    <div class="container mx-auto px-6">
-        <div class="flex flex-wrap justify-between items-center gap-12 opacity-50 grayscale">
-            <i class="ri-amazon-fill text-4xl"></i>
-            <i class="ri-apple-fill text-4xl"></i>
-            <i class="ri-google-fill text-4xl"></i>
-            <i class="ri-microsoft-fill text-4xl"></i>
-            <i class="ri-netflix-fill text-4xl"></i>
-            <i class="ri-spotify-fill text-4xl"></i>
-        </div>
-    </div>
-</section>
-
-{{-- ══════════════════════════════════════════
-     TESTIMONIALS SECTION
-══════════════════════════════════════════ --}}
-<section class="py-24 bg-slate-950">
-    <div class="container mx-auto px-6">
-        <div class="text-center mb-16 reveal">
-            <span class="text-sky-500 font-bold uppercase tracking-widest text-sm mb-4 block">Testimonials</span>
-            <h2 class="text-4xl md:text-5xl font-black text-white uppercase">WHAT CLIENTS SAY ABOUT US</h2>
+<section class="py-24 bg-slate-50 border-t border-slate-100">
+    <div class="container mx-auto px-6 max-w-6xl">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal">
+            <div>
+                <div class="flex items-center gap-4 mb-3">
+                    <span class="text-[#3ABEF9] font-bold uppercase tracking-widest text-[10px]">Our Client's Review</span>
+                    <div class="w-10 h-0.5 bg-[#3ABEF9]"></div>
+                </div>
+                <h2 class="text-3xl md:text-[32px] font-black text-slate-800 uppercase tracking-tight">What Client's Say About Us</h2>
+            </div>
+            <div class="flex gap-2 mt-6 md:mt-0">
+                <button class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#3ABEF9] hover:border-[#3ABEF9] hover:text-white transition-all"><i class="ri-arrow-left-line"></i></button>
+                <button class="w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#3ABEF9] hover:border-[#3ABEF9] hover:text-white transition-all"><i class="ri-arrow-right-line"></i></button>
+            </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            @for($i=0; $i<2; $i++)
-            <div class="card-glass p-12 rounded-[40px] relative reveal" style="animation-delay: {{ $i * 0.2 }}s">
-                <i class="ri-double-quotes-l text-sky-500/20 text-7xl absolute top-8 left-8"></i>
-                <p class="text-slate-300 text-lg leading-relaxed mb-8 relative z-10">
-                    "PixelForge Group has completely transformed our enterprise infrastructure. Their team of experts delivered a custom solution that exceeded all expectations of performance and security."
-                </p>
-                <div class="flex items-center gap-5">
-                    <img src="https://i.pravatar.cc/150?u={{$i}}" alt="User" class="w-16 h-16 rounded-full grayscale">
-                    <div>
-                        <h5 class="text-white font-bold text-lg">Alex Rivera</h5>
-                        <p class="text-sky-500 text-sm uppercase tracking-widest font-bold">CTO, TechWave</p>
+        <div class="grid md:grid-cols-2 gap-8 reveal" style="animation-delay: 0.1s">
+            {{-- Testimonial 1 --}}
+            <div class="bg-white p-8 relative flex shadow-sm border border-slate-100/50 rounded-sm">
+                <div class="absolute top-6 left-6 text-slate-900 text-2xl">
+                    <i class="ri-double-quotes-l"></i>
+                </div>
+                <div class="mt-12 flex gap-6 w-full">
+                    <div class="w-32 h-32 bg-[#3ABEF9] shrink-0 flex items-center justify-center text-white text-[11px] font-black text-center leading-tight tracking-widest px-2">
+                        TRADEVISION<br>LTD
+                    </div>
+                    <div class="flex flex-col justify-between">
+                        <p class="text-slate-500 text-[12px] italic leading-relaxed mb-6 font-medium pr-4">
+                            it sounds like you've had a truly exceptional experience with FUTURE IT ! Their consistent delivery of high-quality service and dedicated support must have been invaluable to your organization.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h5 class="text-slate-900 font-black text-[11px] uppercase tracking-wide">TVL</h5>
+                                <span class="text-[#3ABEF9] font-bold text-[8px] uppercase tracking-widest block mt-0.5">Chairman</span>
+                            </div>
+                            <div class="flex gap-1 text-[#3ABEF9] text-[10px]">
+                                <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            @endfor
+
+            {{-- Testimonial 2 --}}
+            <div class="bg-white p-8 relative flex shadow-sm border border-slate-100/50 rounded-sm">
+                <div class="absolute top-6 left-6 text-slate-900 text-2xl">
+                    <i class="ri-double-quotes-l"></i>
+                </div>
+                <div class="mt-12 flex gap-6 w-full">
+                    <div class="w-32 h-32 bg-white border border-slate-100 shrink-0 flex items-center justify-center text-slate-900 text-[11px] font-black text-center leading-tight tracking-widest flex-col px-2">
+                         <div class="w-full h-8 mb-2 flex items-center justify-center text-[#ff9900] text-3xl"><i class="ri-send-plane-fill"></i></div>
+                         <span class="text-[#3ABEF9]">Delight</span> Holiday<br>
+                         <span class="text-[6px] tracking-normal text-slate-400 mt-1">Touring Support</span>
+                    </div>
+                    <div class="flex flex-col justify-between">
+                        <p class="text-slate-500 text-[12px] italic leading-relaxed mb-6 font-medium pr-4">
+                            it sounds like you've had a truly exceptional experience with FUTURE IT ! Their consistent delivery of high-quality service and dedicated support must have been invaluable to your organization.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h5 class="text-slate-900 font-black text-[11px] uppercase tracking-wide">Delight Holiday</h5>
+                                <span class="text-[#3ABEF9] font-bold text-[8px] uppercase tracking-widest block mt-0.5">Chairman</span>
+                            </div>
+                            <div class="flex gap-1 text-[#3ABEF9] text-[10px]">
+                                <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 {{-- ══════════════════════════════════════════
-     WHY US / PILLARS SECTION
+     TECHNOLOGY INDEX (IMPROVED & INNOVATIVE)
 ══════════════════════════════════════════ --}}
-<section class="py-24 bg-slate-900 relative">
-    <div class="absolute inset-0 opacity-10" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2000'); background-size: cover;"></div>
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="text-center mb-16 reveal">
-            <span class="text-sky-500 font-bold uppercase tracking-widest text-sm mb-4 block">Our Values</span>
-            <h2 class="text-4xl md:text-5xl font-black text-white uppercase">IMPROVED AND INNOVATIVE</h2>
+<section class="py-24 bg-[#212429] relative overflow-hidden">
+    <div class="container mx-auto px-6 max-w-6xl relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+            <div class="flex items-center justify-center gap-4 mb-3">
+                <span class="text-[#3ABEF9] font-bold uppercase tracking-widest text-[9px]">Technology Index</span>
+                <div class="w-8 h-px bg-[#3ABEF9]"></div>
+            </div>
+            <h2 class="text-3xl md:text-[34px] font-black text-white uppercase mb-6 drop-shadow-md tracking-tight">
+                Improved And Innovative
+            </h2>
+            <p class="text-slate-300 text-[11px] leading-relaxed font-bold mx-auto max-w-2xl px-8 tracking-wide">
+                We have the specialist to help you define in stages a business plan, design the products customers want. Its helped to customer define their vision for success of business.
+            </p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 text-center reveal">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 reveal" style="animation-delay: 0.1s">
             @php
-                $pillars = [
-                    ['Expert Team', 'ri-team-line'],
-                    ['Fast Delivery', 'ri-rocket-line'],
-                    ['Secure Code', 'ri-shield-check-line'],
-                    ['24/7 Support', 'ri-headphone-line'],
-                    ['Global Scalability', 'ri-global-line'],
-                    ['Modern Stack', 'ri-code-box-line'],
+                $techIndex = [
+                    ['Marketing Strategy', 'ri-bar-chart-grouped-line'],
+                    ['Cyber Security', 'ri-macbook-line'],
+                    ['Business Services', 'ri-shield-user-fill'],
+                    ['Digital Marketing', 'ri-bar-chart-box-line'],
+                    ['Industry Service', 'ri-phone-find-line'],
+                    ['Insider Survey', 'ri-profile-line'],
                 ];
             @endphp
-            @foreach($pillars as $index => [$title, $icon])
-            <div class="group reveal" style="animation-delay: {{ $index * 0.05 }}s">
-                <div class="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-sky-500 transition-all duration-500">
-                    <i class="{{ $icon }} text-white text-3xl"></i>
-                </div>
-                <h5 class="text-white font-bold text-sm tracking-widest uppercase">{{ $title }}</h5>
+            @foreach($techIndex as $index => [$title, $icon])
+            <div class="group border border-slate-700 hover:border-[#3ABEF9] bg-transparent p-6 flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer h-36">
+                <i class="{{ $icon }} text-3xl text-cyan-400 mb-5 group-hover:scale-110 transition-transform font-light"></i>
+                <h5 class="text-slate-100 text-[9px] font-bold uppercase tracking-widest leading-[1.6] mx-auto block">{!! str_replace(' ', '<br>', $title) !!}</h5>
             </div>
             @endforeach
         </div>
@@ -475,37 +507,43 @@
 {{-- ══════════════════════════════════════════
      BLOG SECTION
 ══════════════════════════════════════════ --}}
-<section class="py-24 bg-slate-950">
+<section class="py-24 bg-slate-50 relative overflow-hidden">
     <div class="container mx-auto px-6">
-        <div class="flex items-end justify-between mb-16 reveal">
+        <div class="flex flex-col md:flex-row items-end justify-between mb-16 reveal">
             <div>
-                <span class="text-sky-500 font-bold uppercase tracking-widest text-sm mb-4 block">Our Blog</span>
-                <h2 class="text-4xl md:text-5xl font-black text-white uppercase">WHAT'S GOING ON OUR BLOG?</h2>
+                <div class="flex items-center gap-4 mb-4">
+                    <span class="text-[#3ABEF9] font-bold uppercase tracking-widest text-[11px]">Recent News</span>
+                    <div class="w-12 h-0.5 bg-[#3ABEF9]"></div>
+                </div>
+                <h2 class="text-4xl md:text-[40px] font-black text-slate-900 uppercase leading-tight">WHAT'S GOING ON OUR BLOG?</h2>
             </div>
-            <a href="/blog" class="px-8 py-4 bg-sky-500 text-white font-bold rounded-xl hidden md:block">VIEW ALL POSTS</a>
+            <a href="/blog" class="px-8 py-3.5 bg-[#3ABEF9] hover:bg-[#2da9e3] text-white font-bold text-xs tracking-widest uppercase transition-colors mt-6 md:mt-0 shadow-lg shadow-sky-500/20">VIEW ALL</a>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
             @php
                 $blogs = [
-                    ['The Future of Artificial Intelligence in Software', 'Sept 12, 2024'],
-                    ['Best Practices for Secure Cloud Infrastructure', 'Aug 28, 2024'],
-                    ['Why Custom Software is Better Than Off-the-shelf', 'Aug 15, 2024'],
+                    ['How to become a successful businessman', 'Business', 'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&q=80&w=800'],
+                    ['10 Efficient & Measurable Benefits of Software', 'Creative Invention', 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800'],
+                    ['Exploring latest Web design together with Theme', 'Professionals', 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800'],
                 ];
             @endphp
-            @foreach($blogs as $index => [$title, $date])
-            <div class="group bg-slate-900 rounded-[40px] overflow-hidden reveal" style="animation-delay: {{ $index * 0.1 }}s">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800" alt="Blog" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="p-8">
-                    <div class="flex items-center gap-3 text-sky-500 text-sm font-bold mb-4">
-                        <i class="ri-calendar-line"></i>
-                        {{ $date }}
+            @foreach($blogs as $index => [$title, $category, $img])
+            <div class="group reveal" style="animation-delay: {{ $index * 0.1 }}s">
+                <div class="relative overflow-hidden h-[240px]">
+                    <img src="{{ $img }}" alt="Blog" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute bottom-0 right-0 lg:right-4 bg-[#3ABEF9] text-white text-[10px] tracking-widest font-bold px-4 py-2.5 flex items-center gap-2">
+                        <i class="ri-calendar-line text-sm"></i>
+                        JUN 03, 2020
                     </div>
-                    <h4 class="text-xl font-bold text-white mb-6 group-hover:text-sky-400 transition-colors">{{ $title }}</h4>
-                    <a href="#" class="text-white font-bold flex items-center gap-3 group/link">
-                        READ MORE
-                        <i class="ri-arrow-right-line group-hover/link:translate-x-2 transition-transform"></i>
-                    </a>
+                </div>
+                <div class="bg-white p-8 lg:p-10 shadow-[0_15px_40px_rgba(0,0,0,0.04)]">
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-5">
+                        <span class="flex items-center gap-2 hover:text-[#3ABEF9] cursor-pointer transition-colors"><i class="ri-user-line text-[#3ABEF9] text-[14px]"></i> BY ADMIN</span>
+                        <span class="flex items-center gap-2 hover:text-[#3ABEF9] cursor-pointer transition-colors"><i class="ri-folder-open-line text-[#3ABEF9] text-[14px]"></i> {{ $category }}</span>
+                    </div>
+                    <h4 class="text-[17px] font-bold text-slate-900 mb-5 group-hover:text-[#3ABEF9] transition-colors uppercase leading-snug">{{ $title }}</h4>
+                    <p class="text-slate-500 text-[14px] leading-relaxed mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et...</p>
                 </div>
             </div>
             @endforeach
@@ -516,90 +554,116 @@
 {{-- ══════════════════════════════════════════
      CONTACT STRIP
 ══════════════════════════════════════════ --}}
-<section class="py-12 bg-sky-500">
-    <div class="container mx-auto px-6">
-        <div class="flex flex-wrap items-center justify-between gap-8">
-            <div class="flex items-center gap-4 text-white">
-                <i class="ri-customer-service-2-line text-3xl"></i>
-                <span class="font-bold tracking-widest uppercase">Get Tech Support Now!</span>
+<section class="bg-[#2da9e3]">
+    <div class="container mx-auto">
+        <div class="flex flex-col lg:flex-row items-stretch text-white text-[13px] font-bold">
+            <div class="flex-1 flex items-center justify-center gap-3 py-6 lg:py-6 border-b lg:border-b-0 lg:border-r border-white/20 hover:bg-white/10 transition-colors">
+                <i class="ri-mail-line text-xl"></i>
+                <a href="mailto:futureitlimited@gmail.com" class="hover:text-slate-100">futureitlimited@gmail.com</a>
             </div>
-            <div class="flex items-center gap-4 text-white">
-                <i class="ri-mail-line text-3xl"></i>
-                <span class="font-bold tracking-widest uppercase">info@techlab.com</span>
+            <div class="flex-1 flex items-center justify-center gap-3 py-6 lg:py-6 border-b lg:border-b-0 lg:border-r border-white/20 hover:bg-white/10 transition-colors">
+                <i class="ri-phone-line text-xl"></i>
+                <a href="tel:+8801971111209" class="hover:text-slate-100">+8801971111209</a>
             </div>
-            <div class="flex items-center gap-4 text-white">
-                <i class="ri-phone-line text-3xl"></i>
-                <span class="font-bold tracking-widest uppercase">+880 123 456 789</span>
+            <div class="flex-1 flex items-center justify-center gap-3 py-6 lg:py-6 border-b lg:border-b-0 lg:border-r border-white/20 hover:bg-white/10 transition-colors">
+                <i class="ri-map-pin-line text-xl"></i>
+                <span>Dhaka,Bangladesh.</span>
             </div>
-            <div class="flex gap-4">
-                <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-sky-500 transition-all"><i class="ri-facebook-fill"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-sky-500 transition-all"><i class="ri-twitter-fill"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-sky-500 transition-all"><i class="ri-linkedin-fill"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-sky-500 transition-all"><i class="ri-instagram-fill"></i></a>
+            <div class="flex-1 flex items-center justify-center gap-3 py-6 lg:py-6 hover:bg-white/10 transition-colors">
+                <a href="#" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#2da9e3] hover:text-white hover:bg-slate-900 transition-all"><i class="ri-facebook-fill"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#2da9e3] hover:text-white hover:bg-slate-900 transition-all"><i class="ri-twitter-fill"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#2da9e3] hover:text-white hover:bg-slate-900 transition-all"><i class="ri-linkedin-fill"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#2da9e3] hover:text-white hover:bg-slate-900 transition-all"><i class="ri-youtube-fill"></i></a>
             </div>
         </div>
     </div>
 </section>
 
 {{-- ══════════════════════════════════════════
-     ELITE FOOTER
+     FOOTER
 ══════════════════════════════════════════ --}}
-<footer class="py-24 bg-slate-950 border-t border-white/5">
-    <div class="container mx-auto px-6">
-        <div class="grid lg:grid-cols-4 gap-12">
+<footer class="pt-24 pb-10 relative bg-[#2a2a2a] text-white overflow-hidden">
+    {{-- Background overlay texture --}}
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('https://www.transparenttextures.com/patterns/maze-white.png');"></div>
+    <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/90 to-transparent pointer-events-none"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+            
+            {{-- Column 1 --}}
             <div>
-                <a href="#" class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white text-xl font-bold">T</div>
-                    <span class="text-2xl font-black text-white tracking-tighter uppercase">TechLab</span>
-                </a>
-                <p class="text-slate-500 leading-relaxed mb-8">
-                    Empowering businesses through cutting-edge technology solutions and digital excellence.
+                <h4 class="text-xl font-bold uppercase mb-8 tracking-wide">FUTURE IT</h4>
+                <p class="text-[12px] font-medium text-slate-300/80 leading-[1.8] mb-8 pr-4 text-justify">
+                    FUTURE IT. is a reputed software development company with 9+ years of experience and is located in Dhaka, Bangladesh. Our services are Customized Web-based Software Development, eCommerce Development, Online News Portal Development & Digital Marketing (Website Development, Website Design (UI/UX), Search Engine Optimization, Paid Promotion (PPC).
                 </p>
-                <div class="card-glass p-8 rounded-2xl border-sky-500/20">
-                    <div class="flex items-center gap-4">
-                        <i class="ri-shield-check-line text-3xl text-sky-500"></i>
-                        <div>
-                            <div class="text-white font-bold text-sm">Certified Tech</div>
-                            <div class="text-slate-500 text-xs">ISO 9001:2015</div>
-                        </div>
+                <div class="bg-white rounded p-6 flex flex-wrap items-center justify-between text-slate-900 lg:mr-4">
+                    <div>
+                        <div class="font-bold text-[16px] mb-1">Talk To Our Support</div>
+                        <div class="text-[13px] font-medium text-slate-500">+8801971111209</div>
+                    </div>
+                    <div class="w-12 h-12 bg-[#2da9e3] rounded-full flex items-center justify-center text-white text-[22px] shadow-lg shadow-[#2da9e3]/30 hover:scale-110 transition-transform cursor-pointer">
+                        <i class="ri-phone-fill"></i>
                     </div>
                 </div>
             </div>
 
+            {{-- Column 2 --}}
             <div>
-                <h5 class="text-white font-bold mb-8 uppercase tracking-widest">Our Services</h5>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Web Development</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Mobile App Development</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Cloud Solutions</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Cyber Security</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">IT Consulting</a></li>
+                <h4 class="text-xl font-bold uppercase mb-8 tracking-wide">OUR SERVICES</h4>
+                <ul class="space-y-4 text-[13px] font-bold text-slate-300">
+                    @php
+                        $footerServices = ['Domain Registration', 'Web Hosting', 'Software Development', 'Web Design & Development', 'Mobile Apps Development', 'Digital Marketing', 'Graphic Design & Animation', 'Security & Backup', 'IT Consulting', 'IT Training'];
+                    @endphp
+                    @foreach($footerServices as $service)
+                    <li><a href="#" class="flex items-center gap-2 hover:text-white transition-colors"><i class="ri-arrow-right-s-line text-[16px]"></i>{{ $service }}</a></li>
+                    @endforeach
                 </ul>
             </div>
 
+            {{-- Column 3 --}}
             <div>
-                <h5 class="text-white font-bold mb-8 uppercase tracking-widest">Quick Links</h5>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">About Us</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Our Portfolio</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Meet Our Team</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Latest News</a></li>
-                    <li><a href="#" class="text-slate-500 hover:text-sky-400 transition-colors">Contact Us</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h5 class="text-white font-bold mb-8 uppercase tracking-widest">Newsletter</h5>
-                <p class="text-slate-500 text-sm mb-6">Subscribe to get latest updates and technical insights.</p>
-                <div class="relative">
-                    <input type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-sky-500">
-                    <button class="absolute right-2 top-2 bottom-2 px-6 bg-sky-500 text-white rounded-lg font-bold"><i class="ri-send-plane-fill"></i></button>
+                <h4 class="text-xl font-bold uppercase mb-8 tracking-wide">LATEST NEWS</h4>
+                <div class="space-y-6">
+                    @php
+                        $newsItems = [
+                            ['How to become a successful businessman', 'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&q=80&w=150'],
+                            ['10 Efficient & Measurable Benefits of Software', 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=150'],
+                            ['10 Efficient & Measurable Benefits of Software', 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=150'],
+                            ['10 Efficient & Measurable Benefits of Software', 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=150'],
+                        ];
+                    @endphp
+                    @foreach($newsItems as [$title, $img])
+                    <div class="flex gap-4 group cursor-pointer">
+                        <img src="{{ $img }}" alt="News" class="w-16 h-16 object-cover bg-slate-800 p-1 group-hover:opacity-80 transition-opacity">
+                        <div>
+                            <h5 class="text-[12px] font-bold mb-1.5 leading-[1.4] group-hover:text-[#3ABEF9] transition-colors pr-4">{{ $title }}</h5>
+                            <span class="text-[#3ABEF9] text-[10px] uppercase font-bold tracking-widest">JUNE 3, 2020</span>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
+
+            {{-- Column 4 --}}
+            <div>
+                <h4 class="text-xl font-bold uppercase mb-8 tracking-wide">NEWSLETTER</h4>
+                <p class="text-[12px] font-bold text-slate-300 mb-6 leading-[1.6]">Sign up today for hints, tips and the latest product news</p>
+                <div class="flex border-none rounded bg-white overflow-hidden p-1 shadow-inner h-12">
+                    <input type="email" placeholder="Your email address" class="w-full px-3 text-[12px] text-slate-900 focus:outline-none bg-transparent">
+                    <button class="bg-[#2da9e3] hover:bg-sky-500 text-white px-5 rounded text-lg transition-colors"><i class="ri-send-plane-fill"></i></button>
+                </div>
+            </div>
+
         </div>
-        
-        <div class="mt-20 pt-8 border-t border-white/5 text-center">
-            <p class="text-slate-600 text-xs font-bold uppercase tracking-widest">&copy; 2024 TechLab Solutions. All Rights Reserved.</p>
+
+        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-bold text-slate-200">
+            <p>Copyright © 2025 FUTURE IT, All Rights Reserved.</p>
+            <div class="flex flex-wrap gap-4 md:gap-7">
+                <a href="#" class="hover:text-white transition-colors">Terms and Conditions</a>
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Refund and Returns Policy</a>
+                <a href="#" class="hover:text-white transition-colors">FAQ</a>
+            </div>
         </div>
     </div>
 </footer>

@@ -80,7 +80,7 @@
     {{-- Footer --}}
     @if(Request::routeIs('graphics.index'))
         @include('graphics.partials.footer')
-    @else
+    @elseif(!Request::routeIs('it.index'))
         @include('partials.footer')
     @endif
 
