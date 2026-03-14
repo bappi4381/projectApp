@@ -15,7 +15,7 @@
             
             {{-- Brand Branding --}}
             <div class="lg:col-span-1">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 mb-8 group">
+                <a href="{{ route('graphics.index') }}" class="flex items-center gap-3 mb-8 group">
                     <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/20 group-hover:rotate-6 transition-transform duration-500">
                         <i class="ri-palette-line text-white text-2xl"></i>
                     </div>
@@ -40,11 +40,21 @@
             <div>
                 <h4 class="text-xs font-black text-white uppercase tracking-[0.2em] mb-8 border-l-2 border-indigo-500 pl-4">Creative Services</h4>
                 <ul class="space-y-4">
-                    @foreach(['Photo Retouching', 'Clipping Path', 'Ghost Mannequin', 'Shadow Creation', 'Vector Conversion', '3D Modeling'] as $service)
+                    @php
+                    $footer_svcs = [
+                        'Photo Retouching' => 'photo-retouching',
+                        'Clipping Path' => 'clipping-path',
+                        'Ghost Mannequin' => 'ghost-mannequin',
+                        'Shadow Creation' => 'shadow-creation',
+                        'Vector Conversion' => 'vector-conversion',
+                        '3D Modeling' => '3d-modeling'
+                    ];
+                    @endphp
+                    @foreach($footer_svcs as $name => $slug)
                     <li>
-                        <a href="#services" class="group flex items-center gap-2 text-slate-400 hover:text-indigo-400 text-sm font-medium transition-colors">
+                        <a href="{{ route('graphics.service-detail', $slug) }}" class="group flex items-center gap-2 text-slate-400 hover:text-indigo-400 text-sm font-medium transition-colors">
                             <span class="h-1 w-1 rounded-full bg-slate-700 group-hover:w-3 group-hover:bg-indigo-500 transition-all"></span>
-                            {{ $service }}
+                            {{ $name }}
                         </a>
                     </li>
                     @endforeach
@@ -55,7 +65,16 @@
             <div>
                 <h4 class="text-xs font-black text-white uppercase tracking-[0.2em] mb-8 border-l-2 border-purple-500 pl-4">Client Portal</h4>
                 <ul class="space-y-4">
-                    @foreach(['Get a Quote' => '#pricing', 'Free Trial' => '#pricing', 'Our Portfolio' => route('graphics.portfolio'), 'Latest Blog' => '#blog', 'Pricing Guide' => '#pricing'] as $label => $link)
+                    @php
+                    $portal_links = [
+                        'Get a Quote' => route('graphics.get-quote'),
+                        'Free Trial' => route('graphics.offers'),
+                        'Our Portfolio' => route('graphics.portfolio'),
+                        'Latest Blog' => route('graphics.blog'),
+                        'Pricing Guide' => route('graphics.pricing')
+                    ];
+                    @endphp
+                    @foreach($portal_links as $label => $link)
                     <li>
                         <a href="{{ $link }}" class="group flex items-center gap-2 text-slate-400 hover:text-purple-400 text-sm font-medium transition-colors">
                             <i class="ri-arrow-right-s-line opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all"></i>
