@@ -1,4 +1,3 @@
-{{-- resources/views/graphics/blog.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Design Blog | Graphics Studio')
 

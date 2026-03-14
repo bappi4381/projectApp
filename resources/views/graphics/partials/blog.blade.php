@@ -67,7 +67,7 @@
                     <p class="text-slate-400 text-sm leading-relaxed mb-6">
                         {{ $post['desc'] }}
                     </p>
-                    <a href="#" class="inline-flex items-center gap-2 text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors group/btn">
+                    <a href="/graphics-studio/blog/{{ Str::slug($post['title']) }}" class="inline-flex items-center gap-2 text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors group/btn">
                         Read Story
                         <i class="ri-arrow-right-line group-hover/btn:translate-x-1 transition-transform"></i>
                     </a>

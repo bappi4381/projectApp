@@ -64,7 +64,7 @@
     </div>
 
     {{-- Navbar --}}
-    @if(Request::routeIs('graphics.index'))
+    @if(Str::startsWith(Request::route()->getName() ?? '', 'graphics.') || Request::is('graphics-studio*'))
         @include('graphics.partials.graphics-navbar')
     @elseif(Request::routeIs('it.index'))
         @include('it.partials.it-navbar')
@@ -78,7 +78,7 @@
     </main>
 
     {{-- Footer --}}
-    @if(Request::routeIs('graphics.index'))
+    @if(Str::startsWith(Request::route()->getName() ?? '', 'graphics.') || Request::is('graphics-studio*'))
         @include('graphics.partials.footer')
     @elseif(!Request::routeIs('it.index'))
         @include('partials.footer')

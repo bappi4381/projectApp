@@ -19,6 +19,11 @@ Route::get('/graphics-studio/services', function () {
     return view('graphics.services');
 })->name('graphics.services');
 
+// Service Detail Page (dynamic slug)
+Route::get('/graphics-studio/services/{slug}', function ($slug) {
+    return view('graphics.service-detail', ['slug' => $slug]);
+})->name('graphics.service-detail');
+
 // Portfolio Page (Our Work)
 Route::get('/graphics-studio/portfolio', function () {
     return view('graphics.portfolio');
@@ -28,6 +33,36 @@ Route::get('/graphics-studio/portfolio', function () {
 Route::get('/graphics-studio/blog', function () {
     return view('graphics.blog');
 })->name('graphics.blog');
+
+// Blog Single Post (Read Story)
+Route::get('/graphics-studio/blog/{slug}', function ($slug) {
+    return view('graphics.blog-single', ['slug' => $slug]);
+})->name('graphics.blog.single');
+
+// Pricing Plan Page
+Route::get('/graphics-studio/pricing', function () {
+    return view('graphics.pricing');
+})->name('graphics.pricing');
+
+// Offers Page
+Route::get('/graphics-studio/offers', function () {
+    return view('graphics.offers');
+})->name('graphics.offers');
+
+// Payment Page
+Route::get('/graphics-studio/payment', function () {
+    return view('graphics.payment');
+})->name('graphics.payment');
+
+// Get Quote Page
+Route::get('/graphics-studio/get-quote', function () {
+    return view('graphics.get-quote');
+})->name('graphics.get-quote');
+
+Route::post('/graphics-studio/get-quote', function () {
+    // Handle form submission (email / save to DB)
+    return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');
+})->name('graphics.get-quote.post');
 
 // IT Solutions Page
 Route::get('/it-solutions', function () {
