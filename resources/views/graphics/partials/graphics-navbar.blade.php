@@ -80,7 +80,7 @@
 
             {{-- Desktop Hub Navigation --}}
             <div class="hidden xl:flex items-center gap-10">
-                <a href="{{ route('home') }}" class="studio-nav-link transition-colors"
+                <a href="{{ route('graphics.index') }}" class="studio-nav-link transition-colors"
                    :class="activeSection === 'home' ? 'text-yellow-400' : 'text-white hover:text-white/80'">
                     Home
                     <span class="studio-link-dot" :class="activeSection === 'home' ? 'active-dot' : ''"></span>
