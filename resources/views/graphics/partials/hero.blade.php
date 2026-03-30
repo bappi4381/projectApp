@@ -61,21 +61,18 @@
                 'title' => 'CRAFTING <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">PIXEL-PERFECT</span> VISUALS',
                 'desc' => 'High-end clipping path, complex masking, and high-frequency retouching for brands that refuse to settle for average.',
                 'image' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1920&q=80&auto=format&fit=crop',
-                'badge' => 'Premium Post-Production',
                 'accent' => 'indigo'
             ],
             [
                 'title' => 'ELEVATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">YOUR PRODUCT</span> AESTHETICS',
                 'desc' => 'From ghost mannequin effects to jewelry enhancement, we transform raw clicks into high-converting commercial assets.',
                 'image' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1920&q=80&auto=format&fit=crop',
-                'badge' => 'Commercial Excellence',
                 'accent' => 'purple'
             ],
             [
                 'title' => 'ELITE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">REAL ESTATE</span> & ARCHITECTURE',
                 'desc' => 'Professional HDR blending, twilight enhancement, and virtual staging that makes properties sell 35% faster.',
                 'image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80&auto=format&fit=crop',
-                'badge' => 'Architecture Specialty',
                 'accent' => 'cyan'
             ]
         ];
@@ -95,11 +92,13 @@
             <div class="relative z-20 h-full flex items-center justify-center">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div class="max-w-4xl mx-auto text-center hero-content">
+                        @if(!empty($slide['badge']))
                         {{-- Refined Badge --}}
                         <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-10 group/badge">
                             <span class="flex h-2 w-2 rounded-full bg-{{ $slide['accent'] }}-400 shadow-[0_0_10px_#818cf8]"></span>
                             <span class="text-xs font-bold text-slate-300 uppercase tracking-[0.2em]">{{ $slide['badge'] }}</span>
                         </div>
+                        @endif
 
                         {{-- Mega Heading (Resized) --}}
                         <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight mb-8">
