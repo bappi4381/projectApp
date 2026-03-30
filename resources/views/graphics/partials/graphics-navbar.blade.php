@@ -1,50 +1,83 @@
 {{-- resources/views/partials/graphics-navbar.blade.php --}}
-<nav id="graphics-navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out"
+<nav id="main-navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out"
      x-data="{ 
         open: false, 
         servicesOpen: false, 
         offersOpen: false,
+        scrolled: false,
         activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') || Request::routeIs('graphics.blog.single') ? 'blog' : (Request::routeIs('graphics.pricing') ? 'pricing' : (Request::routeIs('graphics.offers') ? 'offers' : (Request::routeIs('graphics.payment') ? 'payment' : (Request::routeIs('graphics.get-quote') ? 'quote' : ''))))))) }}',
         init() {
             window.addEventListener('scroll', () => {
-                const nav = document.getElementById('graphics-navbar');
+                this.scrolled = window.scrollY > 40;
+                const nav = document.getElementById('main-navbar');
                 const inner = document.getElementById('studio-nav-inner');
                 
-                // Shrinking effect
-                if (window.scrollY > 40) {
+                if (this.scrolled) {
                     nav.classList.add('nav-scrolled');
-                    if(inner) inner.style.height = '76px';
+                    if(inner) inner.style.height = '85px';
                 } else {
                     nav.classList.remove('nav-scrolled');
-                    if(inner) inner.style.height = '100px';
+                    if(inner) inner.style.height = '110px';
                 }
             });
         }
      }">
 
+    {{-- Top Bar (Main Header Row - Fixed) --}}
+    <div class="hidden lg:block w-full border-b border-white/10 py-3 shadow-lg" style="background-color: #1072C2;">
+        <div class="max-w-[1500px] mx-auto px-12 flex items-center justify-between">
+            <div class="flex items-center gap-10 text-white font-bold text-[11px] tracking-[0.1em]">
+                <a href="tel:+17575405884" class="flex items-center gap-2 hover:text-yellow-400 transition-colors">
+                    <i class="ri-phone-fill text-yellow-400 text-sm"></i> USA: +1 757 540-5884 (Toll Free)
+                </a>
+                <a href="tel:+971502036939" class="flex items-center gap-2 hover:text-yellow-400 transition-colors border-l border-white/20 pl-10">
+                    <i class="ri-phone-fill text-yellow-400 text-sm"></i> UAE: +97150 2036 939
+                </a>
+                <a href="mailto:info@colorexpertsbd.com" class="flex items-center gap-2 hover:text-yellow-400 transition-colors border-l border-white/20 pl-10">
+                    <i class="ri-mail-fill text-yellow-400 text-sm"></i> info@colorexpertsbd.com
+                </a>
+            </div>
+            <div class="flex items-center gap-8 text-white/90 font-bold text-[11px] uppercase tracking-widest">
+                <a href="{{ route('graphics.blog') }}" class="hover:text-yellow-400 transition-all">Blog</a>
+                <a href="#" class="hover:text-yellow-400 transition-all">Glossary</a>
+                <a href="#" class="hover:text-yellow-400 transition-all">About Us</a>
+                <a href="#" class="hover:text-yellow-400 transition-all">Contact Us</a>
+                <a href="#" class="hover:text-yellow-400 transition-all">FAQ</a>
+            </div>
+        </div>
+    </div>
+
     <style>
-        #graphics-navbar { 
-            background: rgba(1, 68, 87, 0.4); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            padding: 0.5rem 0;
+        #main-navbar { 
+            background: transparent; 
+            border-bottom: none;
+            padding: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #graphics-navbar.nav-scrolled {
-            background: rgba(1, 44, 55, 0.95);
-            backdrop-filter: blur(32px) saturate(150%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 80px -20px rgba(0, 0, 0, 0.8);
+        #main-navbar.nav-scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: none;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
             padding: 0;
         }
+
+        /* Color Transitions */
+        .nav-text { color: white; transition: color 0.4s ease; }
+        .nav-scrolled .nav-text { color: #0f172a; } /* slate-900 */
+        
         .studio-nav-link {
             position: relative;
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.15em;
             text-transform: uppercase;
+            color: white;
             transition: all 0.3s ease;
         }
+        .nav-scrolled .studio-nav-link { color: #334155; } /* slate-700 */
+        .nav-scrolled .studio-nav-link:hover { color: #facc15; }
+
         .studio-link-dot {
             position: absolute; bottom: -6px; left: 50%; width: 4px; height: 4px;
             background: #facc15; border-radius: 50%; opacity: 0;
@@ -52,6 +85,13 @@
         }
         .studio-nav-link:hover .studio-link-dot { opacity: 1; transform: translateX(-50%) scale(1); }
         .active-dot { opacity: 1 !important; transform: translateX(-50%) scale(1.5) !important; }
+        
+        /* Logo Transitions */
+        .logo-text-primary { color: white; transition: color 0.4s ease; }
+        .logo-text-secondary { color: rgba(255,255,255,0.4); transition: color 0.4s ease; }
+        .nav-scrolled .logo-text-primary { color: #0f172a; }
+        .nav-scrolled .logo-text-secondary { color: #64748b; }
+
         @keyframes spin-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -73,8 +113,8 @@
                     </svg>
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-white font-black text-2xl leading-none tracking-tighter uppercase group-hover:text-yellow-400 transition-colors">Color <span class="text-white">Experts</span></span>
-                    <span class="text-white/40 text-[9px] font-bold tracking-[0.3em] uppercase mt-1">International Studio</span>
+                    <span class="logo-text-primary font-black text-2xl leading-none tracking-tighter uppercase transition-colors">Color <span class="transition-colors">Experts</span></span>
+                    <span class="logo-text-secondary text-[9px] font-bold tracking-[0.3em] uppercase mt-1">International Studio</span>
                 </div>
             </a>
 
@@ -105,7 +145,7 @@
 
                 <div @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false">
                     <button class="studio-nav-link flex items-center gap-1.5 transition-colors"
-                            :class="activeSection === 'services' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                            :class="activeSection === 'services' ? 'text-yellow-400' : ''">
                         Services
                         <i class="ri-arrow-down-s-line text-sm transition-transform duration-300" :class="servicesOpen ? 'rotate-180' : ''"></i>
                         <span class="studio-link-dot" :class="activeSection === 'services' ? 'active-dot' : ''"></span>
@@ -177,37 +217,37 @@
                 </div>
 
                 <a href="{{ route('graphics.portfolio') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'portfolio' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'portfolio' ? 'text-yellow-400' : ''">
                     Our Work
                     <span class="studio-link-dot" :class="activeSection === 'portfolio' ? 'active-dot' : ''"></span>
                 </a>
 
                 <a href="{{ route('graphics.blog') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'blog' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'blog' ? 'text-yellow-400' : ''">
                     Blog
                     <span class="studio-link-dot" :class="activeSection === 'blog' ? 'active-dot' : ''"></span>
                 </a>
 
                 <a href="{{ route('graphics.pricing') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'pricing' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'pricing' ? 'text-yellow-400' : ''">
                     Pricing
                     <span class="studio-link-dot" :class="activeSection === 'pricing' ? 'active-dot' : ''"></span>
                 </a>
 
                 <a href="{{ route('graphics.offers') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'offers' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'offers' ? 'text-yellow-400' : ''">
                     Offers
                     <span class="studio-link-dot" :class="activeSection === 'offers' ? 'active-dot' : ''"></span>
                 </a>
 
                 <a href="{{ route('graphics.payment') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'payment' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'payment' ? 'text-yellow-400' : ''">
                     Payment
                     <span class="studio-link-dot" :class="activeSection === 'payment' ? 'active-dot' : ''"></span>
                 </a>
 
                 <a href="{{ route('graphics.get-quote') }}" class="studio-nav-link transition-colors"
-                   :class="activeSection === 'quote' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                   :class="activeSection === 'quote' ? 'text-yellow-400' : ''">
                     Get Quote
                     <span class="studio-link-dot" :class="activeSection === 'quote' ? 'active-dot' : ''"></span>
                 </a>
@@ -226,7 +266,7 @@
             </div>
 
             {{-- Mobile Trigger --}}
-            <button @click="open = !open" class="xl:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 text-white">
+            <button @click="open = !open" class="xl:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 text-white nav-text">
                 <i class="ri-menu-right-line text-2xl" x-show="!open"></i>
                 <i class="ri-close-line text-2xl" x-show="open" x-cloak></i>
             </button>

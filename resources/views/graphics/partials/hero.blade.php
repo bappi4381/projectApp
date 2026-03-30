@@ -113,16 +113,13 @@
 
                         {{-- Premium CTAs (Centered) --}}
                         <div class="flex flex-wrap items-center justify-center gap-5">
-                            <a href="#pricing" class="relative group px-10 py-5 rounded-2xl font-bold text-white overflow-hidden shadow-2xl shadow-indigo-500/20 transition-transform hover:scale-105">
+                            <a href="{{ route('graphics.get-quote') }}" class="relative group px-10 py-5 rounded-2xl font-bold text-white overflow-hidden shadow-2xl shadow-indigo-500/20 transition-all hover:scale-105">
                                 <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:scale-110"></div>
                                 <span class="relative flex items-center gap-3">
                                     <i class="ri-flashlight-line text-xl"></i>
-                                    START FREE TRIAL
+                                    GET STARTED WITH QUOTE
                                     <i class="ri-arrow-right-up-line text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                                 </span>
-                            </a>
-                            <a href="#services" class="group px-10 py-5 rounded-2xl font-bold text-white border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:scale-105">
-                                VIEW SHOWREEL
                             </a>
                         </div>
                     </div>
