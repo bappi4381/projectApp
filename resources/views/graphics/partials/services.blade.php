@@ -74,7 +74,7 @@
 
                 {{-- Left Button --}}
                 <div class="mt-8">
-                    <a href="#" class="block w-full text-center py-4 rounded-md border-2 border-[#1ebba3] text-[13px] font-black uppercase tracking-widest text-[#1a1a1a] relative overflow-hidden group">
+                    <a href="{{ route('graphics.get-quote') }}" class="block w-full text-center py-4 rounded-md border-2 border-[#1ebba3] text-[13px] font-black uppercase tracking-widest text-[#1a1a1a] relative overflow-hidden group">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#0984e3] to-[#1ebba3] translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                         <span class="relative group-hover:text-white transition-colors">Get Your First Trial</span>
                     </a>

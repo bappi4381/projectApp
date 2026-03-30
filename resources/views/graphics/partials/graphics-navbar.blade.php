@@ -141,66 +141,161 @@
                         Home
                         <span class="studio-link-dot" :class="activeSection === 'home' ? 'active-dot' : ''"></span>
                     </a>
-                    
-                    {{-- Services Mega Menu --}}
-                    @php
-                    $mega_services = [
-                        ['name'=>'Clipping Path',       'slug'=>'clipping-path',       'icon'=>'ri-scissors-cut-line',    'img'=>'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=70',  'desc'=>'Precise path &amp; isolation'],
-                        ['name'=>'Background Removal',  'slug'=>'background-removal',  'icon'=>'ri-eraser-line',           'img'=>'https://images.unsplash.com/photo-1584771145729-0bd5095b9d41?w=200&q=70', 'desc'=>'Clean, transparent output'],
-                        ['name'=>'Photo Retouching',    'slug'=>'photo-retouching',    'icon'=>'ri-magic-line',            'img'=>'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&q=70', 'desc'=>'Skin, portrait &amp; beauty'],
-                        ['name'=>'Ghost Mannequin',     'slug'=>'ghost-mannequin',     'icon'=>'ri-shirt-line',            'img'=>'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&q=70', 'desc'=>'Invisible mannequin effect'],
-                        ['name'=>'Color Correction',    'slug'=>'color-correction',    'icon'=>'ri-palette-line',          'img'=>'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=200&q=70', 'desc'=>'Tone, balance &amp; grade'],
-                        ['name'=>'Shadow Services',     'slug'=>'shadow-services',     'icon'=>'ri-contrast-2-line',       'img'=>'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=200&q=70', 'desc'=>'Drop, natural &amp; reflection'],
-                        ['name'=>'Image Masking',       'slug'=>'image-masking',       'icon'=>'ri-crop-line',             'img'=>'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=200&q=70', 'desc'=>'Hair, fur &amp; complex edges'],
-                        ['name'=>'Real Estate Editing', 'slug'=>'real-estate-editing', 'icon'=>'ri-home-4-line',           'img'=>'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=200&q=70', 'desc'=>'Sky replace, HDR &amp; staging'],
-                        ['name'=>'Jewellery Editing',   'slug'=>'jewellery-editing',   'icon'=>'ri-gem-line',              'img'=>'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=200&q=70', 'desc'=>'Polish, sparkle &amp; dust'],
-                        ['name'=>'Video Editing',       'slug'=>'video-editing',       'icon'=>'ri-video-line',            'img'=>'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=200&q=70', 'desc'=>'Grade, cut &amp; export'],
-                    ];
-                    $studio_services = $mega_services; // keep mobile menu working
-                    @endphp
 
-                    <div @mouseenter="servicesOpen = true" @mouseleave="servicesOpen = false" class="relative">
+                    <div x-data="{ imageEditOpen: false }" @mouseenter="imageEditOpen = true" @mouseleave="imageEditOpen = false" class="relative group">
                         <a href="{{ route('graphics.services') }}" class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
                            :class="activeSection === 'services' || request()->is('services*') ? 'text-yellow-400' : ''">
-                            Services
-                            <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="servicesOpen ? 'rotate-180' : ''"></i>
+                            IMAGE EDITING
+                            <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="imageEditOpen ? 'rotate-180' : ''"></i>
                             <span class="studio-link-dot" :class="activeSection === 'services' || request()->is('services*') ? 'active-dot' : ''"></span>
                         </a>
 
-                        <div x-show="servicesOpen" x-cloak
-                             class="absolute top-full -translate-x-1/2 left-1/2 pt-6 w-[250px] z-[60]"
+                        <div x-show="imageEditOpen" x-cloak
+                             class="fixed left-0 right-0 pt-6 z-[60]" style="top: auto;"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 translate-y-2"
                              x-transition:enter-end="opacity-100 translate-y-0"
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-2">
-                            <div class="bg-white rounded shadow-xl border border-[#eee] flex flex-col py-1 max-h-[70vh] overflow-y-auto custom-scrollbar">
-                                @foreach($mega_services as $svc)
-                                <a href="{{ route('graphics.service-detail', $svc['slug']) }}" class="px-5 py-3 text-[14px] font-normal text-[#555] hover:text-[#1072C2] hover:bg-slate-50 transition-colors {{ !$loop->last ? 'border-b border-[#f5f5f5]' : '' }}">
-                                    {{ $svc['name'] }}
-                                </a>
-                                @endforeach
+                            <div class="bg-white rounded shadow-xl border border-[#eee] py-8 px-6 flex justify-between gap-6">
+                                {{-- Col 1 --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Remove Background From Images</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="{{ route('graphics.service-detail', 'clipping-path') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Clipping Path Service</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'ghost-mannequin') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Ghost Mannequin Effect</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'image-masking') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Photoshop Image Masking</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'shadow-services') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Photoshop Shadow Service</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 2 --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Professional Photo Retouching</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="{{ route('graphics.service-detail', 'photo-restoration') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Photo Restoration Service</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'color-correction') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Photoshop Color Correction</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'photo-retouching') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Photography Retouching</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'high-end-retouching') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">High End Photo Retouching</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 3 --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Photography Post Production</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="{{ route('graphics.service-detail', 'product-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Product Photo Editing</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'wedding-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Wedding Photo Retouching</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'real-estate-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Real Estate Photo Editing</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'image-blending') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Image Blending Service</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 4 --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Creative Editing Services</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="{{ route('graphics.service-detail', 'photo-manipulation') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Creative Photo Manipulation</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', '3d-modeling') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">3D Modeling Services</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'desktop-publishing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Desktop Publishing</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'video-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Editing and Post Production Services</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 5 --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Vector Illustration & Conversion</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="{{ route('graphics.service-detail', 'raster-to-vector') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Raster to Vector Conversion</a></li>
+                                        <li><a href="{{ route('graphics.service-detail', 'vector-line-drawing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Vector Line Drawing & Artwork</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <a href="{{ route('graphics.portfolio') }}" class="studio-nav-link transition-colors"
-                       :class="activeSection === 'portfolio' ? 'text-yellow-400' : ''">
-                        Our Work
-                        <span class="studio-link-dot" :class="activeSection === 'portfolio' ? 'active-dot' : ''"></span>
-                    </a>
+                    <div x-data="{ videoProdOpen: false }" @mouseenter="videoProdOpen = true" @mouseleave="videoProdOpen = false" class="relative group">
+                        <a href="#" class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer">
+                            VIDEO PRODUCTION
+                            <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="videoProdOpen ? 'rotate-180' : ''"></i>
+                            <span class="studio-link-dot"></span>
+                        </a>
 
-                    <a href="{{ route('graphics.blog') }}" class="studio-nav-link transition-colors"
-                       :class="activeSection === 'blog' ? 'text-yellow-400' : ''">
-                        Blog
-                        <span class="studio-link-dot" :class="activeSection === 'blog' ? 'active-dot' : ''"></span>
-                    </a>
+                        <div x-show="videoProdOpen" x-cloak
+                             class="fixed left-0 right-0 pt-6 z-[60]" style="top: auto;"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 translate-y-2">
+                            <div class="bg-white rounded shadow-xl border border-[#eee] py-8 px-6 flex justify-between gap-6">
+                                {{-- Col 1: Video Editing Services --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Video Editing Services</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">E-Commerce Video Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Background Removal Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Object Removal Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Rotoscoping Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Resizing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Subtitling Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Ad Creation Service</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Vlog Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Masking</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 2: Video Post Production Services --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Video Post Production Services</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Video Color Grading Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Film Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Drone Video Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Wedding Video Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Music Video Editing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Corporate Video Editing Services</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 3: Audio Editing --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Audio Editing</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Audio Enhancement Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Audio Mixing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Audio Noise Reduction Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Dialogue Editing</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Artificial Voice Over Editing Service</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Podcast Audio Editing</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Voice Over Editing</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 4: Story Boarding --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Story Boarding</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Script Writing Services</a></li>
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Explanatory Video</a></li>
+                                    </ul>
+                                </div>
+                                {{-- Col 5: Animation Services --}}
+                                <div class="flex-1">
+                                    <h4 class="text-[#0c5a9e] font-bold text-[13px] mb-4 leading-snug">Animation Services</h4>
+                                    <ul class="space-y-3">
+                                        <li><a href="#" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Web Animation Service</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <a href="{{ route('graphics.pricing') }}" class="studio-nav-link transition-colors"
                        :class="activeSection === 'pricing' ? 'text-yellow-400' : ''">
-                        Pricing
+                        Price
                         <span class="studio-link-dot" :class="activeSection === 'pricing' ? 'active-dot' : ''"></span>
+                    </a>
+
+                    <a href="{{ route('graphics.payment') }}" class="studio-nav-link transition-colors"
+                       :class="activeSection === 'payment' ? 'text-yellow-400' : ''">
+                        Payment
+                        <span class="studio-link-dot" :class="activeSection === 'payment' ? 'active-dot' : ''"></span>
                     </a>
 
                     {{-- Offers Menu --}}
@@ -213,31 +308,25 @@
                         </a>
 
                         <div x-show="offersOpen" x-cloak
-                             class="absolute top-full -translate-x-1/2 left-1/2 pt-6 w-[230px] z-[60]"
+                             class="absolute top-full -translate-x-1/2 left-1/2 pt-6 w-[300px] z-[60]"
                              x-transition:enter="transition ease-out duration-200"
                              x-transition:enter-start="opacity-0 translate-y-2"
                              x-transition:enter-end="opacity-100 translate-y-0"
                              x-transition:leave="transition ease-in duration-150"
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-2">
-                            <div class="bg-white rounded shadow-xl border border-[#eee] flex flex-col py-1">
-                                <a href="{{ url('/offers/first-order-free') }}" class="px-5 py-3 text-[14px] font-normal text-[#555] hover:text-[#1072C2] hover:bg-slate-50 transition-colors border-b border-[#f5f5f5]">First Order Free</a>
-                                <a href="{{ url('/offers/comeback-campaign') }}" class="px-5 py-3 text-[14px] font-normal text-[#555] hover:text-[#1072C2] hover:bg-slate-50 transition-colors border-b border-[#f5f5f5]">Comeback Campaign</a>
-                                <a href="{{ url('/offers/40-percent-off') }}" class="px-5 py-3 text-[14px] font-normal text-[#555] hover:text-[#1072C2] hover:bg-slate-50 transition-colors border-b border-[#f5f5f5]">Get Up to 40% Off</a>
-                                <a href="{{ url('/offers/christmas-photo-editing') }}" class="px-5 py-3 text-[14px] font-normal text-[#555] hover:text-[#1072C2] hover:bg-slate-50 transition-colors">Christmas Photo Editing</a>
+                            <div class="bg-white rounded shadow-xl border border-[#eee] py-5 px-6 flex flex-col gap-4">
+                                <a href="{{ url('/offers/first-order-free') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">First Order Free</a>
+                                <a href="{{ url('/offers/comeback-campaign') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Comeback Campaign</a>
+                                <a href="{{ url('/offers/40-percent-off') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Get Up to 40% Off</a>
+                                <a href="{{ url('/offers/christmas-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Christmas Photo Editing</a>
                             </div>
                         </div>
                     </div>
 
-                    <a href="{{ route('graphics.payment') }}" class="studio-nav-link transition-colors"
-                       :class="activeSection === 'payment' ? 'text-yellow-400' : ''">
-                        Payment
-                        <span class="studio-link-dot" :class="activeSection === 'payment' ? 'active-dot' : ''"></span>
-                    </a>
-
                     <a href="{{ route('graphics.get-quote') }}" class="studio-nav-link transition-colors"
                        :class="activeSection === 'quote' ? 'text-yellow-400' : ''">
-                        Get Quote
+                        Get a Quote
                         <span class="studio-link-dot" :class="activeSection === 'quote' ? 'active-dot' : ''"></span>
                     </a>
                 @endif
@@ -293,33 +382,131 @@
                        class="block text-2xl font-black tracking-tighter transition-colors"
                        :class="activeSection === 'home' || '{{ Request::routeIs('graphics.index') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">HOME</a>
                     
-                    <div x-data="{ sub: false }">
-                        <button @click="sub = !sub" 
-                                class="flex items-center justify-between w-full text-2xl font-black tracking-tighter transition-colors"
-                                :class="activeSection === 'services' || '{{ Request::routeIs('graphics.services') }}' ? 'text-yellow-400' : 'text-white/70'">
-                            SERVICE <i :class="sub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
+                    <div x-data="{ imageEditSub: false }">
+                        <button @click="imageEditSub = !imageEditSub" 
+                                class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors"
+                                :class="activeSection === 'services' || '{{ Request::routeIs('graphics.services') }}' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                            IMAGE EDITING <i :class="imageEditSub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
                         </button>
-                        <div x-show="sub" class="mt-4 grid grid-cols-2 gap-3">
-                            @foreach($studio_services as $svc)
-                                <a href="{{ route('graphics.service-detail', $svc['slug']) }}" @click="open = false"
-                                   class="flex items-center gap-2 text-sm font-bold text-white/60 hover:text-white">
-                                    <i class="{{ $svc['icon'] }} text-yellow-400/70 text-xs"></i> {{ $svc['name'] }}
-                                </a>
-                            @endforeach
+                        <div x-show="imageEditSub" class="mt-4 flex flex-col gap-6 pl-4 border-l border-white/10" x-collapse>
+                            
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Remove Background From Images</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="{{ route('graphics.service-detail', 'clipping-path') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Clipping Path Service</a>
+                                    <a href="{{ route('graphics.service-detail', 'ghost-mannequin') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Ghost Mannequin Effect</a>
+                                    <a href="{{ route('graphics.service-detail', 'image-masking') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Photoshop Image Masking</a>
+                                    <a href="{{ route('graphics.service-detail', 'shadow-services') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Photoshop Shadow Service</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Professional Photo Retouching</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="{{ route('graphics.service-detail', 'photo-restoration') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Photo Restoration Service</a>
+                                    <a href="{{ route('graphics.service-detail', 'color-correction') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Photoshop Color Correction</a>
+                                    <a href="{{ route('graphics.service-detail', 'photo-retouching') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Photography Retouching</a>
+                                    <a href="{{ route('graphics.service-detail', 'high-end-retouching') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">High End Photo Retouching</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Photography Post Production</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="{{ route('graphics.service-detail', 'product-photo-editing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Product Photo Editing</a>
+                                    <a href="{{ route('graphics.service-detail', 'wedding-photo-editing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Wedding Photo Retouching</a>
+                                    <a href="{{ route('graphics.service-detail', 'real-estate-editing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Real Estate Photo Editing</a>
+                                    <a href="{{ route('graphics.service-detail', 'image-blending') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Image Blending Service</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Creative Editing Services</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="{{ route('graphics.service-detail', 'photo-manipulation') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Creative Photo Manipulation</a>
+                                    <a href="{{ route('graphics.service-detail', '3d-modeling') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">3D Modeling Services</a>
+                                    <a href="{{ route('graphics.service-detail', 'desktop-publishing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Desktop Publishing</a>
+                                    <a href="{{ route('graphics.service-detail', 'video-editing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Editing and Post Production Services</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Vector Illustration & Conversion</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="{{ route('graphics.service-detail', 'raster-to-vector') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Raster to Vector Conversion</a>
+                                    <a href="{{ route('graphics.service-detail', 'vector-line-drawing') }}" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Vector Line Drawing & Artwork</a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                    <a href="{{ route('graphics.portfolio') }}" @click="open = false" 
-                       class="block text-2xl font-black tracking-tighter uppercase transition-colors"
-                       :class="activeSection === 'portfolio' || '{{ Request::routeIs('graphics.portfolio') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">OUR WORK</a>
-
-                    <a href="{{ route('graphics.blog') }}" @click="open = false" 
-                       class="block text-2xl font-black tracking-tighter uppercase transition-colors"
-                       :class="activeSection === 'blog' || '{{ Request::routeIs('graphics.blog') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">BLOG</a>
+                    <div x-data="{ videoProdSub: false }">
+                        <button @click="videoProdSub = !videoProdSub" 
+                                class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors text-white/70 hover:text-white">
+                            VIDEO PRODUCTION <i :class="videoProdSub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
+                        </button>
+                        <div x-show="videoProdSub" class="mt-4 flex flex-col gap-6 pl-4 border-l border-white/10" x-collapse>
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Video Editing Services</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">E-Commerce Video Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Background Removal Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Object Removal Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Rotoscoping Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Resizing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Subtitling Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Ad Creation Service</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Vlog Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Masking</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Video Post Production Services</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Video Color Grading Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Film Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Drone Video Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Wedding Video Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Music Video Editing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Corporate Video Editing Services</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Audio Editing</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Audio Enhancement Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Audio Mixing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Audio Noise Reduction Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Dialogue Editing</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Artificial Voice Over Editing Service</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Podcast Audio Editing</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Voice Over Editing</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Story Boarding</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Script Writing Services</a>
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Explanatory Video</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-[14px] mb-2">Animation Services</h4>
+                                <div class="flex flex-col gap-2 pl-2 border-l border-white/10">
+                                    <a href="#" @click="open = false" class="text-[13px] font-normal text-white/60 hover:text-white transition-colors">Web Animation Service</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <a href="{{ route('graphics.pricing') }}" @click="open = false"
                        class="block text-2xl font-black tracking-tighter uppercase transition-colors"
-                       :class="activeSection === 'pricing' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">PRICING</a>
+                       :class="activeSection === 'pricing' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">PRICE</a>
+
+                    <a href="{{ route('graphics.payment') }}" @click="open = false"
+                       class="block text-2xl font-black tracking-tighter uppercase transition-colors"
+                       :class="activeSection === 'payment' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">PAYMENT</a>
 
                     <div x-data="{ offerSub: false }">
                         <button @click="offerSub = !offerSub" 
@@ -337,11 +524,7 @@
 
                     <a href="{{ route('graphics.get-quote') }}" @click="open = false"
                        class="block text-2xl font-black tracking-tighter uppercase transition-colors"
-                       :class="activeSection === 'quote' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">GET QUOTE</a>
-
-                    <a href="{{ route('graphics.payment') }}" @click="open = false"
-                       class="block text-2xl font-black tracking-tighter uppercase transition-colors"
-                       :class="activeSection === 'payment' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">PAYMENT</a>
+                       :class="activeSection === 'quote' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">GET A QUOTE</a>
 
                     <div class="pt-8">
                         <a href="#" class="block w-full py-5 rounded-3xl bg-yellow-400 text-slate-900 font-black text-center text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">
