@@ -131,3 +131,83 @@
         </div>
     </div>
 </section>
+
+{{-- ── WORKING PROCESS ────────────────────────────────── --}}
+<section class="py-16 bg-white shrink-0">
+    <div class="text-center mb-10 px-4">
+        <h2 class="text-2xl md:text-3xl font-black text-[#1a1a1a] uppercase tracking-wide mb-3">WORKING PROCESS</h2>
+        <p class="text-slate-500 text-sm mb-4">This visual representation will help you to get a better understanding of our bulk photo editing service process.</p>
+        <div class="flex justify-center gap-1">
+            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-sm"></div>
+            <div class="w-1.5 h-1.5 bg-yellow-400 rounded-sm"></div>
+            <div class="w-1.5 h-1.5 bg-orange-400 rounded-sm"></div>
+            <div class="w-1.5 h-1.5 bg-blue-600 rounded-sm"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 w-full">
+        {{-- Step 1 --}}
+        <div class="relative h-[250px] bg-[#6c6c6c] flex items-center justify-center group overflow-hidden border border-white">
+            <div class="absolute inset-4 border border-white/50 pointer-events-none z-10"></div>
+            <div class="relative z-20 text-center uppercase tracking-widest text-[#6ab04c] text-sm font-black whitespace-pre-line group-hover:scale-105 transition-transform duration-500">
+                GET
+                PRICE QUOTE
+            </div>
+        </div>
+
+        {{-- Step 2 --}}
+        <div class="relative h-[250px] flex items-center justify-center group overflow-hidden border border-white">
+            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80" alt="Upload Files" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0984e3]/80 to-[#1ebba3]/80 mix-blend-multiply"></div>
+            <div class="absolute inset-4 border border-white/50 pointer-events-none z-10 hidden md:block"></div>
+            <div class="absolute inset-4 border border-white/50 pointer-events-none z-10 md:hidden"></div>
+            <div class="relative z-20 text-center uppercase tracking-widest text-white text-sm font-black whitespace-pre-line group-hover:scale-105 transition-transform duration-500">
+                UPLOAD
+                YOUR FILES
+            </div>
+        </div>
+
+        {{-- Step 3 --}}
+        <div class="relative h-[250px] flex items-center justify-center group overflow-hidden border border-white bg-[#0e1726]">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Download Files" class="absolute inset-0 w-full h-full object-cover opacity-50">
+            <div class="absolute inset-4 border border-white/50 pointer-events-none z-10"></div>
+            
+            {{-- Big Arrow Graphic --}}
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 text-white/20 select-none pointer-events-none z-10" style="font-size: 150px; line-height: 0.8; transform: translateX(-50%) scaleY(1.5);">
+                <i class="ri-arrow-down-line"></i>
+            </div>
+            
+            <div class="relative z-20 text-center uppercase tracking-widest text-[#38bdf8] text-sm font-black whitespace-pre-line group-hover:scale-105 transition-transform duration-500 drop-shadow-md">
+                DOWNLOAD
+                EDITED FILES
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── TRIAL CTA SECTION ──────────────────────────────── --}}
+<section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf]"></div>
+    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1920&q=80" alt="Desk Background" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30">
+    
+    <div class="container mx-auto px-4 relative z-10 text-center">
+        <h2 class="text-2xl md:text-3xl font-black text-[#1a1a1a] uppercase tracking-wide mb-4">GET YOUR FIRST TRIAL</h2>
+        <div class="flex justify-center gap-1.5 mb-8">
+            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+        </div>
+        
+        <h3 class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">
+            Don't Believe Any Commercial Brags.
+        </h3>
+        <p class="text-lg md:text-xl font-medium text-white mb-10">
+            You Be the Judge
+        </p>
+        
+        <a href="{{ route('graphics.get-quote') }}" class="inline-block px-10 py-3 rounded-full bg-white text-[#1a1a1a] font-bold text-xs tracking-widest shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 uppercase">
+            GET YOUR FIRST TRIAL
+        </a>
+    </div>
+</section>
