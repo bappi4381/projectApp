@@ -7,158 +7,255 @@
 @php
 $services = [
     [
-        'name'   => 'Clipping Path Services',
-        'tag'    => 'Most Popular',
-        'img_before' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Simple Clipping','$0.49'],['Compound Path','$0.79'],['Complex Path','$1.59'],['Super Complex','$3.99'], ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Simple Clipping','$0.39'],['Compound Path','$0.69'],['Complex Path','$1.29'],['Super Complex','$2.99'], ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Simple Clipping','$0.25'],['Compound Path','$0.49'],['Complex Path','$0.99'],['Super Complex','$1.99'], ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Clipping Path Services',
+        'img_before' => 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=600&q=80',
+        'price'      => '0.49',
+        'deliver'    => '5000',
+        'discount'   => '40',
+        'features'   => [
+            ['Basic Clipping Path', '$0.49'],
+            ['Clipping Path With Shadows', '$0.99'],
+            ['Simple Clipping Path', '$0.99'],
+            ['Medium Clipping Path', '$1.99'],
+            ['Complex Clipping Path', '$3.99'],
+            ['Super Complex Clipping Path', '$7.99'],
+            ['Clipping Path Flatness', '$0.49'],
+            ['Extra Super Complex Clipping Path', '$14.99'],
+            ['Remove Unwanted Objects', '$1.25'],
         ]
     ],
     [
-        'name'   => 'Image Masking Services',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Layer Masking','$0.89'],['Hair Masking','$2.49'],['Complex Masking','$3.99'],['Transparency','$1.99'],  ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Layer Masking','$0.69'],['Hair Masking','$1.99'],['Complex Masking','$2.99'],['Transparency','$1.49'],  ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Layer Masking','$0.49'],['Hair Masking','$1.49'],['Complex Masking','$1.99'],['Transparency','$0.99'],  ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Image Retouching Services',
+        'img_before' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80',
+        'price'      => '1.49',
+        'deliver'    => '2500',
+        'discount'   => '40',
+        'features'   => [
+            ['Headshots & Face Retouching', '$4.49'],
+            ['Beauty & Glamor Retouching', '$8.99'],
+            ['Body Retouching & Reshaping', '$8.99'],
+            ['Modeling Portrait Retouching', '$6.49'],
+            ['Digital Airbrushing', '$7.49'],
+            ['Portrait Cleaning & Enhancement', '$8.49'],
         ]
     ],
     [
-        'name'   => 'Photo Retouching Services',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Basic Retouch','$1.99'],['Skin Smooth','$2.99'],  ['Portrait Edit','$4.99'],['Full Body','$6.99'],      ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Basic Retouch','$1.49'],['Skin Smooth','$2.49'],  ['Portrait Edit','$3.99'],['Full Body','$5.49'],      ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Basic Retouch','$0.99'],['Skin Smooth','$1.99'],  ['Portrait Edit','$2.99'],['Full Body','$3.99'],      ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Product Photo Editing Services',
+        'img_before' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80',
+        'price'      => '0.49',
+        'deliver'    => '5000',
+        'discount'   => '40',
+        'features'   => [
+            ['Clipping Path', '$0.49'],
+            ['Bulk Photo Editing (Cropping & Resizing)', '$0.25'],
+            ['Product Photo Background Remove', '$0.49'],
+            ['Color Correction & Editing', '$0.99'],
+            ['Photoshop Shadow Effect', '$0.49'],
+            ['Ghost Mannequin Effect', '$1.99'],
+            ['Product Photo Cleaning', '$0.49'],
+            ['Product Photo Retouching & Enhancement', '$1.49'],
+            ['Amazon Requirements Fulfilment Photo Editing', '$0.49'],
+            ['3D/360° Packshot Retouching(5 images)', '$0.99'],
         ]
     ],
     [
-        'name'   => 'Ghost Mannequin Effect',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Neck Joint','$1.49'],   ['Full Body','$2.49'],   ['3D Effect','$3.49'],    ['Sleeve Joint','$2.99'],   ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Neck Joint','$0.99'],   ['Full Body','$1.99'],   ['3D Effect','$2.49'],    ['Sleeve Joint','$1.99'],   ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Neck Joint','$0.75'],   ['Full Body','$1.49'],   ['3D Effect','$1.99'],    ['Sleeve Joint','$1.49'],   ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Ghost Mannequin Effects',
+        'img_before' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+        'price'      => '1.99',
+        'deliver'    => '2000',
+        'discount'   => '40',
+        'features'   => [
+            ['Neck Joint On Ghost Mannequin', '$1.99'],
+            ['Bottom Joint On Ghost Mannequin', '$2.49'],
+            ['Sleeves Joint On Ghost Mannequin', '$2.49'],
+            ['3D/360° Packshot Ghost Mannequin Effects', '$2.99'],
         ]
     ],
     [
-        'name'   => 'Color Correction Services',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Basic CC','$0.49'],     ['Advanced CC','$0.99'], ['White Balance','$0.79'],['Skin Tone','$1.49'],       ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Basic CC','$0.39'],     ['Advanced CC','$0.79'], ['White Balance','$0.59'],['Skin Tone','$1.19'],       ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Basic CC','$0.25'],     ['Advanced CC','$0.49'], ['White Balance','$0.39'],['Skin Tone','$0.79'],       ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Image Masking Services',
+        'img_before' => 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80',
+        'price'      => '1.49',
+        'deliver'    => '2000',
+        'discount'   => '40',
+        'features'   => [
+            ['Layer Masking', '$1.49'],
+            ['Alpha Channel Masking', '$1.99'],
+            ['Fur & Hair Masking', '$2.99'],
+            ['Refine Edge Masking', '$2.99'],
+            ['Transparent Image Masking', '$2.49'],
+            ['Translucent Image Masking', '$2.99'],
+            ['Object Image Masking', '$2.49'],
+            ['Color Masking', '$2.49'],
         ]
     ],
     [
-        'name'   => 'Jewellery Photo Services',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Basic Edit','$1.99'],   ['Reflection','$2.49'],  ['Dust Remove','$1.49'],  ['Color Fix','$2.99'],      ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Basic Edit','$1.49'],   ['Reflection','$1.99'],  ['Dust Remove','$1.19'],  ['Color Fix','$2.49'],      ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Basic Edit','$0.99'],   ['Reflection','$1.49'],  ['Dust Remove','$0.79'],  ['Color Fix','$1.79'],      ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Vector Conversion Services',
+        'img_before' => 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80',
+        'price'      => '4.49',
+        'deliver'    => '500',
+        'discount'   => '40',
+        'features'   => [
+            ['Raster to Vector Conversion', '$4.99'],
+            ['Vector Line Drawing and Artwork (Sketching)', '$4.49'],
+            ['Vector Logo Design', '$50.00'],
+            ['Vector Character Drawing for Animation', '$20.99'],
+            ['2D CAD Design', '$9.99'],
+            ['3D Vector Conversion (line drawing to 3D effects)', '$19.99'],
+            ['Product to Vector', '$14.99'],
+            ['3D Product Modeling', '$30.00'],
         ]
     ],
     [
-        'name'   => 'Real Estate Photo Services',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Basic Edit','$0.99'],   ['Sky Replace','$1.99'], ['Virtual Staging','$9.99'],['HDR Merge','$1.49'],     ['Delivery','24h'],['Volume','Up to 50']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Basic Edit','$0.79'],   ['Sky Replace','$1.49'], ['Virtual Staging','$7.99'],['HDR Merge','$1.19'],     ['Delivery','48h'],['Volume','Up to 200']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Basic Edit','$0.49'],   ['Sky Replace','$0.99'], ['Virtual Staging','$5.99'],['HDR Merge','$0.89'],     ['Delivery','72h'],['Volume','Unlimited']] ],
+        'name'       => 'Photoshop Shadow Services',
+        'img_before' => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=600&q=80',
+        'price'      => '0.25',
+        'deliver'    => '4000',
+        'discount'   => '40',
+        'features'   => [
+            ['Drop Shadow Creation', '$0.25'],
+            ['Reflection Shadow Creation', '$0.99'],
+            ['Realistic Shadow Creation', '$1.49'],
+            ['Retain Original Shadow', '$0.49'],
+            ['Shadow Removal Service', '$0.99'],
+            ['Highlight & Shadow on Portrait', '$4.49'],
         ]
     ],
     [
-        'name'   => 'Video Editing Service',
-        'tag'    => null,
-        'img_before' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500&q=80',
-        'img_after'  => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500&q=80',
-        'plans' => [
-            ['label'=>'Basic',    'color'=>'sky',     'prices'=>[['Up to 5 min','$14.99'], ['Color Grade','$9.99'], ['Audio Mix','$7.99'],    ['Thumbnails','$4.99'],     ['Delivery','48h'],['Volume','1 Project']] ],
-            ['label'=>'Standard', 'color'=>'indigo',  'prices'=>[['Up to 15 min','$24.99'],['Color Grade','$14.99'],['Audio Mix','$12.99'],   ['Thumbnails','$2.99'],     ['Delivery','72h'],['Volume','3 Projects']] ],
-            ['label'=>'Business', 'color'=>'dark',    'prices'=>[['Up to 30 min','$39.99'],['Color Grade','$19.99'],['Audio Mix','$17.99'],   ['Thumbnails','$1.99'],     ['Delivery','96h'],['Volume','Unlimited']] ],
+        'name'       => 'Color Correction Services',
+        'img_before' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80',
+        'price'      => '0.99',
+        'deliver'    => '5000',
+        'discount'   => '40',
+        'features'   => [
+            ['Color Correction', '$1.45'],
+            ['Exposure Correction', '$1.45'],
+            ['Color Conversion/Editing', '$6.99'],
+            ['Color Restoration For Damaged Photos', '$19.99'],
+            ['Product Photography Color Editing', '$4.49'],
+            ['Multi Path & Color Editing', '$1.49'],
+            ['Color Restoration', '$2.25'],
+            ['Black & White Photo Colorize', '$9.99'],
+            ['HDR Blending & Exposure Correction', '$4.49'],
+            ['Fashion Photography Color Editing', '$2.25'],
+            ['Product Photography Color Editing', '$0.99'],
+            ['Wedding Photography Color Editing', '$4.49'],
+            ['Real Estate Photography Photo Editing', '$4.49'],
+            ['Photoshop Lightroom Photo Editing', '$4.49'],
         ]
     ],
+    [
+        'name'       => 'High End Retouching',
+        'img_before' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80',
+        'price'      => '4.49',
+        'deliver'    => '1000',
+        'discount'   => '40',
+        'features'   => [
+            ['High End Retouching', '$4.49'],
+            ['High End Photo Restoration', '$11.99'],
+            ['High End Beauty Retouching', '$11.99'],
+            ['Digital Airbrushing (Wacom)', '$4.49'],
+            ['Pen Tablet Retouching', '$14.99'],
+            ['High Dynamic Range (HDR) Blending & Retouching', '$11.99'],
+            ['Focus Stacking, Z-stacking, Focus Blending', '$11.99'],
+            ['Color Masking', '$9.99'],
+        ]
+    ],
+    [
+        'name'       => 'Image Restoration Services',
+        'img_before' => 'https://images.unsplash.com/photo-1587595350732-bc5584eb63cf?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1587595350732-bc5584eb63cf?w=600&q=80',
+        'price'      => '4.49',
+        'deliver'    => '500',
+        'discount'   => '40',
+        'features'   => [
+            ['Color Cast Restoration', '$4.49'],
+            ['Black & White Photo Restoration', '$19.99'],
+            ['Vintage Photo Restoration', '$19.99'],
+            ['Damaged Photo Restoration', '$19.99'],
+            ['Faded & Blur Photo Restoration', '$19.99'],
+            ['Black & White Photo Colorize', '$19.99'],
+            ['Image Color Restore', '$24.99'],
+        ]
+    ],
+    [
+        'name'       => 'Video Editing Services',
+        'img_before' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+        'price'      => '100',
+        'deliver'    => '10',
+        'discount'   => '40',
+        'features'   => [
+            ['Basic Video Editing', '$100.00'],
+            ['Advance Video Editing', '$300.00'],
+            ['Complex Video Editing', '$500.00'],
+            ['Extreme Video Editing', '$2000.00'],
+        ]
+    ],
+    [
+        'name'       => '3D Modeling Services',
+        'img_before' => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80',
+        'img_after'  => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80',
+        'price'      => '30',
+        'deliver'    => '50',
+        'discount'   => '40',
+        'features'   => [
+            ['3D Product Modeling', '$30.00'],
+            ['Architectural 3D Modeling', '$150.00'],
+            ['Industrial 3D Modeling', '$250.00'],
+            ['Advance Level 3D Modeling', '$250.00'],
+        ]
+    ]
 ];
 @endphp
 
-<div class="bg-slate-950 min-h-screen text-white font-sans selection:bg-[#6366f1] selection:text-white">
-
-    {{-- ── PAGE HERO ─────────────────────────────────── --}}
-    <div class="pt-32 md:pt-40 lg:pt-44 pb-20 relative overflow-hidden">
-        {{-- Background glow --}}
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-[#6366f1]/20 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
-        
-        <div class="container mx-auto px-6 max-w-6xl text-center relative z-10">
-            <span class="inline-block px-5 py-2 rounded-full bg-[#6366f1]/10 text-[#818cf8] text-[11px] font-bold tracking-[0.25em] uppercase border border-[#6366f1]/20 mb-6">
-                Transparent Pricing
-            </span>
-            <h1 class="text-5xl md:text-7xl font-black tracking-tight text-white mb-6">
-                Pricing <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#22d3ee]">Plan</span>
-            </h1>
-            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                Professional Photo Editing &amp; Retouching Rates.<br>
-                Start from <span class="text-[#22d3ee] font-bold">25¢/image</span> — No hidden fees.
-            </p>
-
-            {{-- Quick stats --}}
-            <div class="flex flex-wrap justify-center gap-6 mt-12">
-                @foreach([['24h','Fast Turnaround'],['99%','Satisfaction Rate'],['14+','Service Types'],['50K+','Images Edited']] as [$val,$lbl])
-                <div class="px-6 py-4 rounded-2xl bg-white/[0.04] border border-white/[0.07] text-center min-w-[110px]">
-                    <div class="text-2xl font-black text-white">{{ $val }}</div>
-                    <div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-0.5">{{ $lbl }}</div>
-                </div>
-                @endforeach
-            </div>
+{{-- ── PREMIUM PAGE HEADER ──────────────────────────── --}}
+<div class="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">
+    {{-- Dark Corporate Gradient Background --}}
+    <div class="absolute inset-0 bg-gradient-to-br from-[#0e1726] via-[#112a46] to-[#0a4a82]"></div>
+    {{-- Subtle overlay image for texture --}}
+    <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center mix-blend-overlay"></div>
+    {{-- Dot Grid overlay --}}
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-black text-white uppercase tracking-widest mb-4 drop-shadow-lg">Pricing Plans & Rates</h1>
+        <p class="text-white/80 text-lg md:text-xl font-light mb-8 max-w-3xl mx-auto whitespace-normal">
+            Professional Photo Editing & Retouching Services — Start from <span class="text-yellow-400 font-bold whitespace-nowrap">25¢/image</span>
+        </p>
+        <div class="flex justify-center gap-1.5">
+            <span class="w-1.5 h-1.5 bg-white rounded-full opacity-50"></span>
+            <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
+            <span class="w-1.5 h-1.5 bg-white rounded-full opacity-50"></span>
         </div>
     </div>
+</div>
+
+<div class="bg-slate-50 min-h-screen text-[#333] font-sans pb-24 relative">
 
     {{-- ── PRICING TABLE ROWS ───────────────────────── --}}
-    <div class="container mx-auto px-4 sm:px-6 max-w-7xl pb-28 space-y-6">
-
-        @php
-        $planColors = [
-            'sky'   => ['header'=>'bg-sky-500',    'btn'=>'border-sky-500 text-sky-400 hover:bg-sky-500',   'badge'=>'bg-sky-500/10 text-sky-400 border-sky-500/20'],
-            'indigo'=> ['header'=>'bg-indigo-600', 'btn'=>'border-indigo-500 text-indigo-400 hover:bg-indigo-500', 'badge'=>'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'],
-            'dark'  => ['header'=>'bg-slate-700',  'btn'=>'border-slate-500 text-slate-300 hover:bg-slate-600',   'badge'=>'bg-slate-600/20 text-slate-300 border-slate-600/30'],
-        ];
-        @endphp
+    <div class="container mx-auto pt-4 px-4 max-w-[1200px] space-y-8 relative z-20 -mt-16">
 
         @foreach($services as $s => $service)
-        <div class="rounded-2xl overflow-hidden border border-white/[0.07] bg-white/[0.03] backdrop-blur-sm reveal" style="animation-delay: {{ $s * 0.04 }}s">
+        <div class="bg-white border border-[#e5e5e5] rounded-sm overflow-hidden shadow-sm">
 
             {{-- Row Title Bar --}}
-            <div class="px-6 py-4 border-b border-white/[0.07] flex items-center justify-between flex-wrap gap-2 bg-white/[0.02]">
-                <div class="flex items-center gap-3">
-                    <h3 class="font-black text-[15px] text-white tracking-tight">{{ $service['name'] }}</h3>
-                    @if($service['tag'])
-                        <span class="px-3 py-0.5 text-[9px] font-black uppercase tracking-widest bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 rounded-full">{{ $service['tag'] }}</span>
-                    @endif
-                </div>
-                <a href="#" class="text-[11px] text-[#22d3ee] hover:text-white font-bold uppercase tracking-widest flex items-center gap-1 transition-colors">
-                    Get a Quote <i class="ri-arrow-right-line"></i>
-                </a>
+            <div class="bg-[#f5f5f5] px-5 py-3 border-b border-[#e5e5e5]">
+                <h3 class="font-bold text-[14px] text-[#333] tracking-wide">{{ $service['name'] }}</h3>
             </div>
 
-            <div class="grid md:grid-cols-[180px_1fr_1fr_1fr]">
+            <div class="flex flex-col md:flex-row">
 
-                {{-- Before/After Slider --}}
-                <div class="relative min-h-[220px] overflow-hidden cursor-ew-resize"
+                {{-- Before/After Slider (Large Image) --}}
+                <div class="relative w-full md:w-[400px] shrink-0 h-[280px] bg-[#f9f9f9] border-r border-[#e5e5e5] overflow-hidden"
                     x-data="{ position: 50, isDragging: false,
                         update(e) {
                             if (!this.isDragging && e.type !== 'click') return;
@@ -176,76 +273,103 @@ $services = [
                     @click="update($event)"
                     @mouseleave="isDragging = false"
                 >
+                    {{-- After Image --}}
                     <img src="{{ $service['img_after'] }}" alt="After" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 z-10 overflow-hidden ps-clip"
-                         :style="'clip-path: inset(0 ' + (100 - position) + '% 0 0)'">
-                        <img src="{{ $service['img_before'] }}" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale brightness-[0.55]">
+                    
+                    {{-- Before Image --}}
+                    <div class="absolute inset-0 z-10 overflow-hidden slider-smooth" :style="'clip-path: inset(0 ' + (100 - position) + '% 0 0)'">
+                        <img src="{{ $service['img_before'] }}" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale brightness-90">
                     </div>
-                    {{-- Labels --}}
-                    <div class="absolute bottom-2 left-2 z-20 text-[8px] font-black uppercase tracking-widest text-white bg-black/60 px-2 py-0.5 rounded-md backdrop-blur-sm">BEFORE</div>
-                    <div class="absolute bottom-2 right-2 z-20 text-[8px] font-black uppercase tracking-widest text-white bg-[#6366f1]/80 px-2 py-0.5 rounded-md backdrop-blur-sm">AFTER</div>
+                    
                     {{-- Handle --}}
-                    <div class="absolute inset-y-0 z-20 w-[2px] bg-white/60 pointer-events-none ps-clip"
-                         :style="'left: ' + position + '%'">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7 bg-slate-950 rounded-full shadow-lg flex items-center justify-center border border-white/20">
-                            <i class="ri-arrow-left-right-line text-[10px] text-[#22d3ee]"></i>
+                    <div class="absolute inset-y-0 z-20 w-[2px] bg-white pointer-events-none slider-smooth shadow-sm" :style="'left: ' + position + '%'">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center border border-slate-200">
+                            <i class="ri-arrow-left-right-line text-[12px] text-slate-600"></i>
                         </div>
+                    </div>
+
+                    {{-- Labels (Like the screenshot) --}}
+                    <div class="absolute bottom-3 left-3 z-30 pointer-events-none">
+                        <span class="bg-[#555] text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm inline-block uppercase">BEFORE</span>
+                    </div>
+                    <div class="absolute bottom-3 right-3 z-30 pointer-events-none">
+                        <span class="bg-[#555] text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm inline-block uppercase">AFTER</span>
                     </div>
                 </div>
 
-                {{-- Three Plan Columns --}}
-                @foreach($service['plans'] as $plan)
-                @php $c = $planColors[$plan['color']]; @endphp
-                <div class="flex flex-col border-l border-white/[0.05]">
-                    {{-- Plan Header --}}
-                    <div class="{{ $c['header'] }} px-5 py-3 flex items-center justify-between">
-                        <span class="text-white font-black text-[11px] uppercase tracking-[0.2em]">{{ $plan['label'] }}</span>
-                        <a href="#" class="text-[9px] font-bold text-white/80 hover:text-white border border-white/20 hover:border-white/60 px-3 py-1 rounded-lg transition-all">Order</a>
+                {{-- Content Container --}}
+                <div class="flex-1 p-6 flex flex-col justify-between">
+                    
+                    {{-- Top 3 Column Stats --}}
+                    <div class="grid grid-cols-3 gap-4 pb-6 border-b border-[#eee]">
+                        <div class="text-center">
+                            <div class="text-[12px] text-[#666] mb-1 italic">Price starts from</div>
+                            <div class="text-2xl font-black text-[#5cb85c] leading-none mb-1 tabular-nums">{{ $service['price'] }}$</div>
+                            <div class="text-[11px] text-[#666] italic">
+                                {{ Str::contains($service['name'], 'Video') ? 'per video' : (Str::contains($service['name'], '3D Modeling') ? 'per 3D image' : 'per image') }}
+                            </div>
+                        </div>
+                        <div class="text-center border-l border-[#eee]">
+                            <div class="text-[12px] text-[#666] mb-1 italic">We can deliver</div>
+                            <div class="text-2xl font-black text-[#5cb85c] leading-none mb-1 tabular-nums">{{ $service['deliver'] }}</div>
+                            <div class="text-[11px] text-[#666] italic">
+                                {{ Str::contains($service['name'], 'Video') ? 'projects/day' : 'Images/day' }}
+                            </div>
+                        </div>
+                        <div class="text-center border-l border-[#eee]">
+                            <div class="text-[12px] text-[#666] mb-1 italic">Discount Upto</div>
+                            <div class="text-2xl font-black text-[#5cb85c] leading-none mb-1 tabular-nums">{{ $service['discount'] }}%</div>
+                            <div class="text-[11px] text-[#666] italic">on bulk order</div>
+                        </div>
                     </div>
 
-                    {{-- Pricing Rows --}}
-                    <div class="p-5 flex-1 space-y-0">
-                        @foreach($plan['prices'] as $idx => [$feature, $price])
-                        <div class="flex justify-between items-center py-2 {{ !$loop->last ? 'border-b border-white/[0.05]' : '' }}">
-                            <span class="text-[11px] text-slate-400 font-medium">{{ $feature }}</span>
-                            <span class="text-[12px] font-black text-white tabular-nums">{{ $price }}</span>
+                    {{-- Features List (2 Columns) --}}
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-3 py-6 flex-grow">
+                        @foreach($service['features'] as [$feature_name, $feature_price])
+                        <div class="flex justify-between items-start text-[12px]">
+                            <span class="text-[#555] flex items-center gap-2">
+                                <span class="w-1 h-1 rounded-full bg-[#5cb85c] inline-block shrink-0"></span>
+                                {{ $feature_name }}
+                            </span>
+                            <span class="font-bold text-[#333] tabular-nums">{{ $feature_price }}</span>
                         </div>
                         @endforeach
                     </div>
 
-                    {{-- Trial Button --}}
-                    <div class="px-5 pb-5 pt-2">
-                        <a href="#" class="block text-center border {{ $c['btn'] }} hover:text-white py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                    {{-- Action Buttons --}}
+                    <div class="flex justify-center gap-3 pt-6 border-t border-[#eee]">
+                        <a href="{{ route('graphics.get-quote') }}" class="px-6 py-2 bg-[#12537e] hover:bg-[#0c3e60] text-white text-[12px] font-bold rounded-sm transition-colors shadow-sm">
                             Free Trial
                         </a>
+                        <a href="{{ route('graphics.get-quote') }}" class="px-6 py-2 bg-[#51a8d0] hover:bg-[#3d8fb4] text-white text-[12px] font-bold rounded-sm transition-colors shadow-sm">
+                            Get A Quote
+                        </a>
+                        <a href="{{ route('graphics.services') }}" class="px-6 py-2 bg-[#12537e] hover:bg-[#0c3e60] text-white text-[12px] font-bold rounded-sm transition-colors shadow-sm">
+                            View Details
+                        </a>
                     </div>
+
                 </div>
-                @endforeach
 
             </div>
         </div>
         @endforeach
 
-        {{-- ── CTA Strip ────────────────────────────── --}}
-        <div class="mt-10 p-10 md:p-16 rounded-3xl border border-[#6366f1]/20 bg-gradient-to-br from-[#6366f1]/10 to-[#22d3ee]/5 flex flex-col md:flex-row items-center justify-between gap-8 reveal">
-            <div>
-                <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Need a Custom Quote?</h2>
-                <p class="text-slate-400 max-w-lg">Have a large volume project or special requirements? Contact us and we'll tailor a plan that fits your exact needs.</p>
-            </div>
-            <a href="#" class="shrink-0 inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#6366f1] hover:bg-[#4f46e5] text-white font-bold text-sm transition-all shadow-lg shadow-[#6366f1]/30 hover:-translate-y-0.5 hover:shadow-xl">
-                Contact Us
-                <i class="ri-arrow-right-line"></i>
-            </a>
-        </div>
-
     </div>
 </div>
 
-@endsection
-
-@push('styles')
 <style>
-    [x-data] img { pointer-events: none; user-select: none; }
-    .ps-clip { transition: clip-path 0.08s ease, left 0.08s ease; }
+    .slider-smooth {
+        transition: clip-path 0.1s cubic-bezier(0.17, 0.67, 0.83, 0.67), 
+                    left 0.1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    }
+    /* Ensure the navbar respects the dark header background before scrolling */
+    #main-navbar:not(.nav-scrolled) .studio-nav-link { color: white; }
+    #main-navbar:not(.nav-scrolled) .logo-text-primary { color: white; }
+    #main-navbar:not(.nav-scrolled) .logo-text-secondary { color: rgba(255,255,255,0.6); }
+    
+    /* Force main body text color just in case */
+    body { color: #333; }
 </style>
-@endpush
+
+@endsection
