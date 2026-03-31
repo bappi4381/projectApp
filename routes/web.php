@@ -59,6 +59,11 @@ Route::get('/graphics-studio/get-quote', function () {
     return view('graphics.get-quote');
 })->name('graphics.get-quote');
 
+// Upload Page
+Route::get('/graphics-studio/upload', function () {
+    return view('graphics.upload');
+})->name('graphics.upload');
+
 Route::post('/graphics-studio/get-quote', function () {
     // Handle form submission (email / save to DB)
     return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');

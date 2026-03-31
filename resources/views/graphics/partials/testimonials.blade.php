@@ -2,132 +2,81 @@
 @php
 $testimonials = [
     [
-        'name'    => 'Sarah Johnson',
-        'role'    => 'E-Commerce Director',
-        'company' => 'StyleHive London',
-        'avatar'  => 'SJ',
-        'color'   => 'indigo',
-        'rating'  => 5,
-        'quote'   => 'Our product photography used to take weeks to post-process. Since partnering with this studio, we\'ve cut our time-to-market by 60%. The quality is absolutely flawless.',
-        'tag'     => 'Clipping Path',
+        'name'    => 'Nicholsons',
+        'role'    => 'E-commerce, Product Seller',
+        'avatar'  => 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
+        'quote'   => 'I use Color Experts on a regular basis to clip my images and place them on a <strong>white background</strong> ready for use on my website. I am always impressed by the quality of the work which helps to show my website at its best. The quick "<strong>turn around</strong>" time is vital in helping us to keep our <strong>online product catalogue</strong> fresh and up-to-date.',
+        'color'   => '#1ebba3'
     ],
     [
-        'name'    => 'Marcus Chen',
+        'name'    => 'Kith Wig Seratch',
+        'role'    => 'AB Kajpromenaden, Helsingborg Sweden',
+        'avatar'  => 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+        'quote'   => 'CEI has been providing me <strong>clipping path services</strong> for a long time. The quality and <strong>turnaround time</strong> are second to none. I recommend CEI for superior Clipping Path and top-notch Image Manipulation Services at very very <strong>reasonable cost</strong>.',
+        'color'   => '#0984e3'
+    ],
+    [
+        'name'    => 'Sarah Jenkins',
         'role'    => 'Creative Director',
-        'company' => 'Luxe Jewels NYC',
-        'avatar'  => 'MC',
-        'color'   => 'amber',
-        'rating'  => 5,
-        'quote'   => 'Jewelry retouching is notoriously difficult to outsource — but these guys nailed it from the first batch. Every diamond sparkles exactly the way it should.',
-        'tag'     => 'Jewelry Retouching',
+        'avatar'  => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
+        'quote'   => 'Their <strong>ghost mannequin</strong> editing is flawless. Our clothing line looks incredibly professional, and sales have increased noticeably since we started using their <strong>retouching services</strong> on a daily basis.',
+        'color'   => '#f0932b'
     ],
     [
-        'name'    => 'Priya Nair',
-        'role'    => 'Marketing Head',
-        'company' => 'Urban Threads India',
-        'avatar'  => 'PN',
-        'color'   => 'purple',
-        'rating'  => 5,
-        'quote'   => 'Ghost mannequin service has completely transformed our product listings. Our conversion rate went up by 34% after switching to these professional images.',
-        'tag'     => 'Ghost Mannequin',
-    ],
-    [
-        'name'    => 'David Williams',
-        'role'    => 'Senior Photographer',
-        'company' => 'DW Studios, Berlin',
-        'avatar'  => 'DW',
-        'color'   => 'cyan',
-        'rating'  => 5,
-        'quote'   => 'Fast turnaround, excellent communication, and results that match exactly what I describe. I\'ve tried six other services — this is the only one I\'ve kept.',
-        'tag'     => 'Photo Retouching',
-    ],
-    [
-        'name'    => 'Emma Rodriguez',
-        'role'    => 'Founder & CEO',
-        'company' => 'FashionForward AU',
-        'avatar'  => 'ER',
-        'color'   => 'pink',
-        'rating'  => 5,
-        'quote'   => 'We ship 3,000+ images per month and this team handles every single one. Their consistency across large batch orders is remarkable — every image is perfect.',
-        'tag'     => 'Batch Processing',
-    ],
-    [
-        'name'    => 'Alex Thompson',
-        'role'    => 'Product Manager',
-        'company' => 'NovaMart Global',
-        'avatar'  => 'AT',
-        'color'   => 'emerald',
-        'rating'  => 5,
-        'quote'   => 'The 24-hour turnaround is real. I sent 200 images at 9 PM and had results ready by morning. That kind of reliability is what a high-volume operation needs.',
-        'tag'     => 'Fast Delivery',
+        'name'    => 'Markus Vance',
+        'role'    => 'Lead Photographer',
+        'avatar'  => 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=150&q=80',
+        'quote'   => 'We process thousands of raw images weekly. Outsourcing the <strong>background removal</strong> and color correction to CEI has been the <strong>best decision</strong> we made for streamlining our studio workflow.',
+        'color'   => '#6ab04c'
     ],
 ];
-
-// Group into pairs for the slider
 $chunks = array_chunk($testimonials, 2);
 @endphp
 
-<section id="quote" class="relative py-16 md:py-20 bg-slate-950 overflow-hidden" 
+<section id="testimonials" class="py-24 bg-[#fafafa] overflow-hidden" 
     x-data="{ 
         active: 0,
         count: {{ count($chunks) }},
-        autoplay: true,
         timer: null,
         init() {
-            if (this.autoplay) {
-                this.startAutoplay();
-            }
+            this.startAutoplay();
         },
         startAutoplay() {
             this.timer = setInterval(() => {
                 this.active = (this.active + 1) % this.count;
-            }, 6000);
+            }, 7000);
         },
         stopAutoplay() {
             clearInterval(this.timer);
         },
-        next() {
+        goTo(index) {
             this.stopAutoplay();
-            this.active = (this.active + 1) % this.count;
-            this.startAutoplay();
-        },
-        prev() {
-            this.stopAutoplay();
-            this.active = (this.active - 1 + this.count) % this.count;
+            this.active = index;
             this.startAutoplay();
         }
     }">
 
-    {{-- Luxury Background --}}
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
-        <div class="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[120px] animate-pulse-glow"></div>
-        <div class="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] animate-pulse-glow" style="animation-delay: 2s"></div>
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-        {{-- Header --}}
-        <div class="text-center mb-12 reveal">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-6">
-                Client Success
-            </span>
-            <h2 class="text-3xl md:text-5xl font-black text-white mb-6">
-                Loved by Brands <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Worldwide</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {{-- Header Section --}}
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-black text-[#1a1a1a] uppercase tracking-wide mb-4">
+                TESTIMONIALS
             </h2>
+            <p class="text-slate-500 text-sm md:text-base font-light mb-6">
+                Over 15,000 photo editing clients all over the world, some of them speak for us!
+            </p>
+            <div class="flex justify-center gap-1.5">
+                <span class="w-2 h-2 bg-[#6ab04c] rounded-sm"></span>
+                <span class="w-2 h-2 bg-[#f0932b] rounded-sm"></span>
+                <span class="w-2 h-2 bg-[#3498db] rounded-sm"></span>
+                <span class="w-2 h-2 bg-[#130f40] rounded-sm"></span>
+            </div>
         </div>
 
-        {{-- Main Slider Container --}}
-        <div class="relative max-w-6xl mx-auto px-4 md:px-12">
+        {{-- Slider Container --}}
+        <div class="relative w-full max-w-6xl mx-auto">
             
-            {{-- Navigation Buttons --}}
-            <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all z-20 group hidden md:flex">
-                <i class="ri-arrow-left-s-line text-2xl group-hover:-translate-x-0.5 transition-transform"></i>
-            </button>
-            <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-all z-20 group hidden md:flex">
-                <i class="ri-arrow-right-s-line text-2xl group-hover:translate-x-0.5 transition-transform"></i>
-            </button>
-
-            {{-- Slider Track --}}
             <div class="relative min-h-[400px] md:min-h-[280px]">
                 @foreach($chunks as $i => $slide)
                 <div x-show="active === {{ $i }}" 
@@ -137,54 +86,69 @@ $chunks = array_chunk($testimonials, 2);
                      x-transition:leave="transition ease-in duration-500 absolute inset-0"
                      x-transition:leave-start="opacity-100 translate-x-0"
                      x-transition:leave-end="opacity-0 -translate-x-8"
-                     class="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+                     class="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16"
                      x-cloak>
                     
                     @foreach($slide as $t)
-                    <div class="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-6 md:p-8 flex flex-col items-start text-left group hover:bg-white/[0.04] transition-all duration-300">
-                        <div class="flex gap-1 mb-4">
-                            @for($s=0;$s<5;$s++)
-                            <i class="ri-star-fill text-amber-400 text-xs"></i>
-                            @endfor
+                    <div class="flex flex-col md:flex-row gap-6 md:gap-8 hover:-translate-y-1 transition-transform duration-300">
+                        {{-- Avatar Design --}}
+                        <div class="shrink-0 relative mx-auto md:mx-0 mt-2">
+                            {{-- Decorative background shape --}}
+                            <div class="absolute -inset-3 bg-[#e8f2ec] rounded-full rounded-tr-none scale-[1.1] z-0"></div>
+                            
+                            {{-- Avatar Image Container --}}
+                            <div class="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full rounded-tr-none border-2 border-[{{ $t['color'] }}] overflow-hidden bg-white shadow-lg p-1.5">
+                                <img src="{{ $t['avatar'] }}" alt="{{ $t['name'] }}" class="w-full h-full object-cover rounded-full rounded-tr-none filter contrast-125">
+                            </div>
+
+                            {{-- Floating Dots --}}
+                            <div class="absolute -top-1 -left-1 w-2.5 h-2.5 bg-yellow-400 rounded-full shadow-sm z-20"></div>
+                            <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-[#3498db] rounded-full shadow-sm z-20"></div>
+                            <div class="absolute bottom-2 -right-4 w-1.5 h-1.5 bg-[#130f40] rounded-full shadow-sm z-20"></div>
                         </div>
 
-                        <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-8 italic flex-grow">
-                            "{{ $t['quote'] }}"
-                        </p>
-
-                        <div class="flex items-center gap-4 mt-auto">
-                            <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/10">
-                                <span class="text-xs font-black text-white uppercase">{{ $t['avatar'] }}</span>
+                        {{-- Content --}}
+                        <div class="flex-grow text-center md:text-left">
+                            <div class="flex flex-col md:flex-row md:items-start gap-3 mb-4">
+                                {{-- Quote Icon --}}
+                                <i class="ri-double-quotes-l text-4xl leading-none text-slate-700 font-serif"></i>
+                                
+                                <div class="mt-1 md:mt-2 border-b border-slate-200 pb-2 flex-grow">
+                                    <span class="text-[{{ $t['color'] }}] font-bold text-[15px]">{{ $t['name'] }}</span>
+                                    <span class="text-slate-500 font-medium text-xs">, {{ $t['role'] }}</span>
+                                </div>
                             </div>
-                            <div>
-                                <div class="text-sm font-black text-white tracking-wide uppercase">{{ $t['name'] }}</div>
-                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">{{ $t['company'] }}</div>
-                            </div>
+                            
+                            {{-- Testimonial Text --}}
+                            <p class="text-slate-600 text-[13px] md:text-sm leading-relaxed text-justify test-text">
+                                {!! $t['quote'] !!}
+                            </p>
                         </div>
                     </div>
                     @endforeach
+
                 </div>
                 @endforeach
             </div>
 
-            {{-- Pagination Dots --}}
-            <div class="flex justify-center gap-3 mt-10">
-                @foreach($chunks as $i => $t)
-                <button @click="stopAutoplay(); active = {{ $i }}; startAutoplay();" 
-                        class="h-1.5 rounded-full transition-all duration-500"
-                        :class="active === {{ $i }} ? 'w-12 bg-indigo-500' : 'w-3 bg-white/10 hover:bg-white/20'"></button>
+            {{-- Pagination --}}
+            <div class="flex justify-center items-center gap-3 mt-14">
+                @foreach($chunks as $index => $slide)
+                <button @click="goTo({{ $index }})" class="focus:outline-none flex items-center justify-center transition-all duration-300 w-4 h-4 rounded-full border border-transparent"
+                    :class="active === {{ $index }} ? 'border-yellow-400 p-[2px]' : ''">
+                    <span class="block rounded-full transition-all duration-300" 
+                          :class="active === {{ $index }} ? 'w-full h-full bg-yellow-400' : 'w-[5px] h-[5px] bg-[#a9b0a6] hover:bg-slate-400'"></span>
+                </button>
                 @endforeach
             </div>
-        </div>
 
-        {{-- Mini Stats --}}
-        <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 mt-16 pt-12 border-t border-white/5 opacity-60">
-            @foreach([['500+','Clients'],['2M+','Assets'],['98%','SLA Hub'],['4.9★','Score']] as [$v,$l])
-            <div class="flex items-center gap-3">
-                <span class="text-lg font-black text-white">{{ $v }}</span>
-                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{{ $l }}</span>
-            </div>
-            @endforeach
         </div>
     </div>
 </section>
+
+<style>
+    .test-text strong {
+        color: #1a1a1a;
+        font-weight: 700;
+    }
+</style>

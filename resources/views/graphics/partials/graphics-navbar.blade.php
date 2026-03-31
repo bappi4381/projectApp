@@ -5,7 +5,7 @@
         servicesOpen: false, 
         offersOpen: false,
         scrolled: false,
-        activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') || Request::routeIs('graphics.blog.single') ? 'blog' : (Request::routeIs('graphics.pricing') ? 'pricing' : (Request::routeIs('graphics.offers') ? 'offers' : (Request::routeIs('graphics.payment') ? 'payment' : (Request::routeIs('graphics.get-quote') ? 'quote' : ''))))))) }}',
+        activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') || Request::routeIs('graphics.blog.single') ? 'blog' : (Request::routeIs('graphics.pricing') ? 'pricing' : (Request::routeIs('graphics.offers') ? 'offers' : (Request::routeIs('graphics.payment') ? 'payment' : (Request::routeIs('graphics.upload') ? 'upload' : (Request::routeIs('graphics.get-quote') ? 'quote' : '')))))))) }}',
         init() {
             window.addEventListener('scroll', () => {
                 this.scrolled = window.scrollY > 40;
@@ -335,7 +335,7 @@
             {{-- Action Group --}}
             @if(!Request::routeIs('graphics.get-quote'))
             <div class="hidden lg:flex items-center gap-6">
-                <a href="{{ route('graphics.get-quote') }}" class="relative group overflow-hidden px-10 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-yellow-400/20">
+                <a href="{{ route('graphics.upload') }}" class="relative group overflow-hidden px-10 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-yellow-400/20">
                     <div class="absolute inset-0 bg-yellow-400"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                     <span class="relative text-slate-900 flex items-center gap-2">
