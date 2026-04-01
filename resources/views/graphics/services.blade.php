@@ -6,7 +6,7 @@
 <div class="bg-[#f0f9ff] min-h-screen font-sans selection:bg-[#0ea5e9] selection:text-white pb-20">
 
     {{-- ── HERO SECTION ────────────────────────────────── --}}
-    <div class="text-white flex items-center" style="background-color: #7F2DF7; min-height: 380px; padding-top: 170px; padding-bottom: 50px;">
+    <div class="text-white flex items-center" style="background-color: #0A3756; min-height: 380px; padding-top: 170px; padding-bottom: 50px;">
         <div class="container mx-auto px-6 max-w-6xl relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 {{-- Left Content --}}
