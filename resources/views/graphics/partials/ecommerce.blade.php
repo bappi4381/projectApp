@@ -19,26 +19,27 @@
                         E-Commerce Solutions
                     </div>
                     <h2 class="text-4xl md:text-5xl font-black text-white leading-[1.15] tracking-tight">
-                        Product Photo <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#20c997] to-[#00d2ff]">Editing</span>
+                        E-Commerce <br>
+                        Product Photo Editing
                     </h2>
                 </div>
                 
                 <p class="text-base md:text-lg text-slate-400 leading-relaxed font-medium max-w-lg">
-                    Elevate your brand with high-end post-production. We specialize in creating pixel-perfect images for marketplaces like <span class="text-white">Amazon, eBay, and Etsy.</span>
+                    Are you a vendor or seller in Ecommerce Marketplace like Amazon, eBay, AliExpress, Etsy, Flipkart? Do you need photo touch-up services for your store?
                 </p>
 
-                <div class="flex flex-wrap items-center gap-6 pt-2">
-                    {{-- Premium Action Button --}}
-                    <a href="#" class="relative group px-8 py-4 bg-[#20c997] rounded-full text-xs font-black uppercase tracking-widest text-[#0f172a] overflow-hidden transition-all duration-500 hover:shadow-[0_15px_30px_rgba(32,201,151,0.25)] hover:-translate-y-1">
-                        <span class="relative z-10">Get Quick Quote</span>
-                        <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <div class="flex flex-wrap items-center gap-8 pt-4">
+                    {{-- Link Style: VIEW DETAILS --}}
+                    <a href="{{ route('graphics.ecommerce') }}" class="group flex items-center gap-3 text-[13px] font-bold uppercase tracking-widest text-white hover:text-[#20c997] transition-colors">
+                        VIEW DETAILS
+                        <div class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:border-[#20c997] transition-colors">
+                            <i class="ri-arrow-right-s-line text-lg transition-transform group-hover:translate-x-0.5"></i>
+                        </div>
                     </a>
 
-                    {{-- Link Style --}}
-                    <a href="#" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/60 hover:text-[#20c997] transition-colors">
-                        View Portfolio
-                        <i class="ri-arrow-right-line transition-transform group-hover:translate-x-1"></i>
+                    {{-- Premium Action Button: GET QUICK QUOTE --}}
+                    <a href="{{ route('graphics.get-quote') }}" class="px-8 py-3.5 bg-white rounded-full text-[13px] font-bold uppercase tracking-widest text-[#0f172a] shadow-lg hover:shadow-white/10 hover:-translate-y-0.5 transition-all duration-300">
+                        GET QUICK QUOTE
                     </a>
                 </div>
             </div>
