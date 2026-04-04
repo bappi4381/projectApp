@@ -316,8 +316,8 @@
                              x-transition:leave-start="opacity-100 translate-y-0"
                              x-transition:leave-end="opacity-0 translate-y-2">
                             <div class="bg-white rounded shadow-xl border border-[#eee] py-5 px-6 flex flex-col gap-4">
-                                <a href="{{ url('/offers/first-order-free') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">First Order Free</a>
-                                <a href="{{ url('/offers/comeback-campaign') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Comeback Campaign</a>
+                                <a href="{{ route('graphics.first-order-free') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">First Order Free</a>
+                                <a href="{{ route('graphics.comeback-campaign') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Comeback Campaign</a>
                                 <a href="{{ url('/offers/40-percent-off') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Get Up to 40% Off</a>
                                 <a href="{{ url('/offers/christmas-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Christmas Photo Editing</a>
                             </div>

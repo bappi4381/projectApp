@@ -64,6 +64,16 @@ Route::get('/graphics-studio/upload', function () {
     return view('graphics.upload');
 })->name('graphics.upload');
 
+// First Order Free Page
+Route::get('/graphics-studio/offer/first-order-free', function () {
+    return view('graphics.first-order-free');
+})->name('graphics.first-order-free');
+
+// Comeback Campaign Page
+Route::get('/graphics-studio/offer/comeback-campaign', function () {
+    return view('graphics.comeback-campaign');
+})->name('graphics.comeback-campaign');
+
 // Ecommerce Page
 Route::get('/graphics-studio/ecommerce', function () {
     return view('graphics.ecommerce');
