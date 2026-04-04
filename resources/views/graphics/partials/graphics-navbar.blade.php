@@ -300,11 +300,11 @@
 
                     {{-- Offers Menu --}}
                     <div @mouseenter="offersOpen = true" @mouseleave="offersOpen = false" class="relative">
-                        <a href="{{ url('/offers') }}" class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
-                           :class="activeSection === 'offers' || request()->is('offers*') ? 'text-yellow-400' : ''">
+                        <a href="{{ route('graphics.offers') }}" class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
+                           :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'text-yellow-400' : ''">
                             Offers
                             <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="offersOpen ? 'rotate-180' : ''"></i>
-                            <span class="studio-link-dot" :class="activeSection === 'offers' || request()->is('offers*') ? 'active-dot' : ''"></span>
+                            <span class="studio-link-dot" :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'active-dot' : ''"></span>
                         </a>
 
                         <div x-show="offersOpen" x-cloak
@@ -318,8 +318,8 @@
                             <div class="bg-white rounded shadow-xl border border-[#eee] py-5 px-6 flex flex-col gap-4">
                                 <a href="{{ route('graphics.first-order-free') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">First Order Free</a>
                                 <a href="{{ route('graphics.comeback-campaign') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Comeback Campaign</a>
-                                <a href="{{ url('/offers/40-percent-off') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Get Up to 40% Off</a>
-                                <a href="{{ url('/offers/christmas-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Christmas Photo Editing</a>
+                                <a href="{{ route('graphics.get-quote') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Get Up to 40% Off</a>
+                                <a href="{{ route('graphics.christmas-photo-editing') }}" class="text-[13px] text-[#666] hover:text-[#0c5a9e] transition-colors block">Christmas Photo Editing</a>
                             </div>
                         </div>
                     </div>
@@ -511,14 +511,14 @@
                     <div x-data="{ offerSub: false }">
                         <button @click="offerSub = !offerSub" 
                                 class="flex items-center justify-between w-full text-2xl font-black tracking-tighter transition-colors"
-                                :class="activeSection === 'offers' || request()->is('offers*') ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                                :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
                             OFFERS <i :class="offerSub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
                         </button>
                         <div x-show="offerSub" class="mt-4 flex flex-col gap-3 pl-4 border-l border-white/10" x-collapse>
-                            <a href="{{ url('/offers/first-order-free') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">First Order Free</a>
-                            <a href="{{ url('/offers/comeback-campaign') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Comeback Campaign</a>
-                            <a href="{{ url('/offers/40-percent-off') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Get Up to 40% Off</a>
-                            <a href="{{ url('/offers/christmas-photo-editing') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Christmas Photo Editing</a>
+                            <a href="{{ route('graphics.first-order-free') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">First Order Free</a>
+                            <a href="{{ route('graphics.comeback-campaign') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Comeback Campaign</a>
+                            <a href="{{ route('graphics.get-quote') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Get Up to 40% Off</a>
+                            <a href="{{ route('graphics.christmas-photo-editing') }}" @click="open = false" class="text-lg font-bold text-white/60 hover:text-white transition-colors">Christmas Photo Editing</a>
                         </div>
                     </div>
 

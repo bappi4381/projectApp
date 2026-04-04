@@ -24,11 +24,12 @@
 </div>
 
 {{-- ── MAIN CONTENT AREA ────────────────────────────── --}}
-<div class="bg-white">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-8 pb-12 relative z-10">
+<div class="bg-white pt-16">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 pb-8 relative z-10">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-14 relative z-10">
             
             {{-- TOP GRAPHIC SECTION --}}
-            <div class="flex flex-col xl:flex-row items-center justify-center gap-6 xl:gap-8 mb-16 pt-6">
+            <div class="flex flex-col xl:flex-row items-center justify-center gap-8 xl:gap-12 mb-24 pt-12">
                 
                 {{-- Left Pair --}}
                 <div class="flex flex-row gap-6 md:gap-8 items-center justify-center">
@@ -128,12 +129,12 @@
         </div>
 
         {{-- ── OUR KEY IMPROVEMENT SECTION ──────────────────── --}}
-        <div class="bg-[#fafafa] py-16 border-t border-b border-[#eee]">
+        <div class="bg-[#fafafa] py-24 border-t border-b border-[#eee]">
             <div class="max-w-7xl mx-auto px-4 text-center">
-                <h2 class="text-[#1a1a1a] text-[30px] md:text-[40px] font-black mb-3 uppercase tracking-tighter">OUR KEY IMPROVEMENT - BETTER THAN BEFORE</h2>
-                <p class="text-[#777] text-[15px] md:text-[17px] mb-14 font-medium">We improved the following key areas and we are promising you a service better than before</p>
+                <h2 class="text-[#1a1a1a] text-[32px] md:text-[45px] font-black mb-4 uppercase tracking-tighter">OUR KEY IMPROVEMENT - BETTER THAN BEFORE</h2>
+                <p class="text-[#777] text-[16px] md:text-[19px] mb-20 font-medium">We improved the following key areas and we are promising you a service better than before</p>
                 
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8 mb-16 max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-20 gap-x-12 mb-24 max-w-6xl mx-auto">
                     {{-- Item 1 --}}
                     <div class="flex flex-col items-center">
                         <div class="w-[90px] h-[90px] mb-8 text-[#007ba0]">
@@ -205,9 +206,10 @@
         </div>
 
     {{-- ── SAMPLES OF OUR ACCOMPLISHMENTS ───────────────── --}}
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {{-- ── SAMPLES OF OUR ACCOMPLISHMENTS ───────────────── --}}
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         {{-- Section Title --}}
-        <h3 class="text-[#055781] text-[22px] md:text-[26px] font-bold text-center mb-10">
+        <h3 class="text-[#055781] text-[22px] md:text-[26px] font-bold text-center mt-4 mb-10">
             Samples of Our Accomplishments
         </h3>
 

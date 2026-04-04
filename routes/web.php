@@ -74,10 +74,20 @@ Route::get('/graphics-studio/offer/comeback-campaign', function () {
     return view('graphics.comeback-campaign');
 })->name('graphics.comeback-campaign');
 
+//graphics.christmas-photo-editing
+Route::get('/graphics-studio/offer/christmas-photo-editing', function () {
+    return view('graphics.christmas-photo-editing');
+})->name('graphics.christmas-photo-editing');
+
 // Ecommerce Page
 Route::get('/graphics-studio/ecommerce', function () {
     return view('graphics.ecommerce');
 })->name('graphics.ecommerce');
+
+// Christmas Photo Editing Page
+Route::get('/graphics-studio/services/christmas-photo-editing', function () {
+    return view('graphics.christmas-photo-editing');
+})->name('graphics.christmas-photo-editing');
 
 Route::post('/graphics-studio/get-quote', function () {
     // Handle form submission (email / save to DB)
