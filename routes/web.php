@@ -89,6 +89,27 @@ Route::get('/graphics-studio/services/christmas-photo-editing', function () {
     return view('graphics.christmas-photo-editing');
 })->name('graphics.christmas-photo-editing');
 
+// Service Pages - Remove Background From Images Folder
+Route::get('/graphics-studio/services/remove-background', function () {
+    return view('graphics.remove-background-images.remove-background');
+})->name('graphics.services.remove-background');
+
+Route::get('/graphics-studio/services/clipping-path', function () {
+    return view('graphics.remove-background-images.clipping-path');
+})->name('graphics.services.clipping-path');
+
+Route::get('/graphics-studio/services/ghost-mannequin', function () {
+    return view('graphics.remove-background-images.ghost-mannequin');
+})->name('graphics.services.ghost-mannequin');
+
+Route::get('/graphics-studio/services/image-masking', function () {
+    return view('graphics.remove-background-images.image-masking');
+})->name('graphics.services.image-masking');
+
+Route::get('/graphics-studio/services/shadow-service', function () {
+    return view('graphics.remove-background-images.shadow-service');
+})->name('graphics.services.shadow-service');
+
 Route::post('/graphics-studio/get-quote', function () {
     // Handle form submission (email / save to DB)
     return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');
