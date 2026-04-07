@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GraphicsController;
+use App\Http\Controllers\Admin\BlogController;
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes — PixelForge Group
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Auth Routes
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Protected Admin Routes (Authenticated)
+    Route::middleware(['admin'])->group(function () {
+        // Service Selection Portal
+        Route::get('/service-selection', [DashboardController::class, 'serviceSelection'])->name('service-selection');
+
+        // Graphics Studio Domain
+        Route::prefix('graphics')->name('graphics.')->group(function () {
+            Route::get('/dashboard', [DashboardController::class, 'graphicsIndex'])->name('dashboard');
+            
+            // Graphics Services CRUD
+            Route::prefix('services')->name('services.')->group(function () {
+                Route::get('/', [GraphicsController::class, 'servicesIndex'])->name('index');
+                Route::get('/create', [GraphicsController::class, 'servicesCreate'])->name('create');
+                Route::post('/', [GraphicsController::class, 'servicesStore'])->name('store');
+            });
+
+            // Graphics Blog Resource (Full CRUD)
+            Route::resource('blog', BlogController::class);
+        });
+
+        // IT Solutions Domain
+        Route::prefix('it')->name('it.')->group(function () {
+            Route::get('/dashboard', [DashboardController::class, 'itIndex'])->name('dashboard');
+        });
+    });
+});
