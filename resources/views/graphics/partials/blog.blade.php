@@ -4,7 +4,7 @@
         {{-- Section Header --}}
         <div class="text-center mb-16 reveal">
             <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 border border-blue-500/25 text-xs font-semibold text-blue-300 uppercase tracking-wider mb-5">
-                <i class="ri-article-line"></i> Lateast News
+                <i class="ri-article-line"></i> Latest News
             </span>
             <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
                 From Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Design Blog</span>

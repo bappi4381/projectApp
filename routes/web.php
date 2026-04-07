@@ -19,10 +19,7 @@ Route::get('/graphics-studio/services', function () {
     return view('graphics.services');
 })->name('graphics.services');
 
-// Service Detail Page (dynamic slug)
-Route::get('/graphics-studio/services/{slug}', function ($slug) {
-    return view('graphics.service-detail', ['slug' => $slug]);
-})->name('graphics.service-detail');
+// Service Detail Page (dynamic slug) - MOVED DOWN BELOW SPECIFIC ROUTES
 
 // Portfolio Page (Our Work)
 Route::get('/graphics-studio/portfolio', function () {
@@ -90,9 +87,9 @@ Route::get('/graphics-studio/services/christmas-photo-editing', function () {
 })->name('graphics.christmas-photo-editing');
 
 // Service Pages - Remove Background From Images Folder
-Route::get('/graphics-studio/services/remove-background', function () {
-    return view('graphics.remove-background-images.remove-background');
-})->name('graphics.services.remove-background');
+// Route::get('/graphics-studio/services/remove-background', function () {
+//     return view('graphics.remove-background-images.remove-background');
+// })->name('graphics.services.remove-background');
 
 Route::get('/graphics-studio/services/clipping-path', function () {
     return view('graphics.remove-background-images.clipping-path');
@@ -109,6 +106,24 @@ Route::get('/graphics-studio/services/image-masking', function () {
 Route::get('/graphics-studio/services/shadow-service', function () {
     return view('graphics.remove-background-images.shadow-service');
 })->name('graphics.services.shadow-service');
+
+// Service Detail Page (Wildcard - handles all slugs)
+Route::get('/graphics-studio/services/{slug}', function ($slug) {
+    // Map specific high-end custom pages first
+    $custom_pages = [
+        'clipping-path' => 'graphics.remove-background-images.clipping-path',
+        'ghost-mannequin' => 'graphics.remove-background-images.ghost-mannequin',
+        'image-masking' => 'graphics.remove-background-images.image-masking',
+        'shadow-service' => 'graphics.remove-background-images.shadow-service',
+    ];
+
+    if (isset($custom_pages[$slug])) {
+        return view($custom_pages[$slug]);
+    }
+
+    // Default to generic detail template for other services
+    return view('graphics.service-detail', ['slug' => $slug]);
+})->name('graphics.service-detail');
 
 Route::post('/graphics-studio/get-quote', function () {
     // Handle form submission (email / save to DB)
