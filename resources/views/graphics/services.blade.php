@@ -256,41 +256,7 @@
         </div>
 
         {{-- ── TESTIMONIALS ───────────────────────────────── --}}
-        <div class="py-20 text-center container mx-auto px-4 md:px-6 max-w-5xl">
-            <h2 class="text-2xl md:text-3xl font-black text-[#082f49] uppercase tracking-wide mb-2">
-                What People Say
-            </h2>
-            <div class="text-yellow-400 text-xl tracking-widest mb-4">
-                <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i
-                    class="ri-star-fill"></i><i class="ri-star-fill"></i>
-            </div>
-            <div class="w-16 h-1 bg-[#38bdf8] mx-auto mb-12 rounded-full"></div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex gap-4">
-                    <img src="https://ui-avatars.com/api/?name=Sarah+J&background=0ea5e9&color=fff" alt="Client"
-                        class="w-16 h-16 rounded-full shadow-md shrink-0">
-                    <div>
-                        <h4 class="font-bold text-slate-800 text-lg">Sarah Jenkins</h4>
-                        <p class="text-xs text-slate-400 mb-3 uppercase font-bold tracking-wider">E-commerce Director</p>
-                        <p class="text-slate-600 text-sm leading-relaxed italic">"Graphics Studio completely transformed our
-                            product catalogue. Their clipping path and background removal services are consistently
-                            flawless, delivering our batches exactly when promised. Excellent service!"</p>
-                    </div>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex gap-4">
-                    <img src="https://ui-avatars.com/api/?name=Mark+D&background=0ea5e9&color=fff" alt="Client"
-                        class="w-16 h-16 rounded-full shadow-md shrink-0">
-                    <div>
-                        <h4 class="font-bold text-slate-800 text-lg">Mark Davidson</h4>
-                        <p class="text-xs text-slate-400 mb-3 uppercase font-bold tracking-wider">Lead Photographer</p>
-                        <p class="text-slate-600 text-sm leading-relaxed italic">"The high-end retouching on our recent
-                            fashion campaign was spectacular. They managed to retain skin texture perfectly while cleaning
-                            up the images. I highly recommend their team."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('graphics.partials.testimonials')
         <div class="bg-[#0b141a] pb-0">
             @include('graphics.partials.blog')
         </div>

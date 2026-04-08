@@ -29,7 +29,13 @@ Route::get('/graphics-studio/blog/{slug}', [BlogController::class, 'show'])->nam
 
 // Pricing Plan Page
 Route::get('/graphics-studio/pricing', function () {
-    return view('graphics.pricing');
+    $services = \App\Models\Service::where('is_active', true)
+        ->whereHas('category', function($q) {
+            $q->where('name', 'like', '%IMAGE%');
+        })
+        ->with('category')
+        ->get();
+    return view('graphics.pricing', compact('services'));
 })->name('graphics.pricing');
 
 // Offers Page
@@ -119,4 +125,4 @@ Route::get('/it-solutions', function () {
 })->name('it.index');
 
 // Admin Panel Routes
-require __DIR__.'/admin.php';
+require __DIR__ . '/admin.php';

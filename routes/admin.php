@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GraphicsController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 
 /*
@@ -32,10 +34,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::get('/', [GraphicsController::class, 'servicesIndex'])->name('index');
                 Route::get('/create', [GraphicsController::class, 'servicesCreate'])->name('create');
                 Route::post('/', [GraphicsController::class, 'servicesStore'])->name('store');
+                Route::get('/{service}/edit', [GraphicsController::class, 'servicesEdit'])->name('edit');
+                Route::put('/{service}', [GraphicsController::class, 'servicesUpdate'])->name('update');
+                Route::delete('/{service}', [GraphicsController::class, 'servicesDestroy'])->name('destroy');
             });
+
+            // Graphics Categories & Sub-Categories
+            Route::resource('categories', CategoryController::class);
+            Route::resource('subcategories', SubCategoryController::class);
 
             // Graphics Blog Resource (Full CRUD)
             Route::resource('blog', BlogController::class);
+
+            // Graphics Testimonials Resource
+            Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class);
         });
 
         // IT Solutions Domain

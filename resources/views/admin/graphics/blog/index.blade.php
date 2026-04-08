@@ -8,10 +8,21 @@
             <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Graphics Blog</h1>
             <p class="text-slate-400 font-medium">Create and manage your studio stories and design insights.</p>
         </div>
-        <a href="{{ route('admin.graphics.blog.create') }}" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2 group">
-            <i class="ri-add-line transition-transform group-hover:rotate-90"></i>
-            <span>Write New Story</span>
-        </a>
+        <div class="flex items-center gap-4">
+            <form action="{{ route('admin.graphics.blog.index') }}" method="GET" class="relative">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search blogs..." class="bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 pl-10 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all w-64">
+                <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                @if(request('search'))
+                    <a href="{{ route('admin.graphics.blog.index') }}" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                        <i class="ri-close-line"></i>
+                    </a>
+                @endif
+            </form>
+            <a href="{{ route('admin.graphics.blog.create') }}" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2 group">
+                <i class="ri-add-line transition-transform group-hover:rotate-90"></i>
+                <span>Write New Story</span>
+            </a>
+        </div>
     </div>
 
     {{-- Blog List Table --}}
@@ -36,7 +47,7 @@
                         <td class="px-6 py-5">
                             <div class="flex items-center gap-4">
                                 <div class="w-16 h-12 rounded-lg overflow-hidden border border-white/10 shrink-0">
-                                    <img src="{{ $post->featured_image }}" alt="img" class="w-full h-full object-cover">
+                                    <img src="{{ Str::startsWith($post->featured_image, 'http') ? $post->featured_image : asset('storage/' . $post->featured_image) }}" alt="img" class="w-full h-full object-cover">
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-white tracking-tight line-clamp-1 group-hover:text-indigo-400 transition-colors">{{ $post->title }}</h4>

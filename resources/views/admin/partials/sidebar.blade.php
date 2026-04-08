@@ -31,9 +31,19 @@
             <span>Services List</span>
         </a>
 
+        <a href="{{ route('admin.graphics.categories.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.graphics.categories.*') || request()->routeIs('admin.graphics.subcategories.*') ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+            <i class="ri-node-tree"></i>
+            <span>Architecture Management</span>
+        </a>
+
         <a href="{{ route('admin.graphics.blog.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.graphics.blog.*') ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
             <i class="ri-article-line"></i>
             <span>Blog Management</span>
+        </a>
+
+        <a href="{{ route('admin.graphics.testimonials.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.graphics.testimonials.*') ? 'bg-indigo-500/10 text-indigo-400 font-bold' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+            <i class="ri-chat-quote-line"></i>
+            <span>Testimonials</span>
         </a>
     </div>
 

@@ -1,109 +1,219 @@
 @extends('layouts.admin')
 @section('title', 'Write New Story | Graphics Studio')
 
+@push('styles')
+    {{-- Summernote CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    {{-- Tom Select CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        /* Tom Select Dark Mode Fixes */
+        .ts-control {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0.75rem !important;
+            color: white !important;
+            padding: 0.75rem 1rem !important;
+            box-shadow: none !important;
+        }
+        .ts-dropdown {
+            background-color: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0.75rem !important;
+            margin-top: 5px !important;
+            color: white !important;
+        }
+        .ts-dropdown .active {
+            background-color: rgba(99, 102, 241, 0.2) !important;
+            color: #818cf8 !important;
+        }
+        .ts-dropdown .option:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        .ts-control .item {
+            color: white !important;
+        }
+        .ts-dropdown .create:hover, .ts-dropdown .option:hover {
+            background-color: #334155 !important;
+        }
+        .ts-control input::placeholder {
+            color: #64748b !important;
+        }
+        
+        /* Summernote Overrides */
+        .note-editor.note-frame {
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            background: rgba(255, 255, 255, 0.02) !important;
+            border-radius: 1rem !important;
+            overflow: hidden !important;
+            max-width: 100% !important;
+        }
+        .note-editor.note-frame .note-editing-area .note-editable {
+            background-color: #0f172a !important; /* slate-900 */
+            color: #e2e8f0 !important; /* slate-200 */
+            min-height: 450px;
+            font-family: inherit;
+        }
+        .note-editor.note-frame .note-toolbar {
+            background-color: #1e293b !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            flex-wrap: wrap !important;
+        }
+        .note-btn {
+            background-color: #334155 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #cbd5e1 !important;
+        }
+        .note-btn:hover {
+            background-color: #475569 !important;
+            color: #fff !important;
+        }
+
+        /* Custom image upload feel */
+        .image-upload-wrapper {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .image-upload-wrapper:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+        }
+        .image-preview {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            z-index: 10;
+        }
+
+        /* Prevent X-Overflow */
+        .admin-form-container {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+    </style>
+@endpush
+
 @section('content')
-<div class="p-8 max-w-5xl mx-auto">
-    <div class="flex items-center justify-between mb-10 reveal">
+<div class="p-4 md:p-8 max-w-7xl mx-auto admin-form-container">
+    {{-- Header Section --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 reveal">
         <div>
-            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Create New Story</h1>
-            <p class="text-slate-400 font-medium">Compose a visual journey for the PixelForge community.</p>
+            <h1 class="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">Create New Story</h1>
+            <p class="text-slate-400 font-medium">Capture your creative insights for the world to see.</p>
         </div>
-        <a href="{{ route('admin.graphics.blog.index') }}" class="py-2 px-4 bg-slate-900 border border-white/5 rounded-xl hover:bg-slate-800 transition-all text-sm font-semibold flex items-center gap-2">
+        <a href="{{ route('admin.graphics.blog.index') }}" class="inline-flex items-center gap-2 py-3 px-6 bg-slate-900 border border-white/5 rounded-2xl hover:bg-slate-800 transition-all text-sm font-bold text-slate-300">
             <i class="ri-arrow-left-line"></i>
-            <span>Back to List</span>
+            <span>Back to Editorial</span>
         </a>
     </div>
 
-    <form action="{{ route('admin.graphics.blog.store') }}" method="POST" id="blogForm" class="space-y-8 pb-20">
+    @if ($errors->any())
+        <div class="mb-10 p-6 bg-rose-500/10 border border-rose-500/20 rounded-3xl">
+            <div class="flex items-center gap-3 mb-3 text-rose-500">
+                <i class="ri-error-warning-fill text-xl"></i>
+                <h4 class="font-bold">Validation Errors</h4>
+            </div>
+            <ul class="grid md:grid-cols-2 gap-x-6 list-disc list-inside text-rose-400/80 text-sm font-medium">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('admin.graphics.blog.store') }}" method="POST" enctype="multipart/form-data" id="blogForm" class="pb-20">
         @csrf
-        {{-- Hidden field to store content blocks as JSON --}}
-        <input type="hidden" name="content_json" id="content_json">
-
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {{-- Main Editor --}}
-            <div class="space-y-6">
-                <div class="glass-card p-8 rounded-[24px] border-white/5 shadow-xl">
-                    <div class="space-y-6">
+            {{-- Form Content (Main Column) --}}
+            <div class="lg:col-span-8 space-y-8">
+                <div class="glass-card p-1 md:p-8 rounded-[2rem] border-white/5 shadow-2xl overflow-hidden">
+                    <div class="p-6 md:p-0 space-y-8">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1">Article Title</label>
-                            <input type="text" name="title" required placeholder="Enter a catchy title..." 
-                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-xl font-bold text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600">
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-4 ml-1">Article Title</label>
+                            <input type="text" name="title" value="{{ old('title') }}" required placeholder="e.g. The Future of Visual Identity in 2026" 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-xl font-bold text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-700">
                         </div>
 
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1">Excerpt (Short Description)</label>
-                            <textarea name="excerpt" rows="3" placeholder="Briefly describe the story..." 
-                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-600 resize-none"></textarea>
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-4 ml-1">Editorial Excerpt</label>
+                            <textarea name="excerpt" rows="3" placeholder="A short, compelling summary to hook your readers..." 
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-slate-300 focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-700 resize-none">{{ old('excerpt') }}</textarea>
                         </div>
-                    </div>
-                </div>
 
-                {{-- Block Editor --}}
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between px-2">
-                        <h3 class="text-xs font-black uppercase tracking-widest text-slate-500">Story Composition</h3>
-                        <div class="flex gap-2">
-                            <button type="button" onclick="addBlock('paragraph')" class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all flex items-center justify-center border border-indigo-500/10" title="Add Paragraph"><i class="ri-paragraph"></i></button>
-                            <button type="button" onclick="addBlock('header')" class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all flex items-center justify-center border border-indigo-500/10" title="Add Heading"><i class="ri-h-2"></i></button>
-                            <button type="button" onclick="addBlock('image')" class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all flex items-center justify-center border border-indigo-500/10" title="Add Image"><i class="ri-image-line"></i></button>
-                            <button type="button" onclick="addBlock('quote')" class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all flex items-center justify-center border border-indigo-500/10" title="Add Quote"><i class="ri-double-quotes-l"></i></button>
-                        </div>
-                    </div>
-
-                    {{-- Container for blocks --}}
-                    <div id="blocks-container" class="space-y-4">
-                        {{-- First block is lead by default --}}
-                        <div class="block-item glass-card p-6 rounded-2xl border-white/5 bg-indigo-500/5 relative group" data-type="lead">
-                             <div class="flex justify-between items-center mb-3">
-                                <span class="text-[9px] font-black uppercase tracking-widest text-indigo-400">Lead Block (Auto-Pin)</span>
-                             </div>
-                             <textarea rows="2" class="w-full bg-transparent border-none p-0 text-indigo-200 font-bold text-lg placeholder:text-indigo-900 focus:ring-0 resize-none block-content" placeholder="Enter introductory lead text..."></textarea>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-4 ml-1">Story Content</label>
+                            <textarea id="summernote" name="content">{{ old('content') }}</textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Sidebar Settings --}}
-            <div class="space-y-6 lg:sticky lg:top-8">
-                <div class="glass-card p-6 rounded-[24px] border-white/5 shadow-xl space-y-6">
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1">Featured Image URL</label>
-                        <input type="url" name="featured_image" required placeholder="Unsplash/Direct link..." 
-                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all">
+            {{-- Sidebar Column --}}
+            <div class="lg:col-span-4 space-y-8 lg:sticky lg:top-8">
+                
+                {{-- Featured Image --}}
+                <div class="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 shadow-2xl">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 mb-5 ml-1">Featured Cover</label>
+                    <div onclick="document.getElementById('featured_image').click()" class="image-upload-wrapper group">
+                        <img id="preview_img" class="image-preview" src="#" alt="Preview">
+                        <div id="upload_placeholder" class="text-center p-6 transition-transform duration-500 group-hover:scale-110">
+                            <i class="ri-image-add-line text-4xl text-slate-600 mb-3 block"></i>
+                            <span class="text-xs text-slate-500 font-bold uppercase tracking-widest">Upload Cover</span>
+                            <span class="text-[9px] text-slate-700 block mt-2 font-medium">Optimal: 1600x900px (Max 2MB)</span>
+                        </div>
                     </div>
+                    <input type="file" id="featured_image" name="featured_image" accept="image/*" class="hidden" onchange="previewImage(this)">
+                </div>
 
+                {{-- Post Meta & Metadata --}}
+                <div class="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 shadow-2xl space-y-8">
+                    <h3 class="text-white font-black text-sm uppercase tracking-widest border-b border-white/5 pb-4">Publication Meta</h3>
+                    
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1">Category</label>
-                        <select name="category" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-300 focus:outline-none focus:border-indigo-500 transition-all appearance-none cursor-pointer">
-                            <option value="Photography">Photography</option>
-                            <option value="Tutorial">Tutorial</option>
-                            <option value="Efficiency">Efficiency</option>
-                            <option value="Design">Design</option>
-                            <option value="News">News</option>
+                        <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">Category / Discipline</label>
+                        <select id="category-select" name="category" required>
+                            <option value="">Select Category...</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->name }}" {{ old('category') == $service->name ? 'selected' : '' }}>{{ $service->name }}</option>
+                            @endforeach
+                            <option value="General" {{ old('category') == 'General' ? 'selected' : '' }}>Editorial News</option>
+                            <option value="Process" {{ old('category') == 'Process' ? 'selected' : '' }}>Our Process</option>
                         </select>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1 text-nowrap">Read Time (Min)</label>
-                            <input type="number" name="read_time" value="5" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">Sort Order</label>
+                            <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}" 
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-bold">
                         </div>
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest font-bold text-slate-500 mb-3 ml-1 text-nowrap">Sort Order</label>
-                            <input type="number" name="sort_order" value="0" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+                        <div class="flex flex-col justify-end">
+                             <div class="flex items-center justify-between px-4 py-3 bg-slate-900/50 rounded-xl border border-white/5">
+                                <span class="text-[9px] font-black text-slate-500 uppercase">Live</span>
+                                <label class="relative inline-flex items-center cursor-pointer scale-90">
+                                    <input type="checkbox" name="is_published" class="sr-only peer" {{ old('is_published', 'on') == 'on' ? 'checked' : '' }}>
+                                    <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-white/5">
-                        <span class="text-xs font-bold text-slate-400">Publish Immediately</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_published" class="sr-only peer" checked>
-                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                        </label>
-                    </div>
-
-                    <button type="submit" onclick="handleSubmit(event)" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-indigo-500/20">
+                    <button type="submit" class="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-[0.2em] text-xs rounded-2xl transition-all shadow-xl shadow-indigo-500/20 active:scale-95">
                         Launch Story
                     </button>
                 </div>
@@ -112,70 +222,61 @@
     </form>
 </div>
 
-{{-- Block Templates --}}
-<template id="paragraph-template">
-    <div class="block-item glass-card p-6 rounded-2xl border-white/5 bg-white/[0.02] relative group reveal" data-type="paragraph">
-        <button type="button" onclick="this.parentElement.remove()" class="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100"><i class="ri-close-line"></i></button>
-        <span class="text-[9px] font-black uppercase tracking-widest text-slate-500 block mb-3">Paragraph Block</span>
-        <textarea rows="3" class="w-full bg-transparent border-none p-0 text-slate-300 text-sm leading-relaxed placeholder:text-slate-700 focus:ring-0 resize-none block-content" placeholder="Write your content here..."></textarea>
-    </div>
-</template>
-
-<template id="header-template">
-    <div class="block-item glass-card p-6 rounded-2xl border-white/5 bg-white/[0.02] relative group reveal" data-type="header">
-        <button type="button" onclick="this.parentElement.remove()" class="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100"><i class="ri-close-line"></i></button>
-        <span class="text-[9px] font-black uppercase tracking-widest text-indigo-400 block mb-3">Heading Block</span>
-        <input type="text" class="w-full bg-transparent border-none p-0 text-white font-bold text-xl placeholder:text-slate-800 focus:ring-0 block-content" placeholder="Enter sub-heading text...">
-    </div>
-</template>
-
-<template id="image-template">
-    <div class="block-item glass-card p-6 rounded-2xl border-white/5 bg-white/[0.02] relative group reveal" data-type="image">
-        <button type="button" onclick="this.parentElement.remove()" class="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100"><i class="ri-close-line"></i></button>
-        <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400 block mb-3">Image Block</span>
-        <input type="url" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none mb-3 block-src" placeholder="Direct image URL...">
-        <input type="text" class="w-full bg-transparent border-none p-0 text-[10px] text-slate-500 placeholder:text-slate-800 focus:ring-0 block-caption" placeholder="Optional image caption...">
-    </div>
-</template>
-
-<template id="quote-template">
-    <div class="block-item glass-card p-6 rounded-2xl border-white/5 bg-white/[0.02] border-l-4 border-cyan-400 relative group reveal" data-type="quote">
-        <button type="button" onclick="this.parentElement.remove()" class="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all scale-75 group-hover:scale-100"><i class="ri-close-line"></i></button>
-        <span class="text-[9px] font-black uppercase tracking-widest text-cyan-400 block mb-3">Blockquote Block</span>
-        <textarea rows="2" class="w-full bg-transparent border-none p-0 text-cyan-200 italic font-medium text-base placeholder:text-cyan-950 focus:ring-0 resize-none block-content" placeholder="Enter a memorable quote..."></textarea>
-    </div>
-</template>
-
 @push('scripts')
-<script>
-    const container = document.getElementById('blocks-container');
+    {{-- jQuery (Required for Summernote) --}}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    {{-- Summernote JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    {{-- Tom Select JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     
-    function addBlock(type) {
-        const template = document.getElementById(`${type}-template`);
-        const clone = template.content.cloneNode(true);
-        container.appendChild(clone);
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        const blocks = [];
-        document.querySelectorAll('.block-item').forEach(item => {
-            const type = item.getAttribute('data-type');
-            const block = { type };
-            
-            if (type === 'image') {
-                block.src = item.querySelector('.block-src').value;
-                block.caption = item.querySelector('.block-caption').value;
-            } else {
-                block.text = (type === 'header') ? item.querySelector('input').value : item.querySelector('textarea').value;
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#preview_img').attr('src', e.target.result).fadeIn(600);
+                    $('#preview_img').css('display', 'block');
+                    $('#upload_placeholder').fadeOut(300);
+                }
+                reader.readAsDataURL(input.files[0]);
             }
-            
-            if (block.text || block.src) blocks.push(block);
-        });
+        }
 
-        document.getElementById('content_json').value = JSON.stringify(blocks);
-        document.getElementById('blogForm').submit();
-    }
-</script>
+        $(document).ready(function() {
+            // Summernote
+            $('#summernote').summernote({
+                placeholder: 'Start writing your visual story here...',
+                tabsize: 2,
+                height: 450,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                callbacks: {
+                    onInit: function() {
+                        $('.note-btn').addClass('px-2 py-1.5 transition-all');
+                    }
+                }
+            });
+
+            // Tom Select
+            new TomSelect('#category-select', {
+                create: true,
+                persist: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: "Search or define category..."
+            });
+        });
+    </script>
 @endpush
 @endsection

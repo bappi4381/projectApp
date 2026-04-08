@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -31,6 +32,7 @@ class BlogController extends Controller
     public function show($slug)
     {
         $post = BlogPost::where('slug', $slug)->published()->firstOrFail();
+        $services = Service::all();
         
         // Get related posts (excluding current one)
         $otherPosts = BlogPost::where('id', '!=', $post->id)
@@ -38,6 +40,10 @@ class BlogController extends Controller
             ->limit(2)
             ->get();
 
-        return view('graphics.blog-single', compact('post', 'otherPosts'));
+        return view('graphics.blog-single', [
+            'post' => $post,
+            'otherPosts' => $otherPosts,
+            'services' => $services
+        ]);
     }
 }

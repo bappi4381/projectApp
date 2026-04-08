@@ -14,10 +14,34 @@ class Service extends Model
         'slug',
         'description',
         'icon',
-        'category',
+        'category_id',
+        'sub_category_id',
         'is_active',
         'starting_price',
+        'price_unit',
+        'features',
+        'delivery_capacity',
+        'delivery_unit',
+        'discount_upto',
+        'discount_tag',
+        'image_before',
+        'image_after',
     ];
+
+    protected $casts = [
+        'features' => 'array',
+        'is_active' => 'boolean',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
 
     /**
      * Scope a query to only include specific categories.

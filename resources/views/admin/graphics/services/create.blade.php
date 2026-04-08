@@ -1,0 +1,245 @@
+@extends('layouts.admin')
+@section('title', 'Create Service | Graphics Studio')
+
+@section('content')
+    <div class="p-8">
+        <div class="mb-10 reveal">
+            <a href="{{ route('admin.graphics.services.index') }}"
+                class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2 mb-4">
+                <i class="ri-arrow-left-line"></i> Back to Services
+            </a>
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Create Service</h1>
+            <p class="text-slate-400 font-medium">Add a new graphics design service offering.</p>
+        </div>
+
+        @if ($errors->any())
+            <div class="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-6 py-4 rounded-xl mb-6">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div
+            class="glass-card rounded-[32px] border-white/5 shadow-2xl relative overflow-hidden reveal reveal-delay-1 p-10">
+            <form action="{{ route('admin.graphics.services.store') }}" method="POST" enctype="multipart/form-data"
+                class="space-y-10" x-data="{ 
+                features: [],
+                addFeature() { this.features.push({ name: '', price: '' }) },
+                removeFeature(index) { this.features.splice(index, 1) }
+            }">
+                @csrf
+
+                {{-- 1. Core Identity --}}
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">01</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Core Identity</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Service
+                                Name</label>
+                            <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Clipping Path"
+                                required
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all">
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Icon
+                                Class (RemixIcon)</label>
+                            <input type="text" name="icon" value="{{ old('icon', 'ri-image-line') }}"
+                                placeholder="ri-image-line"
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all">
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Primary
+                                Category</label>
+                            <select name="category_id" required
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all select-dark">
+                                <option value="">Select Category</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Navigation
+                                Sub-Group</label>
+                            <select name="sub_category_id" required
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all select-dark">
+                                <option value="">Select Sub Category</option>
+                                @foreach($subCategories as $subCategory)
+                                    <option value="{{ $subCategory->id }}" {{ old('sub_category_id') == $subCategory->id ? 'selected' : '' }}>{{ $subCategory->name }}
+                                        ({{ $subCategory->category->name ?? 'No Parent' }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- 2. Pricing Architecture --}}
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">02</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Pricing Architecture</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="space-y-3">
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Starting
+                                Price ($)</label>
+                            <input type="number" step="0.01" name="starting_price" value="{{ old('starting_price') }}"
+                                placeholder="0.50"
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all">
+                            <input type="text" name="price_unit" value="{{ old('price_unit', 'per image') }}"
+                                placeholder="e.g. per image"
+                                class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400 focus:outline-none focus:border-indigo-500 transition-all">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Daily
+                                Capacity (Units)</label>
+                            <input type="number" name="delivery_capacity" value="{{ old('delivery_capacity') }}"
+                                placeholder="e.g. 5000"
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all">
+                            <input type="text" name="delivery_unit" value="{{ old('delivery_unit', 'Images/day') }}"
+                                placeholder="e.g. Images/day"
+                                class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400 focus:outline-none focus:border-indigo-500 transition-all">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Bulk
+                                Discount (%)</label>
+                            <input type="number" name="discount_upto" value="{{ old('discount_upto') }}"
+                                placeholder="e.g. 40"
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all">
+                            <input type="text" name="discount_tag" value="{{ old('discount_tag', 'on bulk order') }}"
+                                placeholder="e.g. on bulk order"
+                                class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400 focus:outline-none focus:border-indigo-500 transition-all">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <label
+                            class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Service
+                            Variants & Features</label>
+                        <div class="space-y-4">
+                            <template x-for="(feature, index) in features" :key="index">
+                                <div class="flex gap-4 items-center animate-in fade-in slide-in-from-left-4 duration-300">
+                                    <div class="flex-1">
+                                        <input type="text" :name="'features['+index+'][name]'" x-model="feature.name"
+                                            placeholder="Feature Name (e.g. Complex Retouching)"
+                                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-3 text-xs font-medium text-white focus:outline-none focus:border-indigo-500 transition-all">
+                                    </div>
+                                    <div class="w-32">
+                                        <input type="text" :name="'features['+index+'][price]'" x-model="feature.price"
+                                            placeholder="Price ($0.00)"
+                                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-3 text-xs font-bold text-indigo-400 focus:outline-none focus:border-indigo-500 transition-all">
+                                    </div>
+                                    <button type="button" @click="removeFeature(index)"
+                                        class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </div>
+                            </template>
+                            <button type="button" @click="addFeature()"
+                                class="inline-flex items-center gap-2 py-3 px-6 bg-slate-900 border border-white/5 rounded-2xl hover:bg-slate-800 transition-all text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white">
+                                <i class="ri-add-line"></i> Add Pricing Variant
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- 3. Media Transformation --}}
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">03</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Media Transformation (Before/After)</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div x-data="{ preview: null }">
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Before
+                                Transformation</label>
+                            <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
+                                <div
+                                    class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
+                                    <template x-if="preview">
+                                        <img :src="preview" class="w-full h-full object-cover">
+                                    </template>
+                                    <template x-if="!preview">
+                                        <div class="w-full h-full flex items-center justify-center text-slate-600"><i
+                                                class="ri-image-2-line text-2xl"></i></div>
+                                    </template>
+                                </div>
+                                <input type="file" name="image_before"
+                                    @change="preview = URL.createObjectURL($event.target.files[0])"
+                                    class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-indigo-500/10 file:text-indigo-400 hover:file:bg-indigo-500/20 transition-all">
+                            </div>
+                        </div>
+
+                        <div x-data="{ preview: null }">
+                            <label
+                                class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">After
+                                Transformation</label>
+                            <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
+                                <div
+                                    class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
+                                    <template x-if="preview">
+                                        <img :src="preview" class="w-full h-full object-cover">
+                                    </template>
+                                    <template x-if="!preview">
+                                        <div class="w-full h-full flex items-center justify-center text-slate-600"><i
+                                                class="ri-image-2-line text-2xl"></i></div>
+                                    </template>
+                                </div>
+                                <input type="file" name="image_after"
+                                    @change="preview = URL.createObjectURL($event.target.files[0])"
+                                    class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- 4. Narrative --}}
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">04</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Narrative</h2>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Service
+                            Description</label>
+                        <textarea name="description" rows="5"
+                            class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-indigo-500 transition-all resize-none">{{ old('description') }}</textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4 pt-6">
+                    <a href="{{ route('admin.graphics.services.index') }}"
+                        class="px-8 py-4 bg-slate-900 border border-white/5 rounded-2xl text-slate-400 font-bold hover:bg-slate-800 transition-all text-sm">Cancel</a>
+                    <button type="submit"
+                        class="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all shadow-xl shadow-indigo-500/20 active:scale-95">
+                        Create Service
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection

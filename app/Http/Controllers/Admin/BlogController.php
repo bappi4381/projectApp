@@ -4,17 +4,30 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
     /**
      * Display a listing of blog posts.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = BlogPost::orderBy('sort_order', 'asc')->latest()->paginate(10);
+        $query = BlogPost::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('category', 'like', "%{$search}%")
+                  ->orWhere('author_name', 'like', "%{$search}%");
+            });
+        }
+
+        $posts = $query->orderBy('sort_order', 'asc')->latest()->paginate(10)->appends($request->query());
         return view('admin.graphics.blog.index', compact('posts'));
     }
 
@@ -23,7 +36,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('admin.graphics.blog.create');
+        $services = Service::all();
+        return view('admin.graphics.blog.create', compact('services'));
     }
 
     /**
@@ -35,10 +49,9 @@ class BlogController extends Controller
             'title' => 'required|max:255',
             'sort_order' => 'nullable|integer',
             'category' => 'nullable',
-            'featured_image' => 'required|url',
+            'featured_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'excerpt' => 'nullable',
-            'content_json' => 'required',
-            'read_time' => 'required|integer',
+            'content' => 'required',
         ]);
 
         $post = new BlogPost();
@@ -52,8 +65,8 @@ class BlogController extends Controller
      */
     public function edit(BlogPost $blog)
     {
-        // $blog is automatically resolved via Route Model Binding
-        return view('admin.graphics.blog.edit', ['post' => $blog]);
+        $services = Service::all();
+        return view('admin.graphics.blog.edit', ['post' => $blog, 'services' => $services]);
     }
 
     /**
@@ -65,10 +78,9 @@ class BlogController extends Controller
             'title' => 'required|max:255',
             'sort_order' => 'nullable|integer',
             'category' => 'nullable',
-            'featured_image' => 'required|url',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'excerpt' => 'nullable',
-            'content_json' => 'required',
-            'read_time' => 'required|integer',
+            'content' => 'required',
         ]);
 
         $this->savePost($blog, $request, $validated);
@@ -81,6 +93,9 @@ class BlogController extends Controller
      */
     public function destroy(BlogPost $blog)
     {
+        if ($blog->featured_image && !Str::startsWith($blog->featured_image, 'http')) {
+            Storage::disk('public')->delete($blog->featured_image);
+        }
         $blog->delete();
         return back()->with('success', 'Post removed permanently.');
     }
@@ -93,16 +108,24 @@ class BlogController extends Controller
         $post->title = $validated['title'];
         $post->sort_order = $validated['sort_order'] ?? 0;
         
-        // Only update slug on create or if title changed significantly (optional logic)
         if (!$post->exists) {
             $post->slug = Str::slug($validated['title']);
         }
         
         $post->category = $validated['category'] ?? 'General';
-        $post->featured_image = $validated['featured_image'];
+        
+        // Handle image upload
+        if ($request->hasFile('featured_image')) {
+            // Delete old image if exists
+            if ($post->featured_image && !Str::startsWith($post->featured_image, 'http')) {
+                Storage::disk('public')->delete($post->featured_image);
+            }
+            $path = $request->file('featured_image')->store('blog', 'public');
+            $post->featured_image = $path;
+        }
+
         $post->excerpt = $validated['excerpt'];
-        $post->content = json_decode($validated['content_json'], true);
-        $post->read_time = $validated['read_time'];
+        $post->content = $request->input('content');
         
         $post->is_published = $request->has('is_published');
         if ($post->is_published && !$post->published_at) {

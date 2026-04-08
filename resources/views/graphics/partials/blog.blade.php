@@ -17,7 +17,7 @@
             <div class="group bg-slate-950 border border-white/[0.06] rounded-3xl overflow-hidden hover:border-blue-500/30 transition-all duration-500 reveal" style="animation-delay:{{ $i * 0.15 }}s">
                 {{-- Image --}}
                 <div class="relative h-56 overflow-hidden">
-                    <img src="{{ $post->featured_image }}" alt="{{ $post->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <img src="{{ Str::startsWith($post->featured_image, 'http') ? $post->featured_image : asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
                     <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-600/80 backdrop-blur-sm text-[10px] font-bold text-white uppercase tracking-widest">
                         {{ $post->category }}
