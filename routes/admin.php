@@ -28,7 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Graphics Studio Domain
         Route::prefix('graphics')->name('graphics.')->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'graphicsIndex'])->name('dashboard');
-            
+
             // Graphics Services CRUD
             Route::prefix('services')->name('services.')->group(function () {
                 Route::get('/', [GraphicsController::class, 'servicesIndex'])->name('index');
@@ -41,7 +41,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             // Graphics Categories & Sub-Categories
             Route::resource('categories', CategoryController::class);
-            Route::resource('subcategories', SubCategoryController::class);
+            Route::resource('subcategories', SubCategoryController::class)->parameters(['subcategories' => 'subCategory']);
 
             // Graphics Blog Resource (Full CRUD)
             Route::resource('blog', BlogController::class);

@@ -20,6 +20,8 @@ class Service extends Model
         'starting_price',
         'price_unit',
         'features',
+        'faqs',
+        'methods',
         'delivery_capacity',
         'delivery_unit',
         'discount_upto',
@@ -30,8 +32,16 @@ class Service extends Model
 
     protected $casts = [
         'features' => 'array',
+        'faqs' => 'array',
+        'methods' => 'array',
         'is_active' => 'boolean',
     ];
+
+    public function complexities()
+    {
+        return $this->hasMany(ServiceComplexity::class)->orderBy('order');
+    }
+
 
     public function category()
     {

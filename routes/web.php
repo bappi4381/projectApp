@@ -112,8 +112,11 @@ Route::get('/graphics-studio/services/{slug}', function ($slug) {
     if (isset($custom_pages[$slug])) {
         return view($custom_pages[$slug]);
     }
-    return view('graphics.service-detail', ['slug' => $slug]);
+
+    $service = \App\Models\Service::where('slug', $slug)->firstOrFail();
+    return view('graphics.service-detail', compact('service'));
 })->name('graphics.service-detail');
+
 
 Route::post('/graphics-studio/get-quote', function () {
     return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');

@@ -4,7 +4,6 @@
 
 @section('content')
 
-    @endphp
 
     {{-- ── PREMIUM PAGE HEADER ──────────────────────────── --}}
     <div class="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">

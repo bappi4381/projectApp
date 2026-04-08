@@ -1,301 +1,511 @@
+@php /** @var \App\Models\Service $service */ @endphp
 @extends('layouts.app')
-
-@php
-    $services_data = [
-        'clipping-path' => [
-            'name' => 'Clipping Path',
-            'title' => 'Precise Image Isolation with Clipping Path',
-            'hero_img' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600&q=80',
-            'desc' => 'Hand-drawn, multi-layered clipping paths for perfect product isolation. Ideal for complex shapes and high-end e-commerce.',
-            'icon' => 'ri-scissors-cut-line',
-            'features' => ['100% Hand-Drawn Paths', 'Multi-Layer Support', 'Alpha Channel Masking', 'Clean & Sharp Edges'],
-            'price_start' => '0.39'
-        ],
-        'background-removal' => [
-            'name' => 'Background Removal',
-            'title' => 'Professional Background Removal Services',
-            'hero_img' => 'https://images.unsplash.com/photo-1584771145729-0bd5095b9d41?w=1600&q=80',
-            'desc' => 'Remove distracting backgrounds and replace them with pure white, transparent, or custom colors to make your products pop.',
-            'icon' => 'ri-eraser-line',
-            'features' => ['White/Transparent BG', 'Bulk Image Processing', 'Natural Shadow Preservation', 'Optimized for Web'],
-            'price_start' => '0.29'
-        ],
-        'photo-retouching' => [
-            'name' => 'Photo Retouching',
-            'title' => 'Premium Photo Retouching & Restoration',
-            'hero_img' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1600&q=80',
-            'desc' => 'High-end portrait and product retouching. We remove blemishes, smooth skin, and enhance details while keeping it natural.',
-            'icon' => 'ri-magic-line',
-            'features' => ['High-End Skin Retouching', 'Product Polishing', 'Dust & Scratch Removal', 'Detail Enhancement'],
-            'price_start' => '0.99'
-        ],
-        'ghost-mannequin' => [
-            'name' => 'Ghost Mannequin',
-            'title' => 'Invisible Mannequin & Neck Joint Effect',
-            'hero_img' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80',
-            'desc' => 'Create a 3D, hollow-man effect for your apparel photography. Perfect for clothing brands and online catalogs.',
-            'icon' => 'ri-shirt-line',
-            'features' => ['Neck Joint Service', '3D Ghost Effect', 'Wrinkle Removal', 'Symmetry Adjustment'],
-            'price_start' => '0.75'
-        ],
-        'color-correction' => [
-            'name' => 'Color Correction',
-            'title' => 'Accurate Color Correction & Grading',
-            'hero_img' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80',
-            'desc' => 'Adjust exposure, white balance, and saturation to ensure your images look vibrant and consistent across your entire brand.',
-            'icon' => 'ri-palette-line',
-            'features' => ['White Balance Fix', 'Exposure Correction', 'Color Matching', 'Creative Grading'],
-            'price_start' => '0.45'
-        ],
-        'shadow-services' => [
-            'name' => 'Shadow Services',
-            'title' => 'Natural & Drop Shadow Creation',
-            'hero_img' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1600&q=80',
-            'desc' => 'Add depth and realism to your product images with natural, drop, or reflection shadows that make products look grounded.',
-            'icon' => 'ri-contrast-2-line',
-            'features' => ['Natural Shadows', 'Drop Shadows', 'Mirror Reflections', 'Grounding Effects'],
-            'price_start' => '0.35'
-        ],
-        'image-masking' => [
-            'name' => 'Image Masking',
-            'title' => 'Complex Image Masking for Hair & Fur',
-            'hero_img' => 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1600&q=80',
-            'desc' => 'Advanced masking techniques for images with fine details like hair, fur, or transparent objects where clipping paths fail.',
-            'icon' => 'ri-crop-line',
-            'features' => ['Alpha Channel Masking', 'Hair & Fur Masking', 'Object Isolation', 'Soft Edge Preservation'],
-            'price_start' => '0.65'
-        ],
-        'real-estate-editing' => [
-            'name' => 'Real Estate Editing',
-            'title' => 'High-Quality Real Estate Photo Editing',
-            'hero_img' => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80',
-            'desc' => 'Stunning real estate photography enhancement. Sky replacement, HDR blending, and virtual staging to help sell properties faster.',
-            'icon' => 'ri-home-4-line',
-            'features' => ['Sky Replacement', 'HDR Blending', 'Vertical Straightening', 'Window Color Masking'],
-            'price_start' => '1.20'
-        ],
-        'jewellery-editing' => [
-            'name' => 'Jewellery Editing',
-            'title' => 'Exclusive Jewellery Photo Retouching',
-            'hero_img' => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?w=1600&q=80',
-            'desc' => 'Diamond polishing, metal smoothing, and dust removal for premium jewellery brands. We make every piece sparkle.',
-            'icon' => 'ri-gem-line',
-            'features' => ['Diamond Polishing', 'Metal Shine Enhancement', 'Dust & Scratch Removal', 'Stone Color Correction'],
-            'price_start' => '1.50'
-        ],
-        'video-editing' => [
-            'name' => 'Video Editing',
-            'title' => 'Professional Video Editing & Grading',
-            'hero_img' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1600&q=80',
-            'desc' => 'Dynamic video editing for social media, commercials, and brand stories. Color grading, sound design, and motion graphics.',
-            'icon' => 'ri-video-line',
-            'features' => ['Color Grading', 'Sound Design', 'Motion Graphics', 'Cinematic Cuts'],
-            'price_start' => '15.00'
-        ],
-    ];
-
-    $service = $services_data[$slug] ?? $services_data['clipping-path'];
-@endphp
-
-@section('title', $service['name'] . ' | Graphics Studio')
+@section('title', $service->name . ' | Graphics Studio')
+@section('meta_description', Str::limit(strip_tags($service->description ?? ''), 160))
 
 @section('content')
-<div class="bg-slate-950 min-h-screen text-white font-sans selection:bg-yellow-400 selection:text-slate-900">
+    <div class="bg-white min-h-screen text-slate-800 font-sans selection:bg-[#0ea5e9] selection:text-white pb-20">
 
-    {{-- ── HERO SECTION ────────────────────────────────── --}}
-    <div class="relative pt-32 pb-24 overflow-hidden bg-[#001c3d]">
-        {{-- Background Effects --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-[#001c3d] via-[#002855] to-[#001c3d]"></div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                
-                {{-- Left: Text Content --}}
-                <div class="lg:w-1/2 text-center lg:text-left flex flex-col items-center lg:items-start">
-                    <h1 class="text-4xl md:text-[56px] font-black text-white leading-none uppercase mb-6 tracking-tight reveal">
-                        {{ $service['name'] }}<br>
-                        <span class="text-white">Services</span>
-                    </h1>
-                    
-                    <p class="text-white/90 text-lg md:text-xl font-medium leading-relaxed mb-10 max-w-xl reveal">
-                        Bring your images to life with expert {{ strtolower($service['name']) }} and let every detail tell its story.
-                    </p>
-                    
-                    <div class="flex flex-col items-center lg:items-start gap-8 reveal">
-                        <a href="{{ route('graphics.get-quote') }}" class="px-10 py-4 rounded-full bg-gradient-to-r from-[#0082c3] to-[#00d084] text-white font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 hover:shadow-[0_10px_30px_rgba(0,208,132,0.3)] active:scale-95">
-                            Get A Quote
-                        </a>
-                        
-                        {{-- Pagination Dots from Image --}}
-                        <div class="flex gap-2">
-                            <span class="w-2.5 h-2.5 bg-white rounded-sm"></span>
-                            <span class="w-2.5 h-2.5 bg-white rounded-sm opacity-50"></span>
-                            <span class="w-2.5 h-2.5 bg-white rounded-sm opacity-50"></span>
-                            <span class="w-2.5 h-2.5 bg-white rounded-sm opacity-50"></span>
-                        </div>
+        {{-- ── HERO SECTION ────────────────────────────────── --}}
+        @include('graphics.partials.service-hero', [
+            'title' => strtoupper($service->name),
+            'description' => $service->description ?? 'Professional ' . $service->name . ' services with pixel-perfect precision and fast turnaround.',
+            'hero_image' => $service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
+            'video_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        ])
+
+        {{-- ── STATS STRIP ────────────────────────────────── --}}
+        <div class="bg-black text-white py-10">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <i class="ri-price-tag-3-line text-2xl mb-3 block text-emerald-400"></i>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">Price Starts From</div>
+                        <div class="text-2xl font-black text-white">${{ number_format($service->starting_price ?? 0.49, 2) }}</div>
+                        <div class="text-[10px] text-slate-500 mt-1">{{ $service->price_unit ?? 'Per Image' }}</div>
                     </div>
-                </div>
-
-                {{-- Right: Hero Visual (Video/Image Type) --}}
-                <div class="lg:w-1/2 relative reveal">
-                    <div class="relative bg-[#333333] p-0.5 rounded-lg shadow-2xl overflow-hidden group">
-                        <div class="relative aspect-video overflow-hidden">
-                            <img src="{{ $service['hero_img'] }}" alt="{{ $service['name'] }}" class="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105">
-                            
-                            {{-- Image Retouching overlay (Circles like in the image) --}}
-                            @if($slug === 'photo-retouching')
-                            <div class="absolute inset-0">
-                                <div class="absolute top-1/4 left-1/3 w-16 h-16 border-2 border-orange-400/60 rounded-full"></div>
-                                <div class="absolute top-1/2 right-1/4 w-12 h-12 border-2 border-orange-400/60 rounded-full"></div>
-                                <div class="absolute bottom-1/4 left-1/2 w-20 h-20 border-2 border-orange-400/60 rounded-full"></div>
-                            </div>
-                            @endif
-
-                            {{-- Play Button Overlay --}}
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
-                                <div class="w-20 h-20 rounded-full border-4 border-white/80 flex items-center justify-center bg-white/10 backdrop-blur-sm group-hover:scale-110 transition-transform cursor-pointer">
-                                    <i class="ri-play-fill text-white text-4xl ml-1"></i>
-                                </div>
-                            </div>
-
-                            {{-- Footer Label inside image --}}
-                            <div class="absolute bottom-6 right-6 text-right">
-                                <div class="text-[10px] text-white font-bold uppercase tracking-widest opacity-80">Image</div>
-                                <div class="text-lg font-black text-white leading-none uppercase tracking-tighter">
-                                    {{ $service['name'] }}
-                                </div>
-                                <div class="text-[9px] text-[#00d084] font-serif italic italic mt-0.5 tracking-widest">Service</div>
-                            </div>
-                        </div>
+                    <div>
+                        <i class="ri-shopping-cart-2-line text-2xl mb-3 block text-orange-400"></i>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">Get Big Discount</div>
+                        <div class="text-2xl font-black text-white">{{ $service->discount_upto ?? 25 }}%<span class="text-sm"> OFF</span></div>
+                        <div class="text-[10px] text-slate-500 mt-1">{{ $service->discount_tag ?? 'Contact Us' }}</div>
                     </div>
-                    
-                    {{-- Graphic Glow --}}
-                    <div class="absolute -inset-10 bg-blue-500/10 blur-[100px] -z-10"></div>
+                    <div>
+                        <i class="ri-send-plane-line text-2xl mb-3 block text-green-500"></i>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">We Can Deliver</div>
+                        <div class="text-2xl font-black text-white">{{ $service->delivery_capacity ?? 5000 }}<span class="text-sm font-normal text-slate-400">/day</span></div>
+                        <div class="text-[10px] text-slate-500 mt-1">{{ $service->delivery_unit ?? '2500+ Images in 12 hours' }}</div>
+                    </div>
+                    <div>
+                        <i class="ri-shield-check-line text-2xl mb-3 block text-indigo-400"></i>
+                        <div class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">Comprehensive QA</div>
+                        <div class="text-2xl font-black text-white">6+</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Steps</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{-- ── FEATURES GRID ──────────────────────────────── --}}
-    <div class="py-20 bg-white/[0.02]">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                @foreach($service['features'] as $feature)
-                <div class="p-8 rounded-[32px] bg-white/5 border border-white/10 hover:border-yellow-400/30 transition-all group reveal">
-                    <div class="w-12 h-12 rounded-2xl bg-yellow-400/10 flex items-center justify-center mb-6 group-hover:bg-yellow-400/20 transition-colors">
-                        <i class="ri-checkbox-circle-line text-2xl text-yellow-400"></i>
+        {{-- ── GRID HEADER ────────────────────────────────── --}}
+        <div class="container mx-auto px-6 max-w-6xl py-20 text-center">
+            <h2 class="text-[28px] md:text-[34px] font-black text-[#082f49] mb-6 uppercase tracking-tight leading-tight">
+                PROFESSIONAL {{ strtoupper($service->name) }} SERVICE PROVIDER
+            </h2>
+            <p class="text-slate-500 text-sm leading-relaxed max-w-3xl mx-auto mb-10">
+                To offer top-notch service, we have classified this particular service into 4 categories depending on the products' complexity. Based on the category, they apply different clipping path techniques to bring out immaculate output. Have a look at the categories underneath:
+            </p>
+            <div class="flex justify-center gap-2">
+                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                <div class="w-1.5 h-1.5 bg-orange-400 rounded-full"></div>
+                <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+            </div>
+        </div>
+
+        {{-- ── CLIPPING CATEGORIES GRID ───────────────────── --}}
+        <div class="container mx-auto px-6 max-w-6xl mb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                @php
+                    $displayComplexities = count($service->complexities) > 0 
+                        ? $service->complexities 
+                        : [
+                            (object)[
+                                'name' => 'Basic Clipping Path',
+                                'price' => '0.49',
+                                'description' => 'Basic clipping path is mainly applied on products appearing straight, rectangular, square, round, and oval.',
+                                'image_before' => null,
+                                'image_after' => null,
+                            ]
+                        ];
+                @endphp
+
+                @foreach($displayComplexities as $index => $cat)
+
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group h-full">
+                        {{-- Slider --}}
+                        <div class="relative overflow-hidden bg-slate-100 before-after-container aspect-[4/3] cursor-ew-resize" data-index="{{ $index }}">
+                            <img src="{{ $cat->image_before ? asset('storage/' . $cat->image_before) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="{{ $cat->name }} Before" class="absolute inset-0 w-full h-full object-cover">
+                            <div class="absolute inset-0 before-after-clip overflow-hidden" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                                <img src="{{ $cat->image_after ? asset('storage/' . $cat->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80&sat=-100' }}" alt="{{ $cat->name }} After" class="absolute inset-0 w-full h-full object-cover">
+                            </div>
+                            
+                            {{-- Handle --}}
+                            <div class="absolute top-0 bottom-0 z-20 before-after-handle" style="left: 50%; transform: translateX(-50%);">
+                                <div class="absolute top-0 bottom-0 w-[2px] bg-white/80" style="left: 50%; transform: translateX(-50%);"></div>
+                                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-white bg-slate-900/80 shadow-lg flex items-center justify-center" style="left: 50%;">
+                                    <i class="ri-arrow-left-right-line text-white text-[12px]"></i>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 z-20 bg-slate-800 text-[10px] text-white px-3 py-1 font-bold uppercase tracking-widest rounded-sm">BEFORE</div>
+                            <div class="absolute bottom-4 right-4 z-20 bg-slate-500 text-[10px] text-white px-3 py-1 font-bold uppercase tracking-widest rounded-sm">AFTER</div>
+                        </div>
+
+                        {{-- Card Content --}}
+                        <div class="p-8 flex-1 flex flex-col">
+                            <h3 class="text-xl font-black text-[#0ea5e9] text-center mb-6 uppercase tracking-tight">{{ $cat->name }}</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed text-justify mb-8 flex-1">{{ $cat->description }}</p>
+                            
+                            {{-- Info Row --}}
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="border border-sky-400 rounded-sm py-3 text-center">
+                                    <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Starts From</div>
+                                    <div class="text-[18px] font-black text-slate-800">{{ $cat->price }}</div>
+                                </div>
+                                <div class="border border-sky-400 rounded-sm py-3 text-center">
+                                    <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Delivery</div>
+                                    <div class="text-[18px] font-black text-slate-800">24 Hr</div>
+                                </div>
+                            </div>
+
+                            {{-- Actions --}}
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="#" class="py-3 text-[11px] font-black text-center text-[#0ea5e9] border-[1.5px] border-[#0ea5e9] rounded-sm hover:bg-[#0ea5e9] hover:text-white transition-all uppercase tracking-widest">
+                                    VIEW DETAILS
+                                </a>
+                                <a href="{{ route('graphics.get-quote') }}" class="py-3 text-[11px] font-black text-center text-white bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] rounded-sm hover:brightness-105 transition-all shadow-md uppercase tracking-widest">
+                                    GET A QUOTE
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-lg font-black text-white mb-2">{{ $feature }}</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Tailored solutions handled by our expert team of professional retouchers.</p>
-                </div>
                 @endforeach
             </div>
         </div>
-    </div>
-
-    {{-- ── BEFORE/AFTER SHOWCASE ───────────────────────── --}}
-    <div class="py-32">
-        <div class="container mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
-                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">See the <span class="text-yellow-400">Difference</span></h2>
-                <p class="text-slate-400 text-lg">Compare our professional editing with original shots. Hover over the sliders to see our precision.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
-                {{-- Comparison Item 1 --}}
-                <div class="space-y-6 reveal">
-                    <div class="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl aspect-video group" 
-                         x-data="{ position: 50 }" @mousemove="position = ($event.offsetX / $event.target.closest('.group').clientWidth) * 100">
-                        {{-- Before Image --}}
-                        <div class="absolute inset-0">
-                            <img src="{{ $service['hero_img'] }}" class="w-full h-full object-cover grayscale" alt="Original">
-                            <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-black text-white uppercase tracking-widest border border-white/10">Original</div>
-                        </div>
-                        {{-- After Image --}}
-                        <div class="absolute inset-0 overflow-hidden" :style="'width: ' + position + '%'">
-                            <img src="{{ $service['hero_img'] }}" class="w-[100vw] h-full object-cover" style="max-width: none" alt="Edited">
-                            <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-yellow-400 backdrop-blur-md text-[10px] font-black text-slate-900 uppercase tracking-widest">PixelForge Edited</div>
-                        </div>
-                        {{-- Slider Handle --}}
-                        <div class="absolute top-0 bottom-0 w-1 bg-yellow-400 cursor-ew-resize transition-all" :style="'left: ' + position + '%'">
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center shadow-2xl">
-                                <i class="ri-arrow-left-right-line text-slate-900 text-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h4 class="text-lg font-black text-white mb-1">Standard Output</h4>
-                        <p class="text-sm text-slate-500">Perfect for high-traffic e-commerce platforms.</p>
-                    </div>
-                </div>
-
-                {{-- Comparison Item 2 --}}
-                <div class="space-y-6 reveal" style="animation-delay: 0.1s">
-                    <div class="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl aspect-video group" 
-                         x-data="{ position: 50 }" @mousemove="position = ($event.offsetX / $event.target.closest('.group').clientWidth) * 100">
-                        {{-- Before Image --}}
-                        <div class="absolute inset-0">
-                            <img src="{{ $service['hero_img'] }}" class="w-full h-full object-cover grayscale brightness-50" alt="Original">
-                            <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-black text-white uppercase tracking-widest border border-white/10">Original</div>
-                        </div>
-                        {{-- After Image --}}
-                        <div class="absolute inset-0 overflow-hidden" :style="'width: ' + position + '%'">
-                            <img src="{{ $service['hero_img'] }}" class="w-[100vw] h-full object-cover" style="max-width: none" alt="Edited">
-                            <div class="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-yellow-400 backdrop-blur-md text-[10px] font-black text-slate-900 uppercase tracking-widest">PixelForge Edited</div>
-                        </div>
-                        {{-- Slider Handle --}}
-                        <div class="absolute top-0 bottom-0 w-1 bg-yellow-400 cursor-ew-resize transition-all" :style="'left: ' + position + '%'">
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center shadow-2xl">
-                                <i class="ri-arrow-left-right-line text-slate-900 text-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h4 class="text-lg font-black text-white mb-1">Premium High-End</h4>
-                        <p class="text-sm text-slate-500">Ideal for magazines and large scale billboards.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- ── CTA SECTION ────────────────────────────────── --}}
-    <div class="py-32 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <div class="max-w-4xl mx-auto p-16 rounded-[48px] bg-gradient-to-br from-white/5 to-transparent border border-white/10 relative overflow-hidden reveal">
-                <div class="absolute -top-24 -right-24 w-64 h-64 bg-yellow-400/10 rounded-full blur-[100px]"></div>
-                <h2 class="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
-                    Ready to Transform<br>Your <span class="text-yellow-400">Project?</span>
-                </h2>
-                <p class="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
-                    Get in touch today for a free estimate or send us 3 test images to experience our world-class quality at zero cost.
+        {{-- ── DISCLAIMER ALERT ──────────────────────────── --}}
+        <div class="container mx-auto px-6 max-w-6xl mb-16">
+            <div class="bg-red-50 border border-red-100 p-4 rounded flex items-center gap-3 text-red-700/80 italic text-[13px] shadow-sm">
+                <i class="ri-error-warning-line text-lg"></i>
+                <p>
+                    <span class="font-bold">Disclaimer:</span> The before/after photos are used as a sample of services we offer. The actual price of displayed images might be higher than the mentioned Starting Price. For accurate prices, please <a href="{{ route('graphics.get-quote') }}" class="underline hover:text-red-500 font-bold">Request a Quote</a>
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <a href="{{ route('graphics.get-quote') }}" class="group relative px-12 py-5 rounded-2xl bg-yellow-400 text-slate-900 font-black text-sm uppercase tracking-[0.2em] transition-all hover:scale-105 shadow-2xl shadow-yellow-400/20">
-                        Start Your Project
-                    </a>
-                    <a href="{{ route('graphics.portfolio') }}" class="px-12 py-5 rounded-2xl border border-white/10 hover:border-white/30 text-white font-black text-sm uppercase tracking-[0.2em] transition-all">
-                        View Portfolio
-                    </a>
-                </div>
             </div>
         </div>
+
+        {{-- ── QUOTE REQUEST FORM ────────────────────────── --}}
+        <div class="bg-white pt-20 border-t border-slate-100">
+            <div class="container mx-auto px-6 max-w-6xl text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-slate-800 italic mb-2 tracking-tight">
+                    Need Accurate Pricing? Send Us a Quote Request
+                </h2>
+                <p class="text-[#0ea5e9] font-bold text-sm italic mb-12">We Usually Reply Within 30 Minutes</p>
+
+                <form action="#" method="POST" class="text-left space-y-8">
+                    @csrf
+                    <p class="text-slate-400 text-[11px] text-center italic mb-8">Please Fill up the Required (*) Fields to Submit the Form Properly.</p>
+
+                    {{-- Upload Area --}}
+                    <div class="border-2 border-dashed border-slate-200 rounded-lg p-10 text-center bg-slate-50/30 group hover:border-[#0ea5e9] transition-colors">
+                        <p class="text-slate-500 text-sm font-bold mb-4 uppercase tracking-widest">Upload Your Files (max 500mb/file, 10 files only)</p>
+                        <button type="button" class="inline-flex items-center gap-2 px-8 py-3 bg-[#5487ab] text-white rounded font-black text-[11px] uppercase tracking-widest shadow-md hover:bg-[#436d8a] transition-all">
+                            <i class="ri-upload-cloud-2-line text-lg"></i>
+                            Upload Files
+                        </button>
+                    </div>
+
+                    {{-- Form Fields --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Full Name<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" name="name" required class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                                <i class="ri-user-smile-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Phone<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                                <i class="ri-phone-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Website</label>
+                            <div class="relative">
+                                <input type="url" name="website" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                                <i class="ri-global-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Return File Type</label>
+                            <input type="text" name="file_type" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                        </div>
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Services<span class="text-red-500">*</span></label>
+                            <select name="service" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner appearance-none cursor-pointer">
+                                <option value="{{ $service->slug }}" selected>{{ $service->name }}</option>
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Email<span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="email" name="email" required class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                                <i class="ri-mail-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Your Instructions<span class="text-red-500">*</span></label>
+                        <textarea name="instructions" rows="5" required class="w-full bg-slate-50 border border-slate-200 rounded py-4 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner"></textarea>
+                    </div>
+
+                    <div class="text-center pt-6">
+                        <button type="submit" class="w-full py-4 bg-[#5487ab] text-white font-black text-[13px] uppercase tracking-[0.2em] rounded hover:brightness-105 transition-all shadow-lg active:scale-[0.98]">
+                            Submit
+                        </button>
+                        <p class="text-slate-500 text-[11px] mt-10">By submitting Quote you are automatically agreeing with our <a href="#" class="text-[#0ea5e9] font-bold hover:underline">Terms and Conditions</a> and <a href="#" class="text-[#0ea5e9] font-bold hover:underline">Privacy Policy</a></p>
+                    </div>
+                </form>
+
+                {{-- Testimonial Section --}}
+                <div class="mt-28 flex flex-col items-center">
+                    <div class="flex items-center gap-4 text-left max-w-2xl px-6">
+                        <i class="ri-double-quotes-l text-[#5487ab] text-5xl shrink-0 opacity-40"></i>
+                        <div>
+                            <p class="text-slate-800 text-[16px] md:text-[18px] font-bold leading-relaxed italic">
+                                "These are perfect and exactly what I was looking for. Thank you so much!!! As always, a job well done and executed with excellence!!"
+                            </p>
+                            <div class="flex items-center gap-2 mt-4">
+                                <i class="ri-user-3-line text-[#5487ab]"></i>
+                                <span class="text-slate-900 font-bold text-sm tracking-tight">Michele Wright • USA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- ── COMPLEXITIES & PRICES GRID ────────────────── --}}
+                <div class="bg-slate-50/50 py-24 border-t border-slate-100">
+                    <div class="container mx-auto px-6 max-w-6xl text-center">
+                        <h2 class="text-[28px] md:text-[34px] font-black text-slate-900 mb-6 uppercase tracking-tight">
+                            IMAGE CLIPPING PATH COMPLEXITIES AND PRICES
+                        </h2>
+                        <div class="flex justify-center gap-2 mb-16">
+                            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-[#0ea5e9] rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16 mb-20">
+                            @if($service->features && count($service->features) > 0)
+                                @foreach($service->features as $item)
+                                    <div class="group">
+                                        <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow">
+                                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item['name'] }}</h4>
+                                        <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">{{ $item['price'] }}</div>
+                                    </div>
+                                @endforeach
+                            @else
+                                @php
+                                    $complexities = [
+                                        ['name' => 'Basic Complexity', 'price' => '$0.49', 'img' => 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?auto=format&fit=crop&w=600&q=80'],
+                                        ['name' => 'Simple Complexity', 'price' => '$0.99', 'img' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=600&q=80'],
+                                        ['name' => 'Compound Complexity', 'price' => '$2.99', 'img' => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=600&q=80'],
+                                    ];
+                                @endphp
+                                @foreach($complexities as $item)
+                                    <div class="group">
+                                        <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow">
+                                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item['name'] }}</h4>
+                                        <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">{{ $item['price'] }}</div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="flex justify-center">
+                            <a href="{{ route('graphics.get-quote') }}" class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] text-white font-black text-[11px] tracking-[0.2em] shadow-lg hover:brightness-105 transition-all">
+                                GET MORE ACCURATE QUOTE
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {{-- ── HOW TO CUTOUT SECTION ────────────────────── --}}
+                <div class="bg-white py-24 border-t border-slate-100">
+                        <div class="container mx-auto px-6 max-w-6xl">
+                        <div class="text-center mb-20">
+                            <h2 class="text-[28px] md:text-[34px] font-black text-slate-900 mb-6 uppercase tracking-tight">
+                                How to Apply {{ $service->name }}
+                            </h2>
+                            <div class="flex justify-center gap-2">
+                                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                                <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                                <div class="w-1.5 h-1.5 bg-[#0ea5e9] rounded-full"></div>
+                                <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                            </div>
+                            <p class="text-slate-500 text-sm leading-relaxed max-w-4xl mx-auto mt-8">
+                                There are multiple ways available to remove background from images. But we basically make use of clipping path and image masking leveraging the deft touch of our background removal professionals. Let's introduce with some methods we follow:
+                            </p>
+                        </div>
+
+                        @if($service->methods && count($service->methods) > 0)
+                            @foreach($service->methods as $index => $method)
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+                                    <div class="space-y-6 {{ $index % 2 != 0 ? 'lg:order-2' : '' }}">
+                                        <h3 class="text-xl font-black text-slate-800 uppercase tracking-tight">{{ $method['title'] }}</h3>
+                                        <div class="text-slate-600 text-[13px] leading-relaxed space-y-6 text-justify">
+                                            {!! nl2br(e($method['description'])) !!}
+                                        </div>
+                                    </div>
+                                    <div class="aspect-[4/3] rounded-xl overflow-hidden shadow-2xl border border-slate-100 bg-slate-50 {{ $index % 2 != 0 ? 'lg:order-1' : '' }}">
+                                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="{{ $method['title'] }}" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            {{-- Fallback Method 1: Hand-Drawing --}}
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+                                <div class="space-y-6">
+                                    <h3 class="text-xl font-black text-slate-800 uppercase tracking-tight">Using Hand-Drawing Photoshop Pen tool</h3>
+                                    <div class="text-slate-600 text-[13px] leading-relaxed space-y-6 text-justify">
+                                        <p>In order to remove the background of an image, we primarily utilize clipping path technique. In the process of clipping path, we cut out a 2D image using the pen tool from Photoshop to bring out a perfect output.</p>
+                                    </div>
+                                </div>
+                                <div class="aspect-[4/3] rounded-xl overflow-hidden shadow-2xl border border-slate-100 bg-slate-50">
+                                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Photoshop Pen Tool Logic" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="flex justify-center mt-12">
+                            <a href="{{ route('graphics.get-quote') }}" class="inline-flex items-center justify-center px-10 py-3 bg-[#0ea5e9] text-white font-black text-[12px] uppercase tracking-widest rounded-full shadow-lg hover:brightness-105 transition-all">
+                                GET A QUOTE
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                 {{-- ── OUR POPULAR SERVICES ────────────────────── --}}
+                <div class="bg-white py-24 border-t border-slate-100">
+                    <div class="container mx-auto px-6 max-w-6xl text-center">
+                        <h2 class="text-[28px] md:text-[34px] font-black text-[#082f49] mb-6 uppercase tracking-tight">
+                            OUR POPULAR SERVICES
+                        </h2>
+                        <div class="flex justify-center gap-2 mb-10">
+                            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-[#0ea5e9] rounded-full"></div>
+                            <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed max-w-4xl mx-auto mb-16">
+                            We offer a wide variety of on-demand image editing services including background removal, high-end photo retouching, color correction, photo blending, and many more. Since the beginning of our journey in the image editing world, many of the international brands like Apple, Sony, Samsung, Adidas, Philips, Nike, and many more have already kept faith in us. Browse through our popular services shown underneath.
+                        </p>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                            @php
+                                $popular = [
+                                    ['name' => 'BACKGROUND REMOVAL', 'img' => 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'HIGH-END RETOUCHING', 'img' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'E-COMMERCE PHOTO EDITING', 'img' => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'GHOST MANNEQUIN EDITING', 'img' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'IMAGE MASKING', 'img' => 'https://images.unsplash.com/photo-1582233113702-86927d3fa87a?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'IMAGE RETOUCHING', 'img' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'PHOTO SHADOW SERVICE', 'img' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'PHOTO COLOR CORRECTION', 'img' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'PHOTO POST PRODUCTION', 'img' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'RASTER TO VECTOR EDITING', 'img' => 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'IMAGE RESTORATION', 'img' => 'https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => '3D MODELING', 'img' => 'https://images.unsplash.com/photo-1617791160505-6f008e17ad31?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'DESKTOP PUBLISHING', 'img' => 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'VIDEO EDITING', 'img' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'ADVERTISING DESIGN', 'img' => 'https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&w=400&q=80'],
+                                    ['name' => 'VECTOR LINE DRAWING', 'img' => 'https://images.unsplash.com/photo-1614850715649-1d005629c1aa?auto=format&fit=crop&w=400&q=80'],
+                                ];
+                            @endphp
+
+                            @foreach($popular as $svc)
+                                <div class="group cursor-pointer">
+                                    <div class="aspect-square rounded-lg overflow-hidden border border-slate-100 shadow-sm mb-3 group-hover:shadow-md transition-shadow">
+                                        <img src="{{ $svc['img'] }}" alt="{{ $svc['name'] }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <h4 class="text-[10px] font-bold text-slate-800 tracking-wider text-center group-hover:text-[#0ea5e9] transition-colors">{{ $svc['name'] }}</h4>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ── FAQ SECTION ──────────────────────────────── --}}
+                <div class="bg-slate-50/30 py-24 border-t border-slate-100">
+                    <div class="container mx-auto px-6 max-w-6xl">
+                        <div class="text-center mb-16">
+                            <h2 class="text-[28px] md:text-[34px] font-black text-slate-900 mb-2 uppercase tracking-tight">
+                                FREQUENTLY ASKED QUESTIONS(FAQ)
+                            </h2>
+                        </div>
+
+                        <div class="space-y-4">
+                            @php
+                                $faqs = [
+                                    'Understanding What Clipping Path is-',
+                                    'Difference between Clipping Path and Deep-etching-',
+                                    'When to Apply Clipping Path-',
+                                    'Advantages of Clipping Path Service-',
+                                    'Who Actually Requires this Service-',
+                                    'Clipping Path Services at Color Experts International, Inc.',
+                                    'Clipping path is a manual photo editing technique, right?',
+                                    'Can I get clipping path service for images in different formats?',
+                                    'How You Do It?',
+                                    'How can I place an order?',
+                                    'How fast can you provide the service?',
+                                    'How about your daily delivery capacity?',
+                                ];
+                            @endphp
+
+                            @if($service->faqs && count($service->faqs) > 0)
+                                @foreach($service->faqs as $i => $faq)
+                                    <div class="bg-white border-l-4 border-l-slate-200 hover:border-l-[#0ea5e9] transition-all group overflow-hidden">
+                                        <button class="w-full flex items-center text-left py-4 px-6 focus:outline-none">
+                                            <div class="w-8 h-8 rounded bg-slate-50 flex items-center justify-center text-[11px] font-black mr-4 group-hover:bg-sky-50 group-hover:text-[#0ea5e9] transition-all">
+                                                {{ $i + 1 }}
+                                            </div>
+                                            <span class="text-[14px] font-bold text-slate-700 tracking-tight flex-1 uppercase">{{ $faq['question'] }}</span>
+                                            <i class="ri-add-line text-slate-300"></i>
+                                        </button>
+                                        <div class="px-20 pb-6 text-sm text-slate-500 hidden group-focus:block">
+                                            {{ $faq['answer'] }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-center text-slate-400 italic">No FAQs available for this service.</p>
+                            @endif
+
+                        </div>
+
+                        <div class="flex justify-center gap-4 mt-20">
+                            <a href="{{ route('graphics.get-quote') }}" class="px-10 py-3 bg-[#0ea5e9] text-white font-black text-[11px] uppercase tracking-widest rounded-full shadow-lg hover:translate-y-[-2px] transition-all">
+                                GET A QUOTE
+                            </a>
+                            <a href="#" class="px-10 py-3 bg-white border-2 border-[#5de2ca] text-[#2dd4bf] font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-emerald-50 transition-all">
+                                CONTACT US
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
     </div>
+    <div>
+        @include('graphics.partials.testimonials')
+    </div>
+    <div class="bg-[#0b141a]">
+        @include('graphics.partials.blog') 
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.before-after-container').forEach(function (container) {
+                const clip = container.querySelector('.before-after-clip');
+                const handle = container.querySelector('.before-after-handle');
+                let isDragging = false;
 
-</div>
+                function updatePosition(x) {
+                    const rect = container.getBoundingClientRect();
+                    let pos = ((x - rect.left) / rect.width) * 100;
+                    pos = Math.max(0, Math.min(100, pos));
+                    clip.style.clipPath = `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`;
+                    handle.style.left = pos + '%';
+                }
 
-<style>
-    .reveal {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-    @keyframes reveal {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
+                container.addEventListener('mousedown', function (e) {
+                    isDragging = true;
+                    updatePosition(e.clientX);
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', function (e) {
+                    if (isDragging) {
+                        updatePosition(e.clientX);
+                        e.preventDefault();
+                    }
+                });
+
+                document.addEventListener('mouseup', function () {
+                    isDragging = false;
+                });
+
+                // Touch
+                container.addEventListener('touchstart', function (e) {
+                    isDragging = true;
+                    updatePosition(e.touches[0].clientX);
+                }, { passive: true });
+
+                document.addEventListener('touchmove', function (e) {
+                    if (isDragging) {
+                        updatePosition(e.touches[0].clientX);
+                    }
+                }, { passive: true });
+
+                document.addEventListener('touchend', function () {
+                    isDragging = false;
+                });
+            });
+        });
+    </script>
 @endsection

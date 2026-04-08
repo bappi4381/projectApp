@@ -27,9 +27,19 @@
             <form action="{{ route('admin.graphics.services.update', $service->id) }}" method="POST"
                 enctype="multipart/form-data" class="space-y-10" x-data="{ 
                 features: {{ json_encode($service->features ?? []) }},
+                faqs: {{ json_encode($service->faqs ?? []) }},
+                methods: {{ json_encode($service->methods ?? []) }},
+                complexities: {{ json_encode($service->complexities ?? []) }},
                 addFeature() { this.features.push({ name: '', price: '' }) },
-                removeFeature(index) { this.features.splice(index, 1) }
+                removeFeature(index) { this.features.splice(index, 1) },
+                addFaq() { this.faqs.push({ question: '', answer: '' }) },
+                removeFaq(index) { this.faqs.splice(index, 1) },
+                addMethod() { this.methods.push({ title: '', description: '' }) },
+                removeMethod(index) { this.methods.splice(index, 1) },
+                addComplexity() { this.complexities.push({ id: null, name: '', description: '', price: '', image_before: null, image_after: null }) },
+                removeComplexity(index) { this.complexities.splice(index, 1) }
             }">
+
                 @csrf
                 @method('PUT')
 
@@ -165,14 +175,90 @@
                             </button>
                         </div>
                     </div>
+
+                    {{-- NEW: FAQs --}}
+                    <div class="space-y-4 mt-12">
+                        <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Frequently Asked Questions</label>
+                        <div class="space-y-4">
+                            <template x-for="(faq, index) in faqs" :key="index">
+                                <div class="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4">
+                                    <input type="text" :name="'faqs['+index+'][question]'" x-model="faq.question" placeholder="Question" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white">
+                                    <textarea :name="'faqs['+index+'][answer]'" x-model="faq.answer" placeholder="Answer" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-slate-400 h-20"></textarea>
+                                    <button type="button" @click="removeFaq(index)" class="text-[10px] text-rose-500 font-bold uppercase tracking-widest">Remove FAQ</button>
+                                </div>
+                            </template>
+                            <button type="button" @click="addFaq()" class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">+ Add FAQ</button>
+                        </div>
+                    </div>
+
+                    {{-- NEW: Methods (How it works) --}}
+                    <div class="space-y-4 mt-12">
+                        <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Workflow Methods (How to apply)</label>
+                        <div class="space-y-4">
+                            <template x-for="(method, index) in methods" :key="index">
+                                <div class="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4">
+                                    <input type="text" :name="'methods['+index+'][title]'" x-model="method.title" placeholder="Method Title" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white">
+                                    <textarea :name="'methods['+index+'][description]'" x-model="method.description" placeholder="Short Description" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-slate-400 h-20"></textarea>
+                                    <button type="button" @click="removeMethod(index)" class="text-[10px] text-rose-500 font-bold uppercase tracking-widest">Remove Method</button>
+                                </div>
+                            </template>
+                            <button type="button" @click="addMethod()" class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">+ Add Method</button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- NEW SECTION: Professional Complexities --}}
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">03</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Professional Complexities (Before/After Grid)</h2>
+                    </div>
+
+                    <div class="space-y-8">
+                        <template x-for="(comp, index) in complexities" :key="index">
+                            <div class="glass-card p-8 rounded-3xl border border-white/5 space-y-6">
+                                <input type="hidden" :name="'complexities['+index+'][id]'" :value="comp.id">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <input type="text" :name="'complexities['+index+'][name]'" x-model="comp.name" placeholder="Complexity Name (e.g. Basic Clipping Path)" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-sm text-white">
+                                    <input type="text" :name="'complexities['+index+'][price]'" x-model="comp.price" placeholder="Starting Price (e.g. $0.49)" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-sm text-indigo-400 font-bold">
+                                </div>
+                                <textarea :name="'complexities['+index+'][description]'" x-model="comp.description" placeholder="Detailed Description for this complexity..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-xs text-slate-400 h-24 resize-none"></textarea>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] uppercase font-black text-slate-500 ml-1">Before Image</label>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 rounded-xl bg-slate-800 shrink-0 overflow-hidden border border-white/5">
+                                                <img x-show="comp.image_before" :src="comp.image_before ? '/storage/'+comp.image_before : ''" class="w-full h-full object-cover">
+                                            </div>
+                                            <input type="file" :name="'complexities['+index+'][image_before]'" class="text-[10px] text-slate-500">
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] uppercase font-black text-slate-500 ml-1">After Image</label>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 rounded-xl bg-slate-800 shrink-0 overflow-hidden border border-white/5">
+                                                <img x-show="comp.image_after" :src="comp.image_after ? '/storage/'+comp.image_after : ''" class="w-full h-full object-cover">
+                                            </div>
+                                            <input type="file" :name="'complexities['+index+'][image_after]'" class="text-[10px] text-slate-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="button" @click="removeComplexity(index)" class="text-[10px] text-rose-500 font-bold uppercase tracking-widest mt-4">Delete Complexity Category</button>
+                            </div>
+                        </template>
+                        <button type="button" @click="addComplexity()" class="w-full py-6 border-2 border-dashed border-white/10 rounded-3xl text-sm font-black text-slate-500 hover:border-indigo-500 hover:text-indigo-400 transition-all">+ Add New Complexity Category</button>
+                    </div>
+                </div>
                 </div>
 
                 {{-- 3. Media Transformation --}}
                 <div class="space-y-6">
                     <div class="flex items-center gap-4 mb-4">
                         <span
-                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">03</span>
-                        <h2 class="text-xl font-bold text-white tracking-tight">Media Transformation (Before/After)</h2>
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">04</span>
+                        <h2 class="text-xl font-bold text-white tracking-tight">Main Media Transformation</h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -226,7 +312,7 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-4 mb-4">
                         <span
-                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">04</span>
+                            class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">05</span>
                         <h2 class="text-xl font-bold text-white tracking-tight">Narrative & Visibility</h2>
                     </div>
 
