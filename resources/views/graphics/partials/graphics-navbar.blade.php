@@ -204,18 +204,35 @@
                         <span class="studio-link-dot" :class="activeSection === 'home' ? 'active-dot' : ''"></span>
                     </a>
 
-                    @foreach($navbarServices as $categoryName => $subGroups)
+                    @foreach($navbarData as $category)
                         <div x-data="{ isOpen: false }" @mouseenter="isOpen = true"
                             @mouseleave="isOpen = false" class="relative group">
-                            <a href="#"
-                                class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
-                                :class="isOpen ? 'text-yellow-400' : ''">
-                                {{ strtoupper($categoryName) }}
-                                <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300"
-                                    :class="isOpen ? 'rotate-180' : ''"></i>
-                                <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
-                            </a>
 
+                            {{-- Level 1: Category (clickable if has_details) --}}
+                            @if($category['has_details'])
+                                <a href="{{ route('graphics.service-detail', $category['slug']) }}"
+                                    class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
+                                    :class="isOpen ? 'text-yellow-400' : ''">
+                                    {{ strtoupper($category['name']) }}
+                                    @if(count($category['groups']))
+                                        <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="isOpen ? 'rotate-180' : ''"></i>
+                                    @endif
+                                    <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
+                                </a>
+                            @else
+                                <a href="#"
+                                    class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
+                                    :class="isOpen ? 'text-yellow-400' : ''">
+                                    {{ strtoupper($category['name']) }}
+                                    @if(count($category['groups']))
+                                        <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="isOpen ? 'rotate-180' : ''"></i>
+                                    @endif
+                                    <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
+                                </a>
+                            @endif
+
+                            {{-- Mega Dropdown --}}
+                            @if(count($category['groups']))
                             <div x-show="isOpen" x-cloak class="fixed left-0 right-0 pt-6 z-[60]" style="top: auto;"
                                 x-transition:enter="transition ease-out duration-200"
                                 x-transition:enter-start="opacity-0 translate-y-2"
@@ -224,20 +241,50 @@
                                 x-transition:leave-start="opacity-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 translate-y-2">
                                 <div class="bg-white rounded shadow-2xl border border-slate-200 py-10 px-12 flex justify-start flex-wrap gap-x-16 gap-y-10 max-w-[1500px] mx-auto">
-                                    @foreach($subGroups as $groupName => $services)
+                                    @foreach($category['groups'] as $group)
                                         <div class="min-w-[200px]">
+                                            {{-- Level 2: SubCategory heading (clickable if has_details) --}}
                                             <h4 class="text-indigo-950 font-black text-[11px] uppercase tracking-[0.2em] mb-6 pb-2 border-b border-slate-100 flex items-center gap-2">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
-                                                {{ $groupName }}
+                                                @if($group['has_details'])
+                                                    <a href="{{ route('graphics.service-detail', $group['slug']) }}" class="hover:text-indigo-600 transition-colors uppercase font-bold">{{ $group['name'] }}</a>
+                                                @else
+                                                    <span>{{ $group['name'] }}</span>
+                                                @endif
                                             </h4>
-                                            <ul class="space-y-4">
-                                                @foreach($services as $service)
-                                                    <li>
-                                                        <a href="{{ route('graphics.service-detail', $service->slug) }}"
-                                                            class="group/item flex items-center gap-3 text-[13px] text-slate-500 hover:text-indigo-600 transition-all font-medium">
-                                                            <i class="{{ $service->icon ?? 'ri-arrow-right-s-line' }} text-slate-300 group-hover/item:text-yellow-500 transition-colors"></i>
-                                                            {{ $service->name }}
-                                                        </a>
+                                            <ul class="space-y-3">
+                                                @foreach($group['services'] as $svc)
+                                                    <li class="space-y-1">
+                                                        {{-- Level 3: Service (clickable if has_details) --}}
+                                                        @if($svc['has_details'])
+                                                            <a href="{{ route('graphics.service-detail', $svc['slug']) }}"
+                                                                class="group/item flex items-center gap-3 text-[13px] text-slate-500 hover:text-indigo-600 transition-all font-semibold">
+                                                                <i class="ri-checkbox-blank-circle-fill text-[5px] text-yellow-500"></i>
+                                                                {{ $svc['name'] }}
+                                                            </a>
+                                                        @else
+                                                            <span class="flex items-center gap-3 text-[13px] text-slate-400 font-medium">
+                                                                <i class="ri-checkbox-blank-circle-fill text-[5px] text-slate-300"></i>
+                                                                {{ $svc['name'] }}
+                                                            </span>
+                                                        @endif
+                                                        {{-- Level 4: Variants --}}
+                                                        @if(count($svc['variants']))
+                                                            <ul class="pl-5 pt-0.5 space-y-1">
+                                                                @foreach($svc['variants'] as $variant)
+                                                                    <li>
+                                                                        @if($variant['has_details'])
+                                                                            <a href="{{ route('graphics.service-detail', $variant['slug']) }}"
+                                                                               class="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors font-medium">
+                                                                               → {{ $variant['name'] }}
+                                                                            </a>
+                                                                        @else
+                                                                            <span class="text-[11px] text-slate-300 italic">→ {{ $variant['name'] }}</span>
+                                                                        @endif
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -245,6 +292,7 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
                         </div>
                     @endforeach
 
@@ -361,23 +409,56 @@
                         class="block text-2xl font-black tracking-tighter transition-colors"
                         :class="activeSection === 'home' || '{{ Request::routeIs('graphics.index') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">HOME</a>
 
-                    @foreach($navbarServices as $categoryName => $subGroups)
+                    @foreach($navbarData as $category)
                         <div x-data="{ isCatOpen: false }">
+                            {{-- Level 1 --}}
                             <button @click="isCatOpen = !isCatOpen"
                                 class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors text-white/70 hover:text-white">
-                                {{ $categoryName }} <i :class="isCatOpen ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
+                                {{ $category['name'] }} <i :class="isCatOpen ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
                             </button>
                             <div x-show="isCatOpen" class="mt-6 flex flex-col gap-8 pl-4 border-l border-white/10" x-collapse>
-                                @foreach($subGroups as $groupName => $services)
+                                @foreach($category['groups'] as $group)
                                     <div>
-                                        <h4 class="text-yellow-400 font-black text-[10px] uppercase tracking-[0.2em] mb-4">{{ $groupName }}</h4>
+                                        {{-- Level 2 --}}
+                                        <h4 class="text-yellow-400 font-black text-[10px] uppercase tracking-[0.2em] mb-4">
+                                            @if($group['has_details'])
+                                                <a href="{{ route('graphics.service-detail', $group['slug']) }}" @click="open = false">{{ $group['name'] }}</a>
+                                            @else
+                                                <span>{{ $group['name'] }}</span>
+                                            @endif
+                                        </h4>
                                         <div class="flex flex-col gap-4 pl-2 border-l border-white/5">
-                                            @foreach($services as $service)
-                                                <a href="{{ route('graphics.service-detail', $service->slug) }}" @click="open = false"
-                                                    class="text-sm font-bold text-white/60 hover:text-white transition-colors flex items-center gap-2">
-                                                    <span class="w-1 h-1 rounded-full bg-white/20"></span>
-                                                    {{ $service->name }}
-                                                </a>
+                                            @foreach($group['services'] as $svc)
+                                                <div class="space-y-2">
+                                                    {{-- Level 3 --}}
+                                                    @if($svc['has_details'])
+                                                        <a href="{{ route('graphics.service-detail', $svc['slug']) }}" @click="open = false"
+                                                            class="text-sm font-bold text-white/70 hover:text-white transition-colors flex items-center gap-2">
+                                                            <span class="w-1 h-1 rounded-full bg-yellow-400"></span>
+                                                            {{ $svc['name'] }}
+                                                        </a>
+                                                    @else
+                                                        <span class="text-sm font-bold text-white/30 flex items-center gap-2">
+                                                            <span class="w-1 h-1 rounded-full bg-white/10"></span>
+                                                            {{ $svc['name'] }}
+                                                        </span>
+                                                    @endif
+                                                    {{-- Level 4 --}}
+                                                    @if(count($svc['variants']))
+                                                        <div class="pl-5 flex flex-col gap-2">
+                                                            @foreach($svc['variants'] as $variant)
+                                                                @if($variant['has_details'])
+                                                                    <a href="{{ route('graphics.service-detail', $variant['slug']) }}" @click="open = false"
+                                                                        class="text-[12px] text-white/40 hover:text-white transition-colors">
+                                                                        → {{ $variant['name'] }}
+                                                                    </a>
+                                                                @else
+                                                                    <span class="text-[12px] text-white/20 italic">→ {{ $variant['name'] }}</span>
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>

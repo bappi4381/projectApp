@@ -27,13 +27,33 @@ class SubCategoryController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|max:255',
+            'description' => 'nullable',
+            'icon' => 'nullable|string',
+            'image_before' => 'nullable|image|max:10240',
+            'image_after' => 'nullable|image|max:10240',
+            'features' => 'nullable|array',
+            'faqs' => 'nullable|array',
+            'methods' => 'nullable|array',
+            'starting_price' => 'nullable|numeric',
+            'price_unit' => 'nullable|string',
+            'is_active' => 'boolean',
+            'has_details' => 'boolean'
         ]);
 
+        if ($request->hasFile('image_before')) {
+            $validated['image_before'] = $request->file('image_before')->store('subcategories', 'public');
+        }
+        if ($request->hasFile('image_after')) {
+            $validated['image_after'] = $request->file('image_after')->store('subcategories', 'public');
+        }
+
         $validated['slug'] = Str::slug($request->name);
+        $validated['is_active'] = $request->has('is_active');
+        $validated['has_details'] = $request->has('has_details');
 
         SubCategory::create($validated);
 
-        return redirect()->route('admin.graphics.categories.index')->with('success', 'Sub-Category created successfully.');
+        return redirect()->route('admin.graphics.subcategories.index')->with('success', 'Sub-Category created with rich content.');
     }
 
     public function edit(SubCategory $subCategory)
@@ -47,18 +67,51 @@ class SubCategoryController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|max:255',
+            'description' => 'nullable',
+            'icon' => 'nullable|string',
+            'image_before' => 'nullable|image|max:10240',
+            'image_after' => 'nullable|image|max:10240',
+            'features' => 'nullable|array',
+            'faqs' => 'nullable|array',
+            'methods' => 'nullable|array',
+            'starting_price' => 'nullable|numeric',
+            'price_unit' => 'nullable|string',
+            'is_active' => 'boolean',
+            'has_details' => 'boolean'
         ]);
 
-        $validated['slug'] = Str::slug($request->name);
+        if ($request->hasFile('image_before')) {
+            if ($subCategory->image_before) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($subCategory->image_before);
+            }
+            $validated['image_before'] = $request->file('image_before')->store('subcategories', 'public');
+        }
+        if ($request->hasFile('image_after')) {
+            if ($subCategory->image_after) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($subCategory->image_after);
+            }
+            $validated['image_after'] = $request->file('image_after')->store('subcategories', 'public');
+        }
+
+        if ($request->name !== $subCategory->name) {
+            $validated['slug'] = Str::slug($request->name);
+        }
+        
+        $validated['is_active'] = $request->has('is_active');
+        $validated['has_details'] = $request->has('has_details');
 
         $subCategory->update($validated);
 
-        return redirect()->route('admin.graphics.categories.index')->with('success', 'Sub-Category updated successfully.');
+        return redirect()->route('admin.graphics.subcategories.index')->with('success', 'Sub-Category updated successfully.');
     }
 
     public function destroy(SubCategory $subCategory)
     {
+        // Delete images
+        if ($subCategory->image_before) \Illuminate\Support\Facades\Storage::disk('public')->delete($subCategory->image_before);
+        if ($subCategory->image_after) \Illuminate\Support\Facades\Storage::disk('public')->delete($subCategory->image_after);
+        
         $subCategory->delete();
-        return redirect()->route('admin.graphics.categories.index')->with('success', 'Sub-Category deleted successfully.');
+        return redirect()->route('admin.graphics.subcategories.index')->with('success', 'Sub-Category deleted successfully.');
     }
 }

@@ -34,9 +34,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::get('/', [GraphicsController::class, 'servicesIndex'])->name('index');
                 Route::get('/create', [GraphicsController::class, 'servicesCreate'])->name('create');
                 Route::post('/', [GraphicsController::class, 'servicesStore'])->name('store');
+                Route::get('/{service}', [GraphicsController::class, 'show'])->name('show');
                 Route::get('/{service}/edit', [GraphicsController::class, 'servicesEdit'])->name('edit');
                 Route::put('/{service}', [GraphicsController::class, 'servicesUpdate'])->name('update');
                 Route::delete('/{service}', [GraphicsController::class, 'servicesDestroy'])->name('destroy');
+            });
+
+            // Dedicated Detail-Page Variants Management (Level 4)
+            Route::prefix('variant-details')->name('variants.')->group(function () {
+                Route::get('/', [GraphicsController::class, 'variantsIndex'])->name('index');
+                Route::get('/create', [GraphicsController::class, 'variantsCreate'])->name('create');
+                Route::post('/', [GraphicsController::class, 'variantsStore'])->name('store');
             });
 
             // Graphics Categories & Sub-Categories

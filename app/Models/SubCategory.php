@@ -9,7 +9,19 @@ class SubCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'name', 'slug'];
+    protected $fillable = [
+        'category_id', 'name', 'slug', 'description', 'icon', 
+        'image_before', 'image_after', 'features', 'faqs', 'methods', 
+        'is_active', 'has_details', 'starting_price', 'price_unit'
+    ];
+
+    protected $casts = [
+        'features' => 'array',
+        'faqs' => 'array',
+        'methods' => 'array',
+        'is_active' => 'boolean',
+        'has_details' => 'boolean',
+    ];
 
     public function category()
     {
@@ -18,6 +30,6 @@ class SubCategory extends Model
 
     public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->hasMany(Service::class)->whereNull('parent_id');
     }
 }

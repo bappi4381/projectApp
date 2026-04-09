@@ -1,4 +1,7 @@
-@php /** @var \App\Models\Service $service */ @endphp
+@php 
+    /** @var \App\Models\Service|\App\Models\SubCategory $service */ 
+    $isGroup = $isGroup ?? false;
+@endphp
 @extends('layouts.app')
 @section('title', $service->name . ' | Graphics Studio')
 @section('meta_description', Str::limit(strip_tags($service->description ?? ''), 160))
@@ -49,10 +52,14 @@
         {{-- ── GRID HEADER ────────────────────────────────── --}}
         <div class="container mx-auto px-6 max-w-6xl py-20 text-center">
             <h2 class="text-[28px] md:text-[34px] font-black text-[#082f49] mb-6 uppercase tracking-tight leading-tight">
-                PROFESSIONAL {{ strtoupper($service->name) }} SERVICE PROVIDER
+                PROFESSIONAL {{ strtoupper($service->name) }} {{ $isGroup ? 'SOLUTIONS' : 'SERVICE PROVIDER' }}
             </h2>
             <p class="text-slate-500 text-sm leading-relaxed max-w-3xl mx-auto mb-10">
-                To offer top-notch service, we have classified this particular service into 4 categories depending on the products' complexity. Based on the category, they apply different clipping path techniques to bring out immaculate output. Have a look at the categories underneath:
+                @if($isGroup)
+                    Our {{ $service->name }} group encompasses a wide range of specialized services tailored to meet your unique project requirements. Explore our offerings below:
+                @else
+                    To offer top-notch service, we have classified this particular service into various categories depending on the product's complexity. Have a look underneath:
+                @endif
             </p>
             <div class="flex justify-center gap-2">
                 <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
@@ -66,27 +73,21 @@
         <div class="container mx-auto px-6 max-w-6xl mb-20">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 @php
-                    $displayComplexities = count($service->complexities) > 0 
-                        ? $service->complexities 
-                        : [
-                            (object)[
-                                'name' => 'Basic Clipping Path',
-                                'price' => '0.49',
-                                'description' => 'Basic clipping path is mainly applied on products appearing straight, rectangular, square, round, and oval.',
-                                'image_before' => null,
-                                'image_after' => null,
-                            ]
-                        ];
+                    if($isGroup) {
+                        $displayItems = $service->services;
+                    } else {
+                        $displayItems = $service->complexities->isNotEmpty() ? $service->complexities : [];
+                    }
                 @endphp
 
-                @foreach($displayComplexities as $index => $cat)
+                @foreach($displayItems as $index => $item)
 
-                    <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group h-full">
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group h-full transition-all hover:shadow-2xl">
                         {{-- Slider --}}
                         <div class="relative overflow-hidden bg-slate-100 before-after-container aspect-[4/3] cursor-ew-resize" data-index="{{ $index }}">
-                            <img src="{{ $cat->image_before ? asset('storage/' . $cat->image_before) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="{{ $cat->name }} Before" class="absolute inset-0 w-full h-full object-cover">
+                            <img src="{{ $item->image_before ? asset('storage/' . $item->image_before) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="{{ $item->name }} Before" class="absolute inset-0 w-full h-full object-cover">
                             <div class="absolute inset-0 before-after-clip overflow-hidden" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                                <img src="{{ $cat->image_after ? asset('storage/' . $cat->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80&sat=-100' }}" alt="{{ $cat->name }} After" class="absolute inset-0 w-full h-full object-cover">
+                                <img src="{{ $item->image_after ? asset('storage/' . $item->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80&sat=-100' }}" alt="{{ $item->name }} After" class="absolute inset-0 w-full h-full object-cover">
                             </div>
                             
                             {{-- Handle --}}
@@ -103,14 +104,16 @@
 
                         {{-- Card Content --}}
                         <div class="p-8 flex-1 flex flex-col">
-                            <h3 class="text-xl font-black text-[#0ea5e9] text-center mb-6 uppercase tracking-tight">{{ $cat->name }}</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed text-justify mb-8 flex-1">{{ $cat->description }}</p>
+                            <h3 class="text-xl font-black text-[#0ea5e9] text-center mb-6 uppercase tracking-tight">{{ $item->name }}</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed text-center mb-8 flex-1">
+                                {{ Str::limit(strip_tags($item->description), 160) }}
+                            </p>
                             
                             {{-- Info Row --}}
                             <div class="grid grid-cols-2 gap-4 mb-6">
                                 <div class="border border-sky-400 rounded-sm py-3 text-center">
                                     <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Starts From</div>
-                                    <div class="text-[18px] font-black text-slate-800">{{ $cat->price }}</div>
+                                    <div class="text-[18px] font-black text-slate-800">${{ number_format($item->starting_price ?? 0.49, 2) }}</div>
                                 </div>
                                 <div class="border border-sky-400 rounded-sm py-3 text-center">
                                     <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Delivery</div>
@@ -119,13 +122,16 @@
                             </div>
 
                             {{-- Actions --}}
-                            <div class="grid grid-cols-2 gap-4">
-                                <a href="#" class="py-3 text-[11px] font-black text-center text-[#0ea5e9] border-[1.5px] border-[#0ea5e9] rounded-sm hover:bg-[#0ea5e9] hover:text-white transition-all uppercase tracking-widest">
-                                    VIEW DETAILS
-                                </a>
-                                <a href="{{ route('graphics.get-quote') }}" class="py-3 text-[11px] font-black text-center text-white bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] rounded-sm hover:brightness-105 transition-all shadow-md uppercase tracking-widest">
-                                    GET A QUOTE
-                                </a>
+                            <div class="grid grid-cols-1 gap-4">
+                                @if($isGroup)
+                                    <a href="{{ route('graphics.service-detail', $item->slug) }}" class="py-3 text-[11px] font-black text-center text-white bg-indigo-600 rounded-sm hover:bg-indigo-700 transition-all uppercase tracking-widest shadow-md">
+                                        VIEW SERVICE DETAILS
+                                    </a>
+                                @else
+                                    <a href="{{ route('graphics.get-quote') }}" class="py-3 text-[11px] font-black text-center text-white bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] rounded-sm hover:brightness-105 transition-all shadow-md uppercase tracking-widest">
+                                        GET A QUOTE
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -112,35 +112,37 @@
                 <div class="w-16 h-1 bg-[#38bdf8] mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                @php
-                    $services = [
-                        ['name' => 'Clipping Path Services', 'slug' => 'clipping-path', 'price' => '0.39', 'img1' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'A clipping path is a closed vector path, or shape, used to cut out a 2D image in image editing software. Anything inside the path will be included after the clipping path is applied; anything outside the path will be omitted from the output.'],
-                        ['name' => 'Background Removal Services', 'slug' => 'background-removal', 'price' => '0.49', 'img1' => 'https://images.unsplash.com/photo-1584771145729-0bd5095b9d41?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1584771145729-0bd5095b9d41?auto=format&fit=crop&w=600&q=80&blur=10', 'desc' => 'Background removal entails employing different techniques depending on the subject. With complex edges like hair or fur, advanced masking techniques are necessary over simple clipping paths.'],
-                        ['name' => 'Ghost Mannequin Services', 'slug' => 'ghost-mannequin', 'price' => '0.99', 'img1' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'Showcasing apparel without the distraction of a mannequin provides a seamless and professional look. We flawlessly combine multiple photos to create a 3D hollow effect for your apparel.'],
-                        ['name' => 'Shadow Making Services', 'slug' => 'shadow-services', 'price' => '0.25', 'img1' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'Add depth, dimension, and realism to flat images by introducing natural, reflection, or drop shadows, enhancing the visual appeal and credibility of product presentations.'],
-                        ['name' => 'Color Correction Services', 'slug' => 'color-correction', 'price' => '0.75', 'img1' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'Ensure all images align with your brand guidelines by adjusting colors, brightness, white balance, and contrast. Perfect for seasonal campaigns and unified product catalogues.'],
-                        ['name' => 'Photo Retouching Services', 'slug' => 'photo-retouching', 'price' => '0.80', 'img1' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'High-end retouching to remove blemishes, smooth skin, clean up backgrounds, and emphasize the focal points of any portrait, lifestyle, or commercial photograph.'],
-                        ['name' => 'Automotive Photo Editing', 'slug' => 'car-editing', 'price' => '1.00', 'img1' => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'Elevate your automotive listings with crisp background replacements, shadow adjustments, and glare removal to make vehicles look their absolute best for online showrooms.'],
-                        ['name' => 'E-Commerce Photo Editing', 'slug' => 'ecommerce-editing', 'price' => '0.40', 'img1' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80', 'img2' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80&sat=-100', 'desc' => 'Optimize your product images for major platforms like Amazon, eBay, and Shopify. We ensure strict adherence to technical requirements and visually stunning results.'],
-                    ];
-                @endphp
+            @php
+                // Fetch all active services that have details or are main services
+                $dbServices = \App\Models\Service::where('is_active', true)
+                    ->whereNull('parent_id') // Level 3 services
+                    ->with(['variants' => function($q) {
+                        $q->where('is_active', true);
+                    }])
+                    ->get();
+            @endphp
 
-                @foreach($services as $i => $svc)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                @foreach($dbServices as $i => $svc)
                     <div class="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200 flex flex-col">
                         {{-- Before/After Image Slider --}}
                         <div class="relative overflow-hidden bg-gray-100 before-after-container" style="height: 320px;"
                             data-index="{{ $i }}">
-                            {{-- Before Image (full) --}}
-                            <img src="{{ $svc['img2'] }}" alt="{{ $svc['name'] }} Before"
-                                class="absolute inset-0 w-full h-full object-cover">
-
-                            {{-- After Image (clipped left side) --}}
-                            <div class="absolute inset-0 before-after-clip"
-                                style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                                <img src="{{ $svc['img1'] }}" alt="{{ $svc['name'] }} After"
+                            @if($svc->image_before && $svc->image_after)
+                                {{-- Before Image (full) --}}
+                                <img src="{{ asset('storage/' . $svc->image_after) }}" alt="{{ $svc->name }} After"
                                     class="absolute inset-0 w-full h-full object-cover">
-                            </div>
+
+                                {{-- After Image (clipped left side) --}}
+                                <div class="absolute inset-0 before-after-clip"
+                                    style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                                    <img src="{{ asset('storage/' . $svc->image_before) }}" alt="{{ $svc->name }} Before"
+                                        class="absolute inset-0 w-full h-full object-cover">
+                                </div>
+                            @else
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-20">
+                                <div class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold">SAMPLE PREVIEW</div>
+                            @endif
 
                             {{-- Drag Handle --}}
                             <div class="absolute top-0 bottom-0 z-20 before-after-handle"
@@ -162,36 +164,72 @@
 
                         {{-- Content --}}
                         <div class="p-6 flex-1 flex flex-col">
-                            <h3 class="text-lg font-bold text-center mb-3" style="color: #c0392b;">{{ $svc['name'] }}</h3>
-                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-1 text-justify">{{ $svc['desc'] }}</p>
+                            <h3 class="text-lg font-bold text-center mb-3 group" style="color: #c0392b;">
+                                {{ $svc->name }}
+                            </h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-1 text-justify line-clamp-4">
+                                {{ $svc->description ?? 'Professional image editing services with guaranteed quality and fast turnaround.' }}
+                            </p>
 
                             {{-- Stats Row --}}
-                            <div class="grid grid-cols-2 gap-3 mb-4">
-                                <div class="border border-gray-200 rounded py-2 px-3 text-center">
-                                    <div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Starts From
-                                    </div>
-                                    <div class="text-xl font-black text-gray-800">$ {{ $svc['price'] }}</div>
+                            <div class="grid grid-cols-2 gap-3 mb-6">
+                                <div class="border border-gray-100 bg-gray-50/50 rounded-xl py-3 px-3 text-center transition-all hover:bg-white hover:shadow-sm">
+                                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Starts From</div>
+                                    <div class="text-xl font-black text-slate-800 tracking-tighter">${{ number_format($svc->starting_price ?? 0.49, 2) }}</div>
                                 </div>
-                                <div class="border border-gray-200 rounded py-2 px-3 text-center">
-                                    <div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Images/24Hr
-                                    </div>
-                                    <div class="text-xl font-black text-gray-800">3000</div>
+                                <div class="border border-gray-100 bg-gray-50/50 rounded-xl py-3 px-3 text-center transition-all hover:bg-white hover:shadow-sm">
+                                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Daily Cap</div>
+                                    <div class="text-xl font-black text-slate-800 tracking-tighter">{{ $svc->delivery_capacity ?? '5000' }}</div>
                                 </div>
                             </div>
 
-                            {{-- Buttons --}}
-                            <div class="grid grid-cols-2 gap-3">
-                                <a href="{{ route('graphics.service-detail', $svc['slug']) }}"
-                                    class="py-2.5 text-sm font-bold text-center border-2 rounded"
-                                    style="color: #0ea5e9; border-color: #0ea5e9; transition: all 0.3s;"
-                                    onmouseover="this.style.backgroundColor='#0ea5e9';this.style.color='#fff'"
-                                    onmouseout="this.style.backgroundColor='transparent';this.style.color='#0ea5e9'">
-                                    VIEW DETAILS
-                                </a>
+                            {{-- Dynamic Variants Grid (The specific request) --}}
+                            <div class="grid grid-cols-2 gap-x-6 gap-y-3 mb-8 border-t border-gray-50 pt-6">
+                                @php
+                                    // Get the features (tiers) from JSON
+                                    $tiers = $svc->features ?? [];
+                                    // Cross-reference with Level 4 Variants from DB
+                                    $dbVariants = $svc->variants;
+                                @endphp
+                                @foreach($tiers as $tier)
+                                    @php
+                                        // Try to find if a database variant exists with this name to get its link
+                                        $linkedVariant = $dbVariants->firstWhere('name', $tier['name']);
+                                    @endphp
+                                    <div class="flex items-center justify-between group/v transition-all">
+                                        <div class="flex items-center gap-2 overflow-hidden">
+                                            <span class="w-1 h-1 rounded-full bg-emerald-500 group-hover/v:scale-125 transition-transform"></span>
+                                            @if($linkedVariant && $linkedVariant->has_details)
+                                                <a href="{{ route('graphics.service-detail', $linkedVariant->slug) }}" 
+                                                   class="text-[12px] font-bold text-slate-600 hover:text-indigo-600 truncate transition-colors border-b border-transparent hover:border-indigo-200">
+                                                    {{ $tier['name'] }}
+                                                </a>
+                                            @else
+                                                <span class="text-[12px] font-medium text-slate-500 truncate">{{ $tier['name'] }}</span>
+                                            @endif
+                                        </div>
+                                        <span class="text-[11px] font-black text-slate-400 font-mono tracking-tighter ml-2">{{ $tier['price'] }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            {{-- Action Buttons --}}
+                            <div class="grid grid-cols-2 gap-4">
+                                @if($svc->has_details)
+                                    <a href="{{ route('graphics.service-detail', $svc->slug) }}"
+                                        class="py-3 text-[11px] font-black tracking-widest text-center border-2 rounded-xl transition-all duration-300 hover:bg-[#0ea5e9] hover:text-white"
+                                        style="color: #0ea5e9; border-color: #0ea5e9;">
+                                        VIEW DETAILS
+                                    </a>
+                                @else
+                                    <button disabled class="py-3 text-[11px] font-black tracking-widest text-center border-2 border-gray-100 text-gray-300 rounded-xl cursor-not-allowed">
+                                        NO DETAILS
+                                    </button>
+                                @endif
+
                                 <a href="{{ route('graphics.get-quote') }}"
-                                    class="py-2.5 text-sm font-bold text-center text-white rounded"
-                                    style="background: linear-gradient(to right, #0ea5e9, #2dd4bf); transition: all 0.3s;"
-                                    onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                                    class="py-3 text-[11px] font-black tracking-widest text-center text-white rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all"
+                                    style="background: linear-gradient(to right, #0ea5e9, #2dd4bf);">
                                     GET A QUOTE
                                 </a>
                             </div>

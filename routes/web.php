@@ -100,21 +100,55 @@ Route::get('/graphics-studio/services/shadow-service', function () {
     return view('graphics.remove-background-images.shadow-service');
 })->name('graphics.services.shadow-service');
 
-// Service Detail Page (Wildcard - handles all custom slugs)
+// ── SERVICE DETAIL PAGE ─────────────────────────────────────────────────────
+// This single wildcard route handles ALL 4 levels of the service hierarchy.
+// Resolution order: Category → SubCategory → Service/Variant (by slug)
 Route::get('/graphics-studio/services/{slug}', function ($slug) {
-    $custom_pages = [
-        'clipping-path' => 'graphics.remove-background-images.clipping-path',
-        'ghost-mannequin' => 'graphics.remove-background-images.ghost-mannequin',
-        'image-masking' => 'graphics.remove-background-images.image-masking',
-        'shadow-service' => 'graphics.remove-background-images.shadow-service',
-    ];
 
-    if (isset($custom_pages[$slug])) {
-        return view($custom_pages[$slug]);
+    // LEVEL 1: Is it a Category (Primary Vertical) with a landing page?
+    $category = \App\Models\Category::where('slug', $slug)
+        ->where('has_details', true)
+        ->first();
+    if ($category) {
+        // Load its subcategories and services for the group grid
+        $category->load(['subcategories.services' => function ($q) {
+            $q->where('is_active', true)->whereNull('parent_id');
+        }]);
+        return view('graphics.service-detail', [
+            'service'   => $category,
+            'isGroup'   => true,
+            'level'     => 'category',
+        ]);
     }
 
-    $service = \App\Models\Service::where('slug', $slug)->firstOrFail();
-    return view('graphics.service-detail', compact('service'));
+    // LEVEL 2: Is it a SubCategory (Service Group) with a landing page?
+    $subCategory = \App\Models\SubCategory::where('slug', $slug)
+        ->where('has_details', true)
+        ->first();
+    if ($subCategory) {
+        $subCategory->load(['services' => function ($q) {
+            $q->where('is_active', true)->whereNull('parent_id')->with('variants');
+        }]);
+        return view('graphics.service-detail', [
+            'service'   => $subCategory,
+            'isGroup'   => true,
+            'level'     => 'subgroup',
+        ]);
+    }
+
+    // LEVEL 3 & 4: It's a Service or Variant (both are Service models)
+    // Any Service (primary or variant) with has_details = true gets its own page.
+    $service = \App\Models\Service::where('slug', $slug)
+        ->where('is_active', true)
+        ->with(['variants' => function ($q) {
+            $q->where('is_active', true)->orderBy('id');
+        }, 'parent', 'subCategory'])
+        ->firstOrFail();
+
+    $level = $service->parent_id ? 'variant' : 'service';
+
+    return view('graphics.service-detail', compact('service', 'level'));
+
 })->name('graphics.service-detail');
 
 

@@ -21,24 +21,61 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Pagination\Paginator::useTailwind();
 
-        // Share Navbar Services
+        // Share Navbar Services — Full 4-Level Hierarchy
         \Illuminate\Support\Facades\View::composer('graphics.partials.graphics-navbar', function ($view) {
-            $categories = \App\Models\Category::with([
-                'subcategories.services' => function ($query) {
-                    $query->where('is_active', true);
-                }
-            ])->get();
+            $categories = \App\Models\Category::where('is_active', true)
+                ->with([
+                    'subcategories' => function ($q) {
+                        $q->where('is_active', true)->with([
+                            'services' => function ($sq) {
+                                $sq->where('is_active', true)
+                                   ->whereNull('parent_id')
+                                   ->with(['variants' => function ($vq) {
+                                       $vq->where('is_active', true)->orderBy('id');
+                                   }])
+                                   ->orderBy('id');
+                            }
+                        ]);
+                    }
+                ])->get();
 
-            $navbarServices = [];
-            foreach ($categories as $category) {
-                $groups = [];
-                foreach ($category->subcategories as $subCategory) {
-                    $groups[$subCategory->name] = $subCategory->services;
-                }
-                $navbarServices[$category->name] = $groups;
-            }
+            // Build structured hierarchy for nav rendering
+            $navbarData = $categories->map(function ($cat) {
+                return [
+                    'id'          => $cat->id,
+                    'name'        => $cat->name,
+                    'slug'        => $cat->slug,
+                    'has_details' => (bool) $cat->has_details,
+                    'groups'      => $cat->subcategories->map(function ($sub) {
+                        return [
+                            'id'          => $sub->id,
+                            'name'        => $sub->name,
+                            'slug'        => $sub->slug,
+                            'has_details' => (bool) $sub->has_details,
+                            'services'    => $sub->services->map(function ($svc) {
+                                return [
+                                    'id'          => $svc->id,
+                                    'name'        => $svc->name,
+                                    'slug'        => $svc->slug,
+                                    'has_details' => (bool) $svc->has_details,
+                                    'variants'    => $svc->variants->map(function ($variant) {
+                                        return [
+                                            'id'          => $variant->id,
+                                            'name'        => $variant->name,
+                                            'slug'        => $variant->slug,
+                                            'has_details' => (bool) $variant->has_details,
+                                        ];
+                                    })->values()->all(),
+                                ];
+                            })->values()->all(),
+                        ];
+                    })->values()->all(),
+                ];
+            })->values()->all();
 
-            $view->with('navbarServices', $navbarServices);
+            $view->with('navbarData', $navbarData);
+            // Keep backward compat key
+            $view->with('navbarServices', $navbarData);
         });
 
         // Share Latest Blog Posts with the common partial

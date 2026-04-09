@@ -1,88 +1,182 @@
 @extends('layouts.admin')
-@section('title', 'Project Services | Graphics Studio')
+@section('title', 'Services & Variants | Graphics Studio')
 
 @section('content')
 <div class="p-8">
-    <div class="flex items-center justify-between mb-10 reveal">
+
+    {{-- Header --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 reveal">
         <div>
-            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Graphics Services</h1>
-            <p class="text-slate-400 font-medium">Manage your design offerings and pricing models.</p>
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Services & Variants</h1>
+            <p class="text-slate-400 font-medium text-sm">Manage Level 3 (Primary Services) and Level 4 (Variants). Each can have its own Details Page.</p>
         </div>
-        <div class="flex items-center gap-4">
-            <form action="{{ route('admin.graphics.services.index') }}" method="GET" class="relative">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search services..." class="bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 pl-10 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all w-64">
+        <a href="{{ route('admin.graphics.services.create') }}" class="group relative px-8 py-4 bg-indigo-600 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-indigo-500/20 overflow-hidden flex items-center gap-3 self-start">
+            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <i class="ri-add-line text-white text-lg relative"></i>
+            <span class="relative text-white font-black uppercase tracking-widest text-[11px]">Add Service / Variant</span>
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-2xl mb-8 flex items-center gap-3">
+            <i class="ri-checkbox-circle-line text-xl"></i>
+            <span class="text-sm font-bold">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    {{-- Filter Bar --}}
+    <div class="glass-card rounded-[24px] border-white/5 p-6 mb-6 flex flex-wrap gap-4 items-center reveal reveal-delay-1">
+        <form action="{{ route('admin.graphics.services.index') }}" method="GET" class="flex flex-wrap gap-4 flex-1">
+            <div class="relative flex-1 min-w-[200px]">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search services..."
+                    class="w-full bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 pl-10 text-white text-sm focus:outline-none focus:border-indigo-500/50 transition-all">
                 <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                @if(request('search'))
-                    <a href="{{ route('admin.graphics.services.index') }}" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
-                        <i class="ri-close-line"></i>
-                    </a>
-                @endif
-            </form>
-            <a href="{{ route('admin.graphics.services.create') }}" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2 group">
-                <i class="ri-add-line transition-transform group-hover:rotate-90"></i>
-                <span>Add New Service</span>
-            </a>
-        </div>
+            </div>
+
+            <select name="sub_category" class="bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-slate-400 focus:outline-none focus:border-indigo-500/50 transition-all select-dark">
+                <option value="">All Groups</option>
+                @foreach($subCategories as $sub)
+                    <option value="{{ $sub->id }}" {{ request('sub_category') == $sub->id ? 'selected' : '' }}>
+                        {{ $sub->category->name ?? '' }} → {{ $sub->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            <select name="level" class="bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-slate-400 focus:outline-none focus:border-indigo-500/50 transition-all select-dark">
+                <option value="">All Levels</option>
+                <option value="primary" {{ request('level') == 'primary' ? 'selected' : '' }}>Level 3 — Primary Services</option>
+                <option value="variant"  {{ request('level') == 'variant'  ? 'selected' : '' }}>Level 4 — Variants</option>
+            </select>
+
+            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-black uppercase rounded-xl transition-all">Filter</button>
+            @if(request()->anyFilled(['search', 'sub_category', 'level']))
+                <a href="{{ route('admin.graphics.services.index') }}" class="px-6 py-3 bg-white/5 text-slate-400 hover:text-white text-[11px] font-black uppercase rounded-xl transition-all">Reset</a>
+            @endif
+        </form>
     </div>
 
     {{-- Services Table --}}
-    <div class="glass-card rounded-[24px] border-white/5 shadow-2xl relative overflow-hidden reveal reveal-delay-1">
+    <div class="glass-card rounded-[24px] border-white/5 shadow-2xl relative overflow-hidden reveal reveal-delay-2">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-white/5 border-b border-white/5">
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Service Identity</th>
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Base Category</th>
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Starting Rate</th>
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Status</th>
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none text-right">Orchestration</th>
+                    <tr class="bg-white/[0.02] border-b border-white/5">
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Service</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Hierarchy</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Level</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Pricing</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Details Page</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
                     @forelse($services as $service)
-                    <tr class="hover:bg-white/[0.02] transition-all group">
-                        <td class="px-6 py-5">
+                    <tr class="hover:bg-white/[0.02] transition-all group {{ $service->parent_id ? 'opacity-80' : '' }}">
+
+                        {{-- Service Name & Icon --}}
+                        <td class="px-8 py-5">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 text-xl border border-indigo-500/10 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 shadow-inner">
+                                {{-- Indent visual for variants --}}
+                                @if($service->parent_id)
+                                    <span class="text-slate-700 text-lg pl-1">↳</span>
+                                @endif
+                                <div class="w-11 h-11 rounded-xl {{ $service->parent_id ? 'bg-violet-500/10 border-violet-500/20 text-violet-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' }} flex items-center justify-center border group-hover:scale-110 transition-transform">
                                     <i class="{{ $service->icon ?? 'ri-image-line' }}"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white tracking-tight">{{ $service->name }}</h4>
-                                    <p class="text-xs text-slate-500 font-medium truncate max-w-[200px]">{{ $service->description }}</p>
+                                    <h4 class="font-bold text-white text-sm tracking-tight">{{ $service->name }}</h4>
+                                    <p class="text-[10px] text-slate-500 font-mono">{{ $service->slug }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-5">
-                            <span class="text-xs font-bold text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-lg border border-white/5">{{ $service->category->name ?? 'N/A' }} 
-                                @if($service->subCategory) > {{ $service->subCategory->name }} @endif
-                            </span>
+
+                        {{-- Hierarchy / Group --}}
+                        <td class="px-8 py-5">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    {{ $service->subCategory->category->name ?? '—' }}
+                                </span>
+                                <span class="text-[11px] font-semibold text-slate-400">
+                                    {{ $service->subCategory->name ?? '—' }}
+                                </span>
+                                @if($service->parent)
+                                    <span class="text-[10px] text-violet-400 font-medium italic">
+                                        ↳ Variant of: {{ $service->parent->name }}
+                                    </span>
+                                @endif
+                            </div>
                         </td>
-                        <td class="px-6 py-5">
-                            <span class="text-sm font-bold text-indigo-400 font-mono tracking-tighter">${{ number_format($service->starting_price, 2) }}</span>
-                        </td>
-                        <td class="px-6 py-5">
-                            @if($service->is_active)
-                                <span class="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    Published
+
+                        {{-- Level Badge --}}
+                        <td class="px-8 py-5">
+                            @if($service->parent_id)
+                                <span class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[9px] font-black uppercase tracking-widest">
+                                    L4 Variant
                                 </span>
                             @else
-                                <span class="flex items-center gap-1.5 text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-                                    Draft
+                                <span class="px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-black uppercase tracking-widest">
+                                    L3 Primary
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-5 text-right">
-                            <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.graphics.services.edit', $service) }}" class="w-9 h-9 rounded-lg bg-white/5 border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center">
-                                    <i class="ri-edit-line text-lg"></i>
+
+                        {{-- Pricing --}}
+                        <td class="px-8 py-5">
+                            @if($service->starting_price)
+                                <div>
+                                    <span class="text-sm font-black text-emerald-400 font-mono">${{ number_format($service->starting_price, 2) }}</span>
+                                    <p class="text-[10px] text-slate-600">{{ $service->price_unit }}</p>
+                                </div>
+                            @else
+                                <span class="text-slate-600 text-xs italic">—</span>
+                            @endif
+                        </td>
+
+                        {{-- Has Details Page --}}
+                        <td class="px-8 py-5">
+                            @if($service->has_details)
+                                <div class="flex flex-col gap-1">
+                                    <span class="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                                        <i class="ri-checkbox-circle-fill text-[14px]"></i> Yes
+                                    </span>
+                                    <a href="{{ route('graphics.service-detail', $service->slug) }}" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
+                                        <i class="ri-external-link-line"></i> Preview
+                                    </a>
+                                </div>
+                            @else
+                                <span class="flex items-center gap-1.5 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                                    <i class="ri-close-circle-fill text-[14px]"></i> No
+                                </span>
+                            @endif
+                        </td>
+
+                        {{-- Status --}}
+                        <td class="px-8 py-5">
+                            @if($service->is_active)
+                                <span class="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live
+                                </span>
+                            @else
+                                <span class="flex items-center gap-1.5 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Draft
+                                </span>
+                            @endif
+                        </td>
+
+                        {{-- Actions --}}
+                        <td class="px-8 py-5 text-right">
+                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <a href="{{ route('admin.graphics.services.edit', $service) }}"
+                                    class="p-2.5 rounded-xl bg-white/5 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all" title="Edit">
+                                    <i class="ri-edit-2-line"></i>
                                 </a>
-                                <form action="{{ route('admin.graphics.services.destroy', $service) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this service?');">
+                                <form action="{{ route('admin.graphics.services.destroy', $service) }}" method="POST"
+                                    onsubmit="return confirm('Delete \'{{ $service->name }}\'? Its variants will also be affected.')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-9 h-9 rounded-lg bg-rose-500/5 border border-rose-500/10 text-rose-500/50 hover:text-rose-400 hover:bg-rose-500/10 transition-all flex items-center justify-center">
-                                        <i class="ri-delete-bin-line text-lg"></i>
+                                    <button type="submit" class="p-2.5 rounded-xl bg-white/5 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-all" title="Delete">
+                                        <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
                             </div>
@@ -90,23 +184,46 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-20 text-center">
-                             <div class="flex flex-col items-center gap-4">
-                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-3xl text-slate-600">
-                                     <i class="ri-inbox-line"></i>
-                                 </div>
-                                 <p class="text-slate-500 font-medium">No design services synchronized in the cloud.</p>
-                             </div>
+                        <td colspan="7" class="px-8 py-20 text-center text-slate-500 font-medium">
+                            <i class="ri-inbox-line text-4xl mb-4 block opacity-20"></i>
+                            No services found. <a href="{{ route('admin.graphics.services.create') }}" class="text-indigo-400 font-bold hover:underline">Create the first one.</a>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        @if($services->hasPages())
+            <div class="px-8 py-6 bg-white/[0.01] border-t border-white/5">
+                {{ $services->links() }}
+            </div>
+        @endif
     </div>
-    
-    <div class="mt-8">
-        {{ $services->links('pagination::tailwind') }}
+
+    {{-- Quick Architecture Legend --}}
+    <div class="mt-8 p-6 glass-card rounded-[24px] border-white/5 flex flex-wrap gap-6 items-center reveal">
+        <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Architecture Legend:</span>
+        <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full bg-slate-700/50 border border-white/5 text-slate-500 text-[9px] font-black uppercase">L1</span>
+            <span class="text-xs text-slate-500">Primary Vertical <span class="text-slate-700">(Category)</span></span>
+        </div>
+        <span class="text-slate-700">→</span>
+        <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full bg-slate-700/50 border border-white/5 text-slate-500 text-[9px] font-black uppercase">L2</span>
+            <span class="text-xs text-slate-500">Service Group <span class="text-slate-700">(SubCategory)</span></span>
+        </div>
+        <span class="text-slate-700">→</span>
+        <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-black uppercase">L3</span>
+            <span class="text-xs text-slate-500">Primary Service</span>
+        </div>
+        <span class="text-slate-700">→</span>
+        <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[9px] font-black uppercase">L4</span>
+            <span class="text-xs text-slate-500">Variant <span class="text-slate-700">(child of L3)</span></span>
+        </div>
     </div>
+
 </div>
 @endsection

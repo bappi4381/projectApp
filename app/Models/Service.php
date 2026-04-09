@@ -10,6 +10,7 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = [
+        'parent_id',
         'name',
         'slug',
         'description',
@@ -28,13 +29,25 @@ class Service extends Model
         'discount_tag',
         'image_before',
         'image_after',
+        'has_details',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Service::class, 'parent_id');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(Service::class, 'parent_id')->orderBy('id');
+    }
 
     protected $casts = [
         'features' => 'array',
         'faqs' => 'array',
         'methods' => 'array',
         'is_active' => 'boolean',
+        'has_details' => 'boolean'
     ];
 
     public function complexities()
