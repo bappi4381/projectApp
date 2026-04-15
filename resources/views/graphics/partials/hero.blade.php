@@ -56,33 +56,14 @@
     <div class="swiper-wrapper">
         
         @php
-        $slides = [
-            [
-                'title' => 'CRAFTING <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">PIXEL-PERFECT</span> VISUALS',
-                'desc' => 'High-end clipping path, complex masking, and high-frequency retouching for brands that refuse to settle for average.',
-                'image' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1920&q=80&auto=format&fit=crop',
-                'accent' => 'indigo'
-            ],
-            [
-                'title' => 'ELEVATE <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">YOUR PRODUCT</span> AESTHETICS',
-                'desc' => 'From ghost mannequin effects to jewelry enhancement, we transform raw clicks into high-converting commercial assets.',
-                'image' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1920&q=80&auto=format&fit=crop',
-                'accent' => 'purple'
-            ],
-            [
-                'title' => 'ELITE <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">REAL ESTATE</span> & ARCHITECTURE',
-                'desc' => 'Professional HDR blending, twilight enhancement, and virtual staging that makes properties sell 35% faster.',
-                'image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80&auto=format&fit=crop',
-                'accent' => 'cyan'
-            ]
-        ];
+            $slides = \App\Models\HomePage::settings()->hero_slides ?? [];
         @endphp
 
         @foreach($slides as $slide)
         <div class="swiper-slide h-full">
             {{-- Background with multi-layer overlays --}}
             <div class="absolute inset-0 slide-bg">
-                <img src="{{ $slide['image'] }}" alt="{{ strip_tags($slide['title']) }}" class="w-full h-full object-cover">
+                <img src="{{ !empty($slide['image']) ? asset('storage/'.$slide['image']) : ($slide['fallback_image'] ?? '') }}" alt="{{ strip_tags($slide['title']) }}" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-slate-950/60 transition-opacity duration-1000"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/40 to-transparent"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/20"></div>

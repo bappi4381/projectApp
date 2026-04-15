@@ -130,7 +130,7 @@
         </div>
 
         {{-- Menu Group: Studio Content --}}
-        @php $isStudio = request()->routeIs('admin.graphics.blog.*') || request()->routeIs('admin.graphics.testimonials.*') || request()->routeIs('admin.graphics.brands.*'); @endphp
+        @php $isStudio = request()->routeIs('admin.graphics.blog.*') || request()->routeIs('admin.graphics.testimonials.*') || request()->routeIs('admin.graphics.brands.*') || request()->routeIs('admin.graphics.ecommerce-page.*') || request()->routeIs('admin.graphics.portfolio-page.*') || request()->routeIs('admin.graphics.home-page.*'); @endphp
 
         <div x-data="{ open: @json($isStudio) }" class="space-y-1">
             <button @click="open = !open"
@@ -146,6 +146,9 @@
                 {!! renderSidebarItem('admin.graphics.blog.index', 'ri-article-line', 'Blog Articles', null, 'emerald') !!}
                 {!! renderSidebarItem('admin.graphics.testimonials.index', 'ri-chat-quote-line', 'Client Reviews', null, 'emerald') !!}
                 {!! renderSidebarItem('admin.graphics.brands.index', 'ri-verified-badge-line', 'Brand/Client Logos', null, 'emerald') !!}
+                {!! renderSidebarItem('admin.graphics.home-page.edit', 'ri-slideshow-line', 'Home Slider', null, 'emerald') !!}
+                {!! renderSidebarItem('admin.graphics.ecommerce-page.edit', 'ri-pages-line', 'Ecommerce Page', null, 'emerald') !!}
+                {!! renderSidebarItem('admin.graphics.portfolio-page.edit', 'ri-gallery-upload-line', 'Portfolio Page', null, 'emerald') !!}
             </div>
         </div>
 

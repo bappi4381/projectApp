@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Ecommerce Product Photo Editing Services | Graphics Studio')
-@section('meta_description', 'High-quality ecommerce product photo editing services. Price starts from $0.49 per image.')
+@section('title', $page->hero_title . ' | Graphics Studio')
+@section('meta_description', 'High-quality ' . $page->hero_title . '. Price starts from $' . number_format($page->hero_price_from, 2) . ' ' . $page->hero_price_unit)
 
 @section('content')
     <div class="bg-[#f0f9ff] min-h-screen text-slate-800 font-sans selection:bg-[#7F2DF7] selection:text-white pb-20">
@@ -12,27 +12,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
                     {{-- Left Side: Image Container --}}
-                    <div class="relative mx-auto" style="width: 350px; height: 380px;">
-                        <div
-                            class="w-full h-full bg-slate-200 overflow-hidden relative shadow-2xl border border-white/5 rounded ">
-                            <img src="{{ asset('images/ecommerce/Ecommerce-Product-Photo-Editing-Services-GIF.gif') }}"
-                                alt="Ecommerce Product Example" class="absolute inset-0  object-cover">
-                        </div>
+                    <div class="relative mx-auto flex items-center justify-center p-4 bg-slate-200/10 backdrop-blur-sm shadow-2xl border border-white/10 rounded-2xl" style="width: 380px; height: 380px;">
+                        <img src="{{ $page->hero_gif ? asset('storage/'.$page->hero_gif) : asset('images/ecommerce/Ecommerce-Product-Photo-Editing-Services-GIF.gif') }}"
+                            alt="Ecommerce Product Example" class="w-full h-full object-contain drop-shadow-xl">
                     </div>
 
                     {{-- Right Side: Content --}}
                     <div class="text-white text-center pt-4 flex flex-col items-center">
-                        <h1
-                            class="text-[30px] md:text-[40px] font-bold tracking-tight mb-12 leading-[1.2] text-white text-center md:text-center">
-                            Ecommerce Product<br>Photo Editing Services
+                        <h1 class="text-[30px] md:text-[40px] font-bold tracking-tight mb-12 leading-[1.2] text-white text-center md:text-center">
+                            {!! nl2br(e($page->hero_title)) !!}
                         </h1>
 
                         <div class="grid grid-cols-2 gap-8 mb-12 mx-auto md:max-w-md w-full">
                             {{-- Price Block --}}
                             <div class="text-center">
                                 <h3 class="text-[16.5px] font-bold text-white mb-2">Price Starts From</h3>
-                                <div class="text-[16px] text-[#4ade80] font-medium mb-0.5">$0.49</div>
-                                <div class="text-[14px] text-slate-300">Per Image</div>
+                                <div class="text-[16px] text-[#4ade80] font-medium mb-0.5">${{ number_format($page->hero_price_from, 2) }}</div>
+                                <div class="text-[14px] text-slate-300">{{ $page->hero_price_unit }}</div>
                                 <a href="{{ route('graphics.get-quote') }}"
                                     class="inline-flex items-center justify-center px-7 py-3 mt-8 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] text-white font-bold text-[13px] tracking-[0.15em] shadow-lg hover:shadow-cyan-500/30 transition-shadow">
                                     GET QUOTE
@@ -41,8 +37,8 @@
                             {{-- Deliver Block --}}
                             <div class="text-center">
                                 <h3 class="text-[16.5px] font-bold text-white mb-2">We Can Deliver</h3>
-                                <div class="text-[16px] text-[#4ade80] font-medium mb-0.5">5000 images/day</div>
-                                <div class="text-[14px] text-slate-300">2500+ images in 12 hours</div>
+                                <div class="text-[16px] text-[#4ade80] font-medium mb-0.5">{{ $page->hero_delivery_capacity }}</div>
+                                <div class="text-[14px] text-slate-300">{{ $page->hero_delivery_subtitle }}</div>
                                 <a href="{{ route('graphics.upload') }}"
                                     class="inline-flex items-center justify-center px-7 py-3 mt-8 rounded-full bg-white text-slate-900 font-bold text-[13px] tracking-[0.15em] shadow-lg hover:bg-slate-100 transition-colors">
                                     FREE TRIAL
@@ -120,134 +116,68 @@
             </div>
         </div>
 
-        {{-- ── WORKFLOW SECTION (Row 1) ────────────────────── --}}
-        <div class="bg-white py-24 pb-12">
+        {{-- ── WORKFLOW SECTIONS (Dynamic) ────────────────────── --}}
+        @foreach($page->workflow_sections ?? [] as $index => $wf)
+        @php
+            $highlightedTitle = e($wf['title']);
+            if(!empty($wf['highlight_words'])) {
+                foreach($wf['highlight_words'] as $word) {
+                    $highlightedTitle = str_replace($word, '<span class="text-[#22c55e]">'.$word.'</span>', $highlightedTitle);
+                }
+            }
+            // Add <br> before highlight manually if needed or just let it flow naturally
+        @endphp
+        <div class="bg-white py-24 {{ $index > 0 ? 'pt-12 pb-32' : 'pb-12' }}">
             <div class="container mx-auto px-6 max-w-6xl">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-                    {{-- Left: Slider (Manual/AI Workflow) --}}
-                    <div class="relative overflow-hidden rounded-sm shadow-sm before-after-ec-container group"
-                        style="height: 480px; cursor: ew-resize;">
-                        {{-- AFTER image (Ghost Mannequin) --}}
-                        <img src="{{ asset('images/ecommerce/how-to-edit-product-pictures-for-an-ecommerce-website-ghost-mannequin (1).jpg') }}"
-                            alt="After Ghost Mannequin" class="absolute inset-0 w-full h-full object-cover">
-
-                        {{-- BEFORE image (with original mannequin) --}}
-                        <div class="absolute inset-0 before-after-ec-clip z-10"
-                            style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                            <img src="{{ asset('images/ecommerce/how-to-edit-product-pictures-for-an-ecommerce-website-ghost-mannequin.jpg') }}"
-                                alt="Before Original Photo" class="absolute inset-0 w-full h-full object-cover">
-                        </div>
-
-                        {{-- Dark Corner Labels --}}
-                        <div
-                            class="absolute bottom-0 left-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">
-                            BEFORE</div>
-                        <div
-                            class="absolute bottom-0 right-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">
-                            AFTER</div>
-
-                        {{-- Drag Handle --}}
-                        <div class="absolute top-0 bottom-0 z-30 before-after-ec-handle"
-                            style="left: 50%; transform: translateX(-50%);">
-                            <div class="absolute top-0 bottom-0 w-[1.5px] bg-white/60"
-                                style="left: 50%; transform: translateX(-50%);"></div>
-                            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border border-white/40 bg-slate-800 shadow-lg flex items-center justify-center transition-transform hover:scale-110"
-                                style="left: 50%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="white" stroke-width="3" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="m18 8 4 4-4 4" />
-                                    <path d="M2 12h20" />
-                                    <path d="m6 8-4 4 4 4" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Right: Content --}}
-                    <div class="text-center w-full">
+                    
+                    {{-- Content Side --}}
+                    <div class="text-center w-full {{ $wf['reverse_layout'] ? 'order-2 lg:order-1 pr-0' : 'order-2 lg:order-2' }}">
                         <h2 class="text-[28px] md:text-[34px] font-extrabold leading-[1.05] mb-6 text-slate-900">
-                            High-End <span class="text-[#22c55e]">Ghost</span><br>
-                            <span class="text-[#22c55e]">Mannequin</span> Services
+                            {!! $highlightedTitle !!}
                         </h2>
                         <p class="text-slate-500 text-[15px] md:text-[16px] leading-[1.6] mb-10 max-w-xl mx-auto">
-                            Our invisible mannequin service gives your apparel products a 3D, hollow-man look by expertly
-                            joining the neck and inner-bottom areas. We ensure natural-looking curves and realistic shadows
-                            that highlight the fit and texture of your clothing, helping you increase conversions.
+                            {{ $wf['description'] }}
                         </p>
-                        <a href="{{ route('graphics.portfolio') }}"
-                            class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#22c55e] text-white font-bold text-[12px] uppercase tracking-widest shadow-md hover:brightness-105 transition-all">
-                            VIEW SAMPLES
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        {{-- ── COLOR CORRECTION SECTION (Row 2) ──────────────── --}}
-        <div class="bg-white py-24 pt-12 pb-32">
-            <div class="container mx-auto px-6 max-w-6xl">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-                    {{-- Right (Left on Desktop): Content --}}
-                    <div class="text-center order-2 lg:order-1 pr-0">
-                        <h2 class="text-[28px] md:text-[34px] font-extrabold leading-[1.05] mb-6 text-slate-900">
-                            <span class="text-[#22c55e]">Color correction</span> and<br>
-                            <span class="text-[#22c55e]">consistency</span> across all<br>
-                            platforms
-                        </h2>
-                        <p class="text-slate-500 text-[15px] md:text-[16px] leading-[1.6] mb-12 max-w-xl mx-auto">
-                            From creating product variants to fixing texture details, we match your product colors to your
-                            physical samples and brand guidelines so your visuals look authentic and always stay on-brand,
-                            everywhere.
-                        </p>
+                        @if($wf['cta_label'])
                         <div class="flex flex-wrap gap-4 justify-center">
-                            <a href="{{ route('graphics.get-quote') }}"
-                                class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] text-white font-bold text-[12px] uppercase tracking-widest shadow-md">
-                                GET QUOTE
+                            <a href="{{ route($wf['cta_route'] ?? 'graphics.get-quote') }}"
+                                class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] text-white font-bold text-[12px] uppercase tracking-widest shadow-md hover:brightness-105 transition-all">
+                                {{ $wf['cta_label'] }}
                             </a>
+                            @if($wf['reverse_layout'])
                             <a href="{{ route('graphics.upload') }}"
                                 class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-white border-2 border-[#0ea5e9] text-slate-800 font-bold text-[12px] uppercase tracking-widest shadow-sm hover:bg-slate-50 transition-colors">
                                 FREE TRIAL
                             </a>
+                            @endif
                         </div>
+                        @endif
                     </div>
 
-                    {{-- Left (Right on Desktop): Slider (Model Color Correction) --}}
-                    <div class="order-1 lg:order-2 relative overflow-hidden rounded-sm shadow-sm before-after-ec-container group"
-                        style="height: 500px; cursor: ew-resize;">
+                    {{-- Image Slider Side --}}
+                    <div class="{{ $wf['reverse_layout'] ? 'order-1 lg:order-2' : 'order-1 lg:order-1' }} relative overflow-hidden rounded-sm shadow-sm before-after-ec-container group"
+                        style="height: 480px; cursor: ew-resize;">
                         {{-- AFTER image --}}
-                        <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=800&q=80"
-                            alt="Model Color After" class="absolute inset-0 w-full h-full object-cover">
+                        <img src="{{ !empty($wf['after_image']) ? asset('storage/'.$wf['after_image']) : asset('images/placeholder.jpg') }}"
+                            alt="After" class="absolute inset-0 w-full h-full object-cover">
 
-                        {{-- BEFORE image (clipped) --}}
+                        {{-- BEFORE image --}}
                         <div class="absolute inset-0 before-after-ec-clip z-10"
                             style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                            <img src="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=800&q=80&sat=-80"
-                                alt="Model Color Before"
-                                class="absolute inset-0 w-full h-full object-cover grayscale opacity-90 contrast-[1.1]">
+                            <img src="{{ !empty($wf['before_image']) ? asset('storage/'.$wf['before_image']) : asset('images/placeholder.jpg') }}"
+                                alt="Before" class="absolute inset-0 w-full h-full object-cover {{ $wf['reverse_layout'] ? 'grayscale contrast-[1.1]' : '' }}">
                         </div>
 
                         {{-- Dark Corner Labels --}}
-                        <div
-                            class="absolute bottom-0 left-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">
-                            BEFORE</div>
-                        <div
-                            class="absolute bottom-0 right-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">
-                            AFTER</div>
+                        <div class="absolute bottom-0 left-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">BEFORE</div>
+                        <div class="absolute bottom-0 right-0 z-20 bg-[#333] text-white text-[9px] font-bold px-4 py-1.5 uppercase tracking-wider">AFTER</div>
 
                         {{-- Drag Handle --}}
-                        <div class="absolute top-0 bottom-0 z-30 before-after-ec-handle"
-                            style="left: 50%; transform: translateX(-50%);">
-                            <div class="absolute top-0 bottom-0 w-[1.5px] bg-white/70"
-                                style="left: 50%; transform: translateX(-50%);"></div>
-                            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border border-white/40 bg-slate-800 shadow-lg flex items-center justify-center transition-transform hover:scale-110"
-                                style="left: 50%;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
-                                    fill="none" stroke="white" stroke-width="3" stroke-linecap="round"
-                                    stroke-linejoin="round">
+                        <div class="absolute top-0 bottom-0 z-30 before-after-ec-handle" style="left: 50%; transform: translateX(-50%);">
+                            <div class="absolute top-0 bottom-0 w-[1.5px] bg-white/60" style="left: 50%; transform: translateX(-50%);"></div>
+                            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border border-white/40 bg-slate-800 shadow-lg flex items-center justify-center transition-transform hover:scale-110" style="left: 50%;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="m18 8 4 4-4 4" />
                                     <path d="M2 12h20" />
                                     <path d="m6 8-4 4 4 4" />
@@ -259,6 +189,8 @@
                 </div>
             </div>
         </div>
+        @endforeach
+
 
         {{-- ── VALUE PROPOSITION SECTION ──────────────────── --}}
         <div class="bg-white py-12">
@@ -274,7 +206,7 @@
                     {{-- Left: Static Product Hero Image --}}
                     <div
                         class="rounded-sm overflow-hidden shadow-xl bg-[#fcfcfc] p-8 h-[280px] flex items-center justify-center">
-                        <img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1200&q=80"
+                        <img src="{{ $page->value_image ? asset('storage/'.$page->value_image) : 'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=1200&q=80' }}"
                             alt="Product Retouching Example" class="max-h-full w-auto object-contain">
                     </div>
 
@@ -287,13 +219,12 @@
 
                         <blockquote
                             class="text-[#111] font-bold italic text-[15px] md:text-[16px] leading-[1.6] max-w-[420px] mt-8 mb-6">
-                            "We've saved hundreds of hours and finally have time to focus on growing the brand instead of
-                            sitting next to screen for countless of hours."
+                            "{{ $page->value_quote }}"
                         </blockquote>
 
                         <div>
-                            <p class="text-[#111] font-extrabold text-[15px] mb-1">Rachel M. -</p>
-                            <p class="text-[#555] text-[14px]">Production Manager</p>
+                            <p class="text-[#111] font-extrabold text-[15px] mb-1">{{ $page->value_quote_author }} -</p>
+                            <p class="text-[#555] text-[14px]">{{ $page->value_quote_role }}</p>
                         </div>
                     </div>
                 </div>
@@ -310,42 +241,13 @@
             </h2>
 
             <div class="flex flex-wrap justify-center gap-x-12 gap-y-8">
-                {{-- Service Links --}}
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+                @foreach($page->service_links ?? [] as $link)
+                <a href="{{ $link['url'] }}"
+                    data-image="{{ $link['image_url'] }}"
                     class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Background Removal
+                    {{ $link['name'] }}
                 </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1596783074918-c84cb06531ca?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    High-end Retouching
-                </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1617042503254-2cc35be26e13?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Clipping Path
-                </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Color Correction
-                </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1620799139834-6b8f844fbe61?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Ghost Mannequin Effect
-                </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1618354691438-25bc04584c23?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Realistic Shadow Creation
-                </a>
-                <a href="{{ route('graphics.services') }}"
-                    data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
-                    class="cursor-hover-link text-[#22c55e] hover:text-[#16a34a] font-bold text-[15px] md:text-[17px] border-b border-dotted border-[#22c55e] hover:border-[#16a34a] pb-0.5 transition-colors">
-                    Dust Cleaning and more...
-                </a>
+                @endforeach
             </div>
         </div>
 
@@ -373,70 +275,20 @@
 
             {{-- Categories Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 mb-24">
-
-                {{-- 1. Apparel & Clothing --}}
+                @foreach($page->categories ?? [] as $cat)
                 <div>
                     <h3 class="text-center justify-center flex font-bold text-[19px] md:text-[21px] text-[#222] mb-6">
-                        Apparel & Clothing</h3>
+                        {{ $cat['title'] }}</h3>
                     <div
                         class="rounded-sm overflow-hidden shadow-xl bg-[#fcfcfc] p-8 h-[280px] flex items-center justify-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=800&q=80"
-                            alt="Apparel & Clothing" class="max-h-full w-auto object-contain">
+                        <img src="{{ !empty($cat['image_path']) ? asset('storage/'.$cat['image_path']) : $cat['image_url'] }}"
+                            alt="{{ $cat['title'] }}" class="max-h-full w-auto object-contain">
                     </div>
                     <p class="text-[#555] text-[14px] md:text-[14.5px] leading-[1.8] text-left">
-                        Worried about low-quality apparel photos on your e-commerce store? We offer top-notch editing
-                        for all types of clothing, including color and exposure correction, background removal, ghost
-                        mannequin effects, and more—to ensure the best results.
+                        {{ $cat['description'] }}
                     </p>
                 </div>
-
-                {{-- 2. Beauty Products --}}
-                <div>
-                    <h3 class="text-center justify-center flex font-bold text-[19px] md:text-[21px] text-[#222] mb-6">
-                        Beauty Products</h3>
-                    <div
-                        class="rounded-sm overflow-hidden shadow-xl bg-[#fcfcfc] p-8 h-[280px] flex items-center justify-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80"
-                            alt="Beauty Products" class="max-h-full w-auto object-contain">
-                    </div>
-                    <p class="text-[#555] text-[14px] md:text-[14.5px] leading-[1.8] text-left">
-                        Cosmetic products are in high demand online and need to look their best. From makeup to
-                        perfumes, we enhance every item with expert photo editing—adding shadows, adjusting colors,
-                        correcting exposure, and more to create engaging visuals.
-                    </p>
-                </div>
-
-                {{-- 3. Shoes & Footwear --}}
-                <div>
-                    <h3 class="text-center justify-center flex font-bold text-[19px] md:text-[21px] text-[#222] mb-6">
-                        Shoes & Footwear</h3>
-                    <div
-                        class="rounded-sm overflow-hidden shadow-xl bg-[#fcfcfc] p-8 h-[280px] flex items-center justify-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80"
-                            alt="Shoes & Footwear" class="max-h-full w-auto object-contain">
-                    </div>
-                    <p class="text-[#555] text-[14px] md:text-[14.5px] leading-[1.8] text-left">
-                        We specialize in high-demand shoe photo editing for e-commerce, including color correction,
-                        background removal, line drawing, and retouching—handled by experts who deliver top results, no
-                        matter the complexity.
-                    </p>
-                </div>
-
-                {{-- 4. Furniture & Movables --}}
-                <div>
-                    <h3 class="text-center justify-center flex font-bold text-[19px] md:text-[21px] text-[#222] mb-6">
-                        Furniture & Movables</h3>
-                    <div
-                        class="rounded-sm overflow-hidden shadow-xl bg-[#fcfcfc] p-8 h-[280px] flex items-center justify-center mb-6">
-                        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80"
-                            alt="Furniture & Movables" class="max-h-full w-auto object-contain">
-                    </div>
-                    <p class="text-[#555] text-[14px] md:text-[14.5px] leading-[1.8] text-left">
-                        With the rise of online shopping, furniture sellers are taking their business digital. We
-                        enhance all types of furniture photos—sofas, chairs, tables, cupboards, and more—using
-                        top-quality photo editing to help products stand out online.
-                    </p>
-                </div>
+                @endforeach
             </div>
 
             {{-- Green Box "And Many More" --}}
@@ -473,10 +325,10 @@
                 {{-- Left Content --}}
                 <div class="pl-0 md:pl-8">
                     <h2 class="text-[30px] md:text-[34px] font-bold text-[#111] leading-[1.2] mb-4">
-                        Take a quick tour on
+                        {{ $page->tour_title }}
                     </h2>
                     <p class="text-[#3b85a0] text-[16px] md:text-[17px] leading-[1.6] mb-10 max-w-sm">
-                        How we retouch ecommerce<br> product photos.
+                        {!! nl2br(e($page->tour_subtitle)) !!}
                     </p>
 
                     {{-- Gradient Border Button --}}
@@ -490,7 +342,7 @@
 
                 {{-- Right Video Card --}}
                 <div class="relative group cursor-pointer overflow-hidden rounded-lg shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=1000&q=80"
+                    <img src="{{ $page->tour_video_thumbnail ? asset('storage/'.$page->tour_video_thumbnail) : 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=1000&q=80' }}"
                         alt="Video Thumbnail"
                         class="w-full h-auto object-cover max-h-[360px] transform group-hover:scale-[1.02] transition-transform duration-500">
 
@@ -507,6 +359,10 @@
                             <span class="font-normal text-[16px]">Play</span>
                         </div>
                     </div>
+                    
+                    @if($page->tour_video_url)
+                    <a href="{{ $page->tour_video_url }}" target="_blank" class="absolute inset-0 z-20"></a>
+                    @endif
                 </div>
 
             </div>
@@ -521,43 +377,12 @@
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-                {{-- Portfolio Items --}}
+                @foreach($page->portfolio_images ?? [] as $img)
                 <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 1" class="w-full h-full object-cover">
+                    <img src="{{ !empty($img['image_path']) ? asset('storage/'.$img['image_path']) : $img['image_url'] }}"
+                        alt="Portfolio" class="w-full h-full object-cover">
                 </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 2" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 3" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 4" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f6612d54e?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 5" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 6" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1588667675765-515433f48a1d?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 7" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 8" class="w-full h-full object-cover">
-                </div>
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=600&q=80"
-                        alt="Portfolio 9" class="w-full h-full object-cover">
-                </div>
+                @endforeach
             </div>
 
             <div class="flex flex-wrap justify-center gap-4">
@@ -587,36 +412,7 @@
                 <div class="w-2.5 h-2.5 bg-[#0d9488]"></div>
             </div>
             <div class="space-y-4" id="faq-accordion">
-                @php
-                    $faqs = [
-                        [
-                            'q' => 'What are the products that you edit?',
-                            'a' => 'We edit and retouch all types of product photos. For example- Electronics, Food Items, Apparel, Cosmetics, machinery/motor parts, farming tools, and many more.',
-                        ],
-                        [
-                            'q' => 'What services do you provide for ecommerce product photo editing?',
-                            'a' => 'We offer clipping path, background removal, ghost mannequin effect, color correction, Photoshop shadow effect, image cropping & resizing, perspective & exposure correction, and many more.',
-                        ],
-                        [
-                            'q' => 'Do you edit bulk product photos?',
-                            'a' => 'Absolutely, we edit bulk product photos. Our editing capacity is 5000+ images per day.',
-                        ],
-                        [
-                            'q' => 'How about the image quality?',
-                            'a' => "You don't have to worry about the image quality. We are a professional image editing company and always bring out 100% quality product images that are capable of drawing potential customers’ attention.",
-                        ],
-                        [
-                            'q' => 'Are you a Photography studio?',
-                            'a' => 'No, we are a photo editing company. We have been serving product photographers, e-commerce businesses, photography agencies, advertising companies, and many more by offering top-grade image manipulation services.',
-                        ],
-                        [
-                            'q' => 'Do you have an image editing production house?',
-                            'a' => 'Yes, we have a well-equipped production house located in Dhaka, Bangladesh. With 250+ full-fledged photo editors & graphic designers, we use state-of-the-art technology and maintain maximum photo quality.',
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($faqs as $index => $faq)
+                @foreach ($page->faqs ?? [] as $index => $faq)
                     <div class="faq-item border-b border-slate-700/60 pb-6 pt-4">
                         <button class="w-full flex items-center justify-between text-left text-white group outline-none"
                             onclick="toggleFaq(this)">

@@ -108,12 +108,18 @@ class GraphicsStudioController extends Controller
      * Helper for simple static-like pages.
      */
     public function services() { return view('graphics.services'); }
-    public function portfolio() { return view('graphics.portfolio'); }
+    public function portfolio() {
+        $page = \App\Models\PortfolioPage::settings();
+        return view('graphics.portfolio', compact('page'));
+    }
     public function offers() { return view('graphics.offers'); }
     public function payment() { return view('graphics.payment'); }
     public function getQuote() { return view('graphics.get-quote'); }
     public function upload() { return view('graphics.upload'); }
-    public function ecommerce() { return view('graphics.ecommerce'); }
+    public function ecommerce() {
+        $page = \App\Models\EcommercePage::settings();
+        return view('graphics.ecommerce', compact('page'));
+    }
     
     // Campaign Pages
     public function firstOrderFree() { return view('graphics.first-order-free'); }

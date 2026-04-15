@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+ @extends('layouts.admin')
 @section('title', 'Price List | Graphics Studio')
 
 @section('content')

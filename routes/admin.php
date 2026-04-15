@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\GraphicsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\EcommercePageController;
+use App\Http\Controllers\Admin\PortfolioPageController;
+use App\Http\Controllers\Admin\HomePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +66,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             // Graphics Brands/Clients Resource
             Route::resource('brands', \App\Http\Controllers\Admin\BrandController::class);
+
+            // Ecommerce Page Settings
+            Route::get('/ecommerce-page', [EcommercePageController::class, 'edit'])->name('ecommerce-page.edit');
+            Route::put('/ecommerce-page', [EcommercePageController::class, 'update'])->name('ecommerce-page.update');
+            Route::delete('/ecommerce-page/portfolio', [EcommercePageController::class, 'deletePortfolioImage'])->name('ecommerce-page.delete-portfolio');
+
+            // Portfolio Page Settings
+            Route::get('/portfolio-page', [PortfolioPageController::class, 'edit'])->name('portfolio-page.edit');
+            Route::put('/portfolio-page', [PortfolioPageController::class, 'update'])->name('portfolio-page.update');
+
+            // Home Page Settings
+            Route::get('/home-page', [HomePageController::class, 'edit'])->name('home-page.edit');
+            Route::put('/home-page', [HomePageController::class, 'update'])->name('home-page.update');
         });
 
         // IT Solutions Domain
