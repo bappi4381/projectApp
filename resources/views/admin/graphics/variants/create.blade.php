@@ -121,25 +121,42 @@
                     </div>
                 </div>
 
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div>
                         <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Icon Class</label>
-                        <input type="text" name="icon" value="{{ old('icon', 'ri-image-line') }}" 
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all shadow-inner">
+                        <input type="text" name="icon" value="{{ old('icon', 'ri-image-line') }}" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all shadow-inner">
                     </div>
-                    <div class="p-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 flex items-center justify-between">
-                        <div>
-                            <h4 class="text-sm font-bold text-white mb-1">Has Dedicated Details?</h4>
-                            <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">Always enabled for Detail variants</p>
+
+                    {{-- Status Toggle --}}
+                    <div class="p-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 flex items-center justify-between shadow-sm">
+                        <div x-data="{ isActive: true }">
+                            <h4 class="text-sm font-bold text-white mb-1">Is Active?</h4>
+                            <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">Enable/Disable visibility</p>
+                            <label class="relative inline-flex items-center cursor-pointer mt-4">
+                                <input type="checkbox" name="is_active" class="sr-only peer" x-model="isActive" value="1" checked>
+                                <div class="w-14 h-7 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                <span class="ml-3 text-xs font-black text-emerald-400" x-text="isActive ? 'YES' : 'NO'"></span>
+                            </label>
                         </div>
-                        <input type="hidden" name="has_details" value="1">
-                        <span class="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest">ENABLED</span>
+                    </div>
+
+                    {{-- Detail Toggle --}}
+                    <div class="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 flex items-center justify-between shadow-sm">
+                        <div>
+                            <h4 class="text-sm font-bold text-white mb-1">Has Details?</h4>
+                            <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">Toggle for Linkable Detail Page</p>
+                            <label class="relative inline-flex items-center cursor-pointer mt-4">
+                                <input type="checkbox" name="has_details" class="sr-only peer" x-model="hasDetails" value="1">
+                                <div class="w-14 h-7 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                <span class="ml-3 text-xs font-black text-indigo-400" x-text="hasDetails ? 'YES' : 'NO'"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {{-- 2. Detail Data Section (Rich Content) --}}
-            <div class="space-y-10">
+            <div x-show="hasDetails" x-cloak x-transition class="space-y-10">
                 <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10">
                     <div class="flex items-center gap-4 mb-8">
                         <span class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs">02</span>

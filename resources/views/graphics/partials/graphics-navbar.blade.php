@@ -4,7 +4,7 @@
         servicesOpen: false, 
         offersOpen: false,
         scrolled: false,
-        activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') || Request::routeIs('graphics.blog.single') ? 'blog' : (Request::routeIs('graphics.pricing') ? 'pricing' : (Request::routeIs('graphics.offers') ? 'offers' : (Request::routeIs('graphics.payment') ? 'payment' : (Request::routeIs('graphics.upload') ? 'upload' : (Request::routeIs('graphics.get-quote') ? 'quote' : '')))))))) }}',
+        activeSection: '{{ Request::routeIs('home') || Request::routeIs('graphics.index') ? 'home' : (Request::routeIs('graphics.services') ? 'services' : (Request::routeIs('graphics.portfolio') ? 'portfolio' : (Request::routeIs('graphics.blog') || Request::routeIs('graphics.blog.single') ? 'blog' : (Request::routeIs('graphics.pricing') ? 'pricing' : (Request::routeIs('graphics.offers') || Request::is('graphics-studio/offers*') ? 'offers' : (Request::routeIs('graphics.payment') ? 'payment' : (Request::routeIs('graphics.upload') ? 'upload' : (Request::routeIs('graphics.get-quote') ? 'quote' : '')))))))) }}',
         init() {
             window.addEventListener('scroll', () => {
                 this.scrolled = window.scrollY > 40;
@@ -40,7 +40,7 @@
             </div>
             <div class="flex items-center gap-8 text-white/90 font-bold text-[11px] uppercase tracking-widest">
                 <a href="{{ route('graphics.blog') }}" class="hover:text-yellow-400 transition-all">Blog</a>
-                <a href="{{ route('graphics.services') }}#testimonials" class="hover:text-yellow-400 transition-all">Testimonials</a>
+                <a href="#" class="hover:text-yellow-400 transition-all">Glossary</a>
                 <a href="#" class="hover:text-yellow-400 transition-all">About Us</a>
                 <a href="#" class="hover:text-yellow-400 transition-all">Contact Us</a>
                 <a href="#" class="hover:text-yellow-400 transition-all">FAQ</a>
@@ -240,7 +240,7 @@
                                 x-transition:leave="transition ease-in duration-150"
                                 x-transition:leave-start="opacity-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 translate-y-2">
-                                <div class="bg-white rounded shadow-2xl border border-slate-200 py-10 px-12 flex justify-start flex-wrap gap-x-16 gap-y-10 max-w-[1500px] mx-auto">
+                                <div class="bg-white rounded shadow-2xl border border-slate-200 py-12 px-12 flex justify-start items-start flex-nowrap gap-x-10 max-w-[1500px] mx-auto overflow-x-auto no-scrollbar">
                                     @foreach($category['groups'] as $group)
                                         <div class="min-w-[200px]">
                                             {{-- Level 2: SubCategory heading (clickable if has_details) --}}
@@ -268,25 +268,9 @@
                                                                 {{ $svc['name'] }}
                                                             </span>
                                                         @endif
-                                                        {{-- Level 4: Variants --}}
-                                                        @if(count($svc['variants']))
-                                                            <ul class="pl-5 pt-0.5 space-y-1">
-                                                                @foreach($svc['variants'] as $variant)
-                                                                    <li>
-                                                                        @if($variant['has_details'])
-                                                                            <a href="{{ route('graphics.service-detail', $variant['slug']) }}"
-                                                                               class="text-[11px] text-slate-400 hover:text-indigo-500 transition-colors font-medium">
-                                                                               → {{ $variant['name'] }}
-                                                                            </a>
-                                                                        @else
-                                                                            <span class="text-[11px] text-slate-300 italic">→ {{ $variant['name'] }}</span>
-                                                                        @endif
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @endif
                                                     </li>
                                                 @endforeach
+
                                             </ul>
                                         </div>
                                     @endforeach
@@ -312,12 +296,12 @@
                     <div @mouseenter="offersOpen = true" @mouseleave="offersOpen = false" class="relative">
                         <a href="{{ route('graphics.offers') }}"
                             class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
-                            :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'text-yellow-400' : ''">
+                            :class="activeSection === 'offers' ? 'text-yellow-400' : ''">
                             Offers
                             <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300"
                                  :class="offersOpen ? 'rotate-180' : ''"></i>
                             <span class="studio-link-dot"
-                                :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'active-dot' : ''"></span>
+                                :class="activeSection === 'offers' ? 'active-dot' : ''"></span>
                         </a>
 
                         <div x-show="offersOpen" x-cloak
@@ -443,23 +427,8 @@
                                                             {{ $svc['name'] }}
                                                         </span>
                                                     @endif
-                                                    {{-- Level 4 --}}
-                                                    @if(count($svc['variants']))
-                                                        <div class="pl-5 flex flex-col gap-2">
-                                                            @foreach($svc['variants'] as $variant)
-                                                                @if($variant['has_details'])
-                                                                    <a href="{{ route('graphics.service-detail', $variant['slug']) }}" @click="open = false"
-                                                                        class="text-[12px] text-white/40 hover:text-white transition-colors">
-                                                                        → {{ $variant['name'] }}
-                                                                    </a>
-                                                                @else
-                                                                    <span class="text-[12px] text-white/20 italic">→ {{ $variant['name'] }}</span>
-                                                                @endif
-                                                            @endforeach
-                                                        </div>
-                                                    @endif
                                                 </div>
-                                            @endforeach
+@endforeach
                                         </div>
                                     </div>
                                 @endforeach
@@ -481,7 +450,7 @@
                     <div x-data="{ offerSub: false }">
                         <button @click="offerSub = !offerSub"
                             class="flex items-center justify-between w-full text-2xl font-black tracking-tighter transition-colors"
-                            :class="activeSection === 'offers' || request()->is('graphics-studio/offers*') ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
+                            :class="activeSection === 'offers' ? 'text-yellow-400' : 'text-white/70 hover:text-white'">
                             OFFERS <i :class="offerSub ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
                         </button>
                         <div x-show="offerSub" class="mt-4 flex flex-col gap-3 pl-4 border-l border-white/10" x-collapse>

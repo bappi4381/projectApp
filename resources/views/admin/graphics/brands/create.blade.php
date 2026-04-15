@@ -1,0 +1,109 @@
+@extends('layouts.admin')
+@section('title', 'Add New Brand')
+
+@section('content')
+<div class="p-8">
+    {{-- Header --}}
+    <div class="mb-10 reveal">
+        <a href="{{ route('admin.graphics.brands.index') }}" class="text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2 mb-4">
+            <i class="ri-arrow-left-line"></i> Back to Brands
+        </a>
+        <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Add New Brand</h1>
+        <p class="text-slate-400 font-medium text-sm italic">Upload a logo for a client or partner.</p>
+    </div>
+
+    <div class="max-w-4xl">
+        <form action="{{ route('admin.graphics.brands.store') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
+            @csrf
+
+            <div class="glass-card rounded-[32px] border-white/5 p-10 reveal">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    
+                    {{-- Brand Name --}}
+                    <div class="space-y-3">
+                        <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-1 ml-1">Brand Name</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+                                <i class="ri-building-line text-lg"></i>
+                            </div>
+                            <input type="text" name="name" value="{{ old('name') }}" required
+                                   class="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-bold text-white placeholder:text-slate-600"
+                                   placeholder="e.g. Amazon, Apple">
+                        </div>
+                        @error('name') <p class="text-xs text-rose-500 font-bold ml-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Visit URL --}}
+                    <div class="space-y-3">
+                        <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-1 ml-1">Website URL (Optional)</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+                                <i class="ri-external-link-line text-lg"></i>
+                            </div>
+                            <input type="url" name="url" value="{{ old('url') }}"
+                                   class="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-bold text-white placeholder:text-slate-600"
+                                   placeholder="https://example.com">
+                        </div>
+                    </div>
+
+                    {{-- Sort Order --}}
+                    <div class="space-y-3">
+                        <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-1 ml-1">Display Order</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+                                <i class="ri-list-ordered-2 text-lg"></i>
+                            </div>
+                            <input type="number" name="sort_order" value="{{ old('sort_order', 0) }}"
+                                   class="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-bold text-white">
+                        </div>
+                    </div>
+
+                    {{-- Is Active Toggle --}}
+                    <div class="flex items-center pt-8">
+                        <label class="relative inline-flex items-center cursor-pointer group">
+                            <input type="checkbox" name="is_active" class="sr-only peer" checked value="1">
+                            <div class="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="ml-4 text-[11px] font-black uppercase tracking-widest text-slate-500 peer-checked:text-emerald-400 transition-colors">Active & Visible</span>
+                        </label>
+                    </div>
+                </div>
+
+                {{-- Image Upload --}}
+                <div class="mt-12 space-y-4">
+                    <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-1 ml-1">Client Logo</label>
+                    <div class="relative group" x-data="{ preview: null }">
+                        <input type="file" name="logo" id="logo_input" required accept="image/*" class="sr-only"
+                               @change="const file = $event.target.files[0]; if (file) { preview = URL.createObjectURL(file); }">
+                        <label for="logo_input" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-white/10 rounded-[2.5rem] cursor-pointer hover:bg-white/[0.02] hover:border-indigo-500/50 transition-all overflow-hidden">
+                            <div x-show="!preview" class="flex flex-col items-center">
+                                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                                    <i class="ri-upload-cloud-2-line text-3xl text-slate-400"></i>
+                                </div>
+                                <p class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">Click to Upload Logo</p>
+                                <p class="text-[10px] text-slate-600 mt-2 italic">SVG, PNG, JPG (Transparent PNG recommended)</p>
+                            </div>
+                            <div x-show="preview" class="absolute inset-0 p-10 flex items-center justify-center bg-[#020617]">
+                                <img :src="preview" class="max-w-full max-h-full object-contain filter invert brightness-200">
+                                <div class="absolute inset-0 bg-indigo-600/20 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                    <span class="px-6 py-2 bg-white text-[#020617] text-[10px] font-black uppercase tracking-widest rounded-full">Change Logo</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    @error('logo') <p class="text-xs text-rose-500 font-bold ml-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            {{-- Submit --}}
+            <div class="flex items-center gap-6 pt-4">
+                <button type="submit" class="flex-1 px-12 py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-[0.2em] text-[12px] rounded-3xl transition-all shadow-2xl shadow-indigo-600/20 active:scale-95">
+                    Save Brand & Launch Logo
+                </button>
+                <a href="{{ route('admin.graphics.brands.index') }}" class="px-10 py-5 text-slate-500 hover:text-white font-bold text-sm transition-colors">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

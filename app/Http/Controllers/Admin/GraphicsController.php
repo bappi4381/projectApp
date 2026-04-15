@@ -44,6 +44,40 @@ class GraphicsController extends Controller
         return view('admin.graphics.services.index', compact('services', 'subCategories'));
     }
 
+    public function priceListIndex(Request $request)
+    {
+        // Only L3 services (Primary Services)
+        $query = Service::whereNull('parent_id')
+            ->with('subCategory.category')
+            ->orderBy('category_id')
+            ->orderBy('id');
+
+        // Search by Name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by Visibility
+        if ($request->filled('status')) {
+            $query->where('show_on_pricing', $request->status === 'visible');
+        }
+            
+        $services = $query->paginate(15)->appends($request->query());
+            
+        return view('admin.graphics.price-list', compact('services'));
+    }
+
+    public function togglePricing(Service $service)
+    {
+        $service->show_on_pricing = !$service->show_on_pricing;
+        $service->save();
+
+        return response()->json([
+            'success' => true,
+            'show_on_pricing' => $service->show_on_pricing
+        ]);
+    }
+
     public function servicesCreate()
     {
         $categories = Category::all();
@@ -101,6 +135,7 @@ class GraphicsController extends Controller
             'image_before'      => 'nullable|image|max:10240',
             'image_after'       => 'nullable|image|max:10240',
             'has_details'       => 'boolean',
+            'show_on_pricing'   => 'boolean',
         ]);
 
         $subCat = SubCategory::find($validated['sub_category_id']);
@@ -128,6 +163,7 @@ class GraphicsController extends Controller
         $validated['slug'] = $slug;
 
         $validated['has_details'] = $request->has('has_details');
+        $validated['show_on_pricing'] = $request->has('show_on_pricing');
         $validated['is_active'] = $request->has('is_active') ?: true;
 
         $newService = Service::create($validated);
@@ -169,6 +205,7 @@ class GraphicsController extends Controller
             'image_after'       => 'nullable|image|max:10240',
             'is_active'         => 'boolean',
             'has_details'       => 'boolean',
+            'show_on_pricing'   => 'boolean',
         ]);
 
         $subCat = SubCategory::find($validated['sub_category_id']);
@@ -201,6 +238,7 @@ class GraphicsController extends Controller
 
         $validated['is_active'] = $request->has('is_active');
         $validated['has_details'] = $request->has('has_details');
+        $validated['show_on_pricing'] = $request->has('show_on_pricing');
 
         $service->update($validated);
         return redirect()->route('admin.graphics.services.show', $service->id)->with('success', 'Service updated successfully.');

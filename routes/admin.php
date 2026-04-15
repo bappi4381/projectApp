@@ -40,6 +40,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::delete('/{service}', [GraphicsController::class, 'servicesDestroy'])->name('destroy');
             });
 
+            // Price List Management
+            Route::get('/price-list', [GraphicsController::class, 'priceListIndex'])->name('price-list.index');
+            Route::post('/price-list/{service}/toggle-pricing', [GraphicsController::class, 'togglePricing'])->name('price-list.toggle');
+
             // Dedicated Detail-Page Variants Management (Level 4)
             Route::prefix('variant-details')->name('variants.')->group(function () {
                 Route::get('/', [GraphicsController::class, 'variantsIndex'])->name('index');
@@ -56,6 +60,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             // Graphics Testimonials Resource
             Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class);
+
+            // Graphics Brands/Clients Resource
+            Route::resource('brands', \App\Http\Controllers\Admin\BrandController::class);
         });
 
         // IT Solutions Domain

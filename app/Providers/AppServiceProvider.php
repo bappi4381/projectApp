@@ -30,51 +30,70 @@ class AppServiceProvider extends ServiceProvider
                             'services' => function ($sq) {
                                 $sq->where('is_active', true)
                                    ->whereNull('parent_id')
-                                   ->with(['variants' => function ($vq) {
-                                       $vq->where('is_active', true)->orderBy('id');
-                                   }])
                                    ->orderBy('id');
                             }
                         ]);
-                    }
-                ])->get();
+                    },
+                    'services' => function ($q) {
+                        // Services directly under category (no subcategory)
+                        $q->where('is_active', true)
+                            ->whereNull('sub_category_id')
+                            ->whereNull('parent_id')
+                            ->orderBy('id');
+                        }
+                    ])->get();
 
             // Build structured hierarchy for nav rendering
             $navbarData = $categories->map(function ($cat) {
+                // Map subcategories as groups
+                $groups = $cat->subcategories->map(function ($sub) {
+                    return [
+                        'id'          => $sub->id,
+                        'name'        => $sub->name,
+                        'slug'        => $sub->slug,
+                        'has_details' => (bool) $sub->has_details,
+                        'services'    => $sub->services->map(function ($svc) {
+                            return [
+                                'id'          => $svc->id,
+                                'name'        => $svc->name,
+                                'slug'        => $svc->slug,
+                                'has_details' => (bool) $svc->has_details,
+                            ];
+                        })->values()->all(),
+                    ];
+                });
+
+                // Convert to collection for pushing orphaned services
+                $groupsCollection = collect($groups);
+
+                // If there are direct services, add them as a 'General' group
+                if ($cat->services->isNotEmpty()) {
+                    $groupsCollection->push([
+                        'id'          => 0,
+                        'name'        => 'More Services',
+                        'slug'        => $cat->slug,
+                        'has_details' => false,
+                        'services'    => $cat->services->map(function ($svc) {
+                            return [
+                                'id'          => $svc->id,
+                                'name'        => $svc->name,
+                                'slug'        => $svc->slug,
+                                'has_details' => (bool) $svc->has_details,
+                            ];
+                        })->values()->all(),
+                    ]);
+                }
+
                 return [
                     'id'          => $cat->id,
                     'name'        => $cat->name,
                     'slug'        => $cat->slug,
                     'has_details' => (bool) $cat->has_details,
-                    'groups'      => $cat->subcategories->map(function ($sub) {
-                        return [
-                            'id'          => $sub->id,
-                            'name'        => $sub->name,
-                            'slug'        => $sub->slug,
-                            'has_details' => (bool) $sub->has_details,
-                            'services'    => $sub->services->map(function ($svc) {
-                                return [
-                                    'id'          => $svc->id,
-                                    'name'        => $svc->name,
-                                    'slug'        => $svc->slug,
-                                    'has_details' => (bool) $svc->has_details,
-                                    'variants'    => $svc->variants->map(function ($variant) {
-                                        return [
-                                            'id'          => $variant->id,
-                                            'name'        => $variant->name,
-                                            'slug'        => $variant->slug,
-                                            'has_details' => (bool) $variant->has_details,
-                                        ];
-                                    })->values()->all(),
-                                ];
-                            })->values()->all(),
-                        ];
-                    })->values()->all(),
+                    'groups'      => $groupsCollection->all(),
                 ];
             })->values()->all();
 
             $view->with('navbarData', $navbarData);
-            // Keep backward compat key
             $view->with('navbarServices', $navbarData);
         });
 

@@ -23,6 +23,7 @@
 
     <div x-data="{ 
         hasDetails: {{ old('has_details') ? 'true' : 'false' }},
+        isActive: {{ old('is_active', 'true') === 'true' ? 'true' : 'false' }},
         features: [],
         faqs: [],
         methods: [],
@@ -57,17 +58,31 @@
                     </div>
                 </div>
 
-                {{-- Toggle: Has Details Page --}}
-                <div class="mt-10 p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 flex items-center justify-between">
-                    <div>
-                        <h4 class="text-sm font-bold text-white mb-1">Create Dedicated Landing Page?</h4>
-                        <p class="text-[10px] text-slate-500 font-medium">If enabled, you can define rich content like pricing, FAQs, and complexity sections.</p>
+                {{-- Toggles: Status & Details --}}
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-bold text-white mb-1">Is Active?</h4>
+                            <p class="text-[10px] text-slate-500 font-medium">Enable/Disable visibility of this vertical across the platform.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_active" class="sr-only peer" x-model="isActive" value="1">
+                            <div class="w-14 h-7 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="ml-3 text-xs font-black uppercase tracking-widest" :class="isActive ? 'text-emerald-400' : 'text-slate-600'" x-text="isActive ? 'Yes' : 'No'"></span>
+                        </label>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="has_details" class="sr-only peer" x-model="hasDetails" value="1">
-                        <div class="w-14 h-7 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                        <span class="ml-3 text-xs font-black uppercase tracking-widest" :class="hasDetails ? 'text-indigo-400' : 'text-slate-600'" x-text="hasDetails ? 'Yes' : 'No'"></span>
-                    </label>
+
+                    <div class="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-sm font-bold text-white mb-1">Has Details?</h4>
+                            <p class="text-[10px] text-slate-500 font-medium">Toggle for Linkable Detail Page.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="has_details" class="sr-only peer" x-model="hasDetails" value="1">
+                            <div class="w-14 h-7 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <span class="ml-3 text-xs font-black uppercase tracking-widest" :class="hasDetails ? 'text-indigo-400' : 'text-slate-600'" x-text="hasDetails ? 'Yes' : 'No'"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 

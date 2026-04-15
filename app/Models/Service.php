@@ -30,6 +30,7 @@ class Service extends Model
         'image_before',
         'image_after',
         'has_details',
+        'show_on_pricing',
     ];
 
     public function parent()
@@ -47,7 +48,8 @@ class Service extends Model
         'faqs' => 'array',
         'methods' => 'array',
         'is_active' => 'boolean',
-        'has_details' => 'boolean'
+        'has_details' => 'boolean',
+        'show_on_pricing' => 'boolean'
     ];
 
     public function complexities()

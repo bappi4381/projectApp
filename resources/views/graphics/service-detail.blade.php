@@ -74,9 +74,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 @php
                     if($isGroup) {
-                        $displayItems = $service->services;
+                        // Level 1 (Category) shows SubCategories. Level 2 (SubCategory) shows Services.
+                        $displayItems = count($service->subcategories ?? []) > 0 ? $service->subcategories : ($service->services ?? collect());
                     } else {
-                        $displayItems = $service->complexities->isNotEmpty() ? $service->complexities : [];
+                        // Level 3 (Service) shows Variants (Level 4). If no variants, show hardcoded complexities.
+                        $displayItems = $service->variants->isNotEmpty() ? $service->variants : ($service->complexities->isNotEmpty() ? $service->complexities : collect());
                     }
                 @endphp
 
@@ -113,26 +115,30 @@
                             <div class="grid grid-cols-2 gap-4 mb-6">
                                 <div class="border border-sky-400 rounded-sm py-3 text-center">
                                     <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Starts From</div>
-                                    <div class="text-[18px] font-black text-slate-800">${{ number_format($item->starting_price ?? 0.49, 2) }}</div>
+                                    <div class="text-[18px] font-black text-slate-800">${{ number_format($item->starting_price ?? $item->price ?? 0.49, 2) }}</div>
                                 </div>
                                 <div class="border border-sky-400 rounded-sm py-3 text-center">
-                                    <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Delivery</div>
-                                    <div class="text-[18px] font-black text-slate-800">24 Hr</div>
+                                    <div class="text-[10px] text-slate-400 font-bold uppercase mb-1">Capacity</div>
+                                    <div class="text-[15px] font-black text-slate-800 leading-tight">
+                                        {{ $item->delivery_capacity ?? 3000 }} 
+                                        <span class="block text-[9px] text-slate-400 font-bold">{{ $item->delivery_unit ?? 'Images/24Hr' }}</span>
+                                    </div>
                                 </div>
                             </div>
 
                             {{-- Actions --}}
-                            <div class="grid grid-cols-1 gap-4">
-                                @if($isGroup)
-                                    <a href="{{ route('graphics.service-detail', $item->slug) }}" class="py-3 text-[11px] font-black text-center text-white bg-indigo-600 rounded-sm hover:bg-indigo-700 transition-all uppercase tracking-widest shadow-md">
-                                        VIEW SERVICE DETAILS
-                                    </a>
-                                @else
-                                    <a href="{{ route('graphics.get-quote') }}" class="py-3 text-[11px] font-black text-center text-white bg-gradient-to-r from-[#0ea5e9] to-[#2dd4bf] rounded-sm hover:brightness-105 transition-all shadow-md uppercase tracking-widest">
-                                        GET A QUOTE
-                                    </a>
-                                @endif
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="{{ route('graphics.service-variant', $item->slug) }}" 
+                                   class="py-3.5 px-4 text-[10px] font-black text-center text-slate-800 border-2 border-sky-400 rounded-full hover:bg-sky-50 transition-all uppercase tracking-widest shadow-sm">
+                                    VIEW DETAILS
+                                </a>
+                                <a href="{{ route('graphics.get-quote') }}" 
+                                   class="py-3.5 px-4 text-[10px] font-black text-center text-white bg-gradient-to-r from-[#0ea5e9] via-[#0ea5e9] to-[#2dd4bf] rounded-full hover:brightness-105 transition-all shadow-md uppercase tracking-widest">
+                                    GET A QUOTE
+                                </a>
                             </div>
+
+
                         </div>
                     </div>
                 @endforeach
@@ -253,33 +259,28 @@
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16 mb-20">
-                            @if($service->features && count($service->features) > 0)
+                            @if($service->variants && $service->variants->count() > 0)
+                                @foreach($service->variants as $item)
+                                    <div class="group">
+                                        <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow block">
+                                            <img src="{{ $item->image_after ? asset('storage/' . $item->image_after) : ($service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80') }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
+                                        </div>
+                                        <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item->name }}</h4>
+                                        <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">${{ number_format($item->starting_price ?? 0, 2) }} {{ $item->price_unit ? '/ ' . $item->price_unit : '' }}</div>
+                                    </div>
+                                @endforeach
+                            @elseif(is_array($service->features) && count($service->features) > 0)
                                 @foreach($service->features as $item)
                                     <div class="group">
                                         <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow">
-                                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
+                                            <img src="{{ $service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
                                         </div>
                                         <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item['name'] }}</h4>
                                         <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">{{ $item['price'] }}</div>
                                     </div>
                                 @endforeach
                             @else
-                                @php
-                                    $complexities = [
-                                        ['name' => 'Basic Complexity', 'price' => '$0.49', 'img' => 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?auto=format&fit=crop&w=600&q=80'],
-                                        ['name' => 'Simple Complexity', 'price' => '$0.99', 'img' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=600&q=80'],
-                                        ['name' => 'Compound Complexity', 'price' => '$2.99', 'img' => 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?auto=format&fit=crop&w=600&q=80'],
-                                    ];
-                                @endphp
-                                @foreach($complexities as $item)
-                                    <div class="group">
-                                        <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow">
-                                            <img src="{{ $item['img'] }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
-                                        </div>
-                                        <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item['name'] }}</h4>
-                                        <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">{{ $item['price'] }}</div>
-                                    </div>
-                                @endforeach
+                                <div class="col-span-full py-10 text-slate-400 italic">No pricing tiers or variants available for this service.</div>
                             @endif
                         </div>
 
@@ -362,35 +363,50 @@
                         </p>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                            @php
-                                $popular = [
-                                    ['name' => 'BACKGROUND REMOVAL', 'img' => 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'HIGH-END RETOUCHING', 'img' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'E-COMMERCE PHOTO EDITING', 'img' => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'GHOST MANNEQUIN EDITING', 'img' => 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'IMAGE MASKING', 'img' => 'https://images.unsplash.com/photo-1582233113702-86927d3fa87a?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'IMAGE RETOUCHING', 'img' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'PHOTO SHADOW SERVICE', 'img' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'PHOTO COLOR CORRECTION', 'img' => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'PHOTO POST PRODUCTION', 'img' => 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'RASTER TO VECTOR EDITING', 'img' => 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'IMAGE RESTORATION', 'img' => 'https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => '3D MODELING', 'img' => 'https://images.unsplash.com/photo-1617791160505-6f008e17ad31?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'DESKTOP PUBLISHING', 'img' => 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'VIDEO EDITING', 'img' => 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'ADVERTISING DESIGN', 'img' => 'https://images.unsplash.com/photo-1542744094-24638eff58bb?auto=format&fit=crop&w=400&q=80'],
-                                    ['name' => 'VECTOR LINE DRAWING', 'img' => 'https://images.unsplash.com/photo-1614850715649-1d005629c1aa?auto=format&fit=crop&w=400&q=80'],
-                                ];
-                            @endphp
+                            @forelse($popularServices ?? [] as $svc)
+                                <a href="{{ route('graphics.service-detail', $svc->slug) }}" 
+                                   class="group block"
+                                   title="{{ $svc->name }}">
+                                    <div class="aspect-square rounded-lg overflow-hidden border border-slate-200 shadow-sm mb-3 relative bg-slate-100">
+                                        
+                                        @if($svc->image_before && $svc->image_after)
+                                            {{-- Before (left half) --}}
+                                            <div style="position:absolute;top:0;bottom:0;left:0;width:50%;overflow:hidden;">
+                                                <img src="{{ asset('storage/' . $svc->image_before) }}" 
+                                                     alt="{{ $svc->name }} Before"
+                                                     style="width:100%;height:100%;object-fit:cover;object-position:center;">
+                                            </div>
+                                            {{-- After (right half) --}}
+                                            <div style="position:absolute;top:0;bottom:0;right:0;width:50%;overflow:hidden;">
+                                                <img src="{{ asset('storage/' . $svc->image_after) }}" 
+                                                     alt="{{ $svc->name }} After"
+                                                     style="width:100%;height:100%;object-fit:cover;object-position:center;">
+                                            </div>
+                                            {{-- Divider --}}
+                                            <div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.8);z-index:10;transform:translateX(-50%);"></div>
+                                        @else
+                                            <img src="{{ $svc->image_after ? asset('storage/' . $svc->image_after) : ($svc->image_before ? asset('storage/' . $svc->image_before) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80') }}"
+                                                 alt="{{ $svc->name }}"
+                                                 style="width:100%;height:100%;object-fit:cover;">
+                                        @endif
 
-                            @foreach($popular as $svc)
-                                <div class="group cursor-pointer">
-                                    <div class="aspect-square rounded-lg overflow-hidden border border-slate-100 shadow-sm mb-3 group-hover:shadow-md transition-shadow">
-                                        <img src="{{ $svc['img'] }}" alt="{{ $svc['name'] }}" class="w-full h-full object-cover">
+                                        {{-- Hover Overlay --}}
+                                        <div class="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
+                                            <div class="w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center">
+                                                <i class="ri-links-line text-slate-600 text-lg"></i>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h4 class="text-[10px] font-bold text-slate-800 tracking-wider text-center group-hover:text-[#0ea5e9] transition-colors">{{ $svc['name'] }}</h4>
+
+                                    <h4 class="text-[10px] font-bold text-slate-800 tracking-wider text-center uppercase group-hover:underline transition-all leading-tight">
+                                        {{ $svc->name }}
+                                    </h4>
+                                </a>
+                            @empty
+                                <div class="col-span-4 text-center py-8 text-slate-400 italic text-sm">
+                                    No services available yet.
                                 </div>
-                            @endforeach
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -404,43 +420,28 @@
                             </h2>
                         </div>
 
-                        <div class="space-y-4">
-                            @php
-                                $faqs = [
-                                    'Understanding What Clipping Path is-',
-                                    'Difference between Clipping Path and Deep-etching-',
-                                    'When to Apply Clipping Path-',
-                                    'Advantages of Clipping Path Service-',
-                                    'Who Actually Requires this Service-',
-                                    'Clipping Path Services at Color Experts International, Inc.',
-                                    'Clipping path is a manual photo editing technique, right?',
-                                    'Can I get clipping path service for images in different formats?',
-                                    'How You Do It?',
-                                    'How can I place an order?',
-                                    'How fast can you provide the service?',
-                                    'How about your daily delivery capacity?',
-                                ];
-                            @endphp
-
-                            @if($service->faqs && count($service->faqs) > 0)
+                        <div class="space-y-4" id="faq-accordion">
+                            @if($service->faqs && is_array($service->faqs) && count($service->faqs) > 0)
                                 @foreach($service->faqs as $i => $faq)
-                                    <div class="bg-white border-l-4 border-l-slate-200 hover:border-l-[#0ea5e9] transition-all group overflow-hidden">
-                                        <button class="w-full flex items-center text-left py-4 px-6 focus:outline-none">
-                                            <div class="w-8 h-8 rounded bg-slate-50 flex items-center justify-center text-[11px] font-black mr-4 group-hover:bg-sky-50 group-hover:text-[#0ea5e9] transition-all">
-                                                {{ $i + 1 }}
+                                    <div class="bg-white border-l-4 border-l-slate-200 hover:border-l-[#0ea5e9] transition-all overflow-hidden rounded-r-lg shadow-sm">
+                                        <button 
+                                            type="button"
+                                            onclick="toggleFaq(this)"
+                                            class="w-full flex items-center text-left py-4 px-6 focus:outline-none">
+                                            <div class="w-8 h-8 rounded bg-slate-50 flex items-center justify-center text-[11px] font-black mr-4 text-slate-500 faq-num shrink-0">
+                                                {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
                                             </div>
-                                            <span class="text-[14px] font-bold text-slate-700 tracking-tight flex-1 uppercase">{{ $faq['question'] }}</span>
-                                            <i class="ri-add-line text-slate-300"></i>
+                                            <span class="text-[13px] font-bold text-slate-700 tracking-tight flex-1 uppercase leading-snug">{{ $faq['question'] }}</span>
+                                            <i class="ri-add-line text-slate-300 text-lg faq-icon shrink-0 transition-transform duration-300"></i>
                                         </button>
-                                        <div class="px-20 pb-6 text-sm text-slate-500 hidden group-focus:block">
+                                        <div class="faq-body hidden px-6 pb-5 pl-[4.5rem] text-[13px] text-slate-500 leading-relaxed">
                                             {{ $faq['answer'] }}
                                         </div>
                                     </div>
                                 @endforeach
                             @else
-                                <p class="text-center text-slate-400 italic">No FAQs available for this service.</p>
+                                <p class="text-center text-slate-400 italic py-6">No FAQs available for this service.</p>
                             @endif
-
                         </div>
 
                         <div class="flex justify-center gap-4 mt-20">
@@ -513,5 +514,29 @@
                 });
             });
         });
+
+        // FAQ Accordion Toggle
+        function toggleFaq(btn) {
+            const wrapper = btn.closest('div');
+            const body = wrapper.querySelector('.faq-body');
+            const icon = btn.querySelector('.faq-icon');
+            const isOpen = !body.classList.contains('hidden');
+
+            // Close all
+            document.querySelectorAll('.faq-body').forEach(b => b.classList.add('hidden'));
+            document.querySelectorAll('.faq-icon').forEach(i => {
+                i.classList.remove('ri-subtract-line', 'rotate-45');
+                i.classList.add('ri-add-line');
+            });
+            document.querySelectorAll('#faq-accordion > div').forEach(d => d.classList.remove('border-l-[#0ea5e9]'));
+
+            // Toggle current
+            if (!isOpen) {
+                body.classList.remove('hidden');
+                icon.classList.remove('ri-add-line');
+                icon.classList.add('ri-subtract-line');
+                wrapper.classList.add('border-l-[#0ea5e9]');
+            }
+        }
     </script>
 @endsection

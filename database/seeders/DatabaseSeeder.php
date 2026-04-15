@@ -22,8 +22,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'PixelForge Admin',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
-        ]
-        );
+        ]);
+
+        // 2. Run Domain Specific Seeders
+        $this->call([
+            TestimonialSeeder::class,
+            BlogPostSeeder::class,
+            GraphicsStudioSeeder::class, // For Brands/Clients
+        ]);
 
     }
 }
