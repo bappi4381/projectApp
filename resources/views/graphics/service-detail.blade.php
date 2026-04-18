@@ -3,6 +3,13 @@
     $isGroup = $isGroup ?? false;
 @endphp
 @extends('layouts.app')
+
+@if(isset($isVedio) && $isVedio)
+    @section('custom_navbar')
+        @include('graphics.partials.video-navbar', ['videoSubCategories' => $videoSubCategories])
+    @endsection
+@endif
+
 @section('title', $service->name . ' | Graphics Studio')
 @section('meta_description', Str::limit(strip_tags($service->description ?? ''), 160))
 
@@ -263,7 +270,7 @@
                                 @foreach($service->variants as $item)
                                     <div class="group">
                                         <div class="aspect-square bg-white rounded-lg overflow-hidden shadow-sm border border-slate-100 mb-6 group-hover:shadow-md transition-shadow block">
-                                            <img src="{{ $item->image_after ? asset('storage/' . $item->image_after) : ($service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80') }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
+                                            <img src="{{ $item->image_after ? asset('storage/' . $item->image_after) : ($service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80') }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
                                         </div>
                                         <h4 class="text-[14px] font-bold text-slate-800 mb-2 uppercase tracking-tight">{{ $item->name }}</h4>
                                         <div class="text-[18px] font-black text-[#0ea5e9] tracking-tight">${{ number_format($item->starting_price ?? 0, 2) }} {{ $item->price_unit ? '/ ' . $item->price_unit : '' }}</div>
@@ -319,7 +326,7 @@
                                         </div>
                                     </div>
                                     <div class="aspect-[4/3] rounded-xl overflow-hidden shadow-2xl border border-slate-100 bg-slate-50 {{ $index % 2 != 0 ? 'lg:order-1' : '' }}">
-                                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="{{ $method['title'] }}" class="w-full h-full object-cover">
+                                        <img src="{{ isset($method['image']) ? asset('storage/' . $method['image']) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80' }}" alt="{{ $method['title'] }}" class="w-full h-full object-cover">
                                     </div>
                                 </div>
                             @endforeach

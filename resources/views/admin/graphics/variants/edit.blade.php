@@ -233,46 +233,40 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div
-                                    x-data="{ preview: '{{ $variant->image_before ? asset('storage/' . $variant->image_before) : '' }}' }">
-                                    <label
-                                        class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Before
-                                        Image</label>
-                                    <div
-                                        class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all">
-                                        <div
-                                            class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5 shadow-xl">
-                                            <template x-if="preview"><img :src="preview"
-                                                    class="w-full h-full object-cover"></template>
+                                <div x-data="{ preview: '{{ $variant->image_before ? asset('storage/' . $variant->image_before) : '' }}' }">
+                                    <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">
+                                        {{ str_contains(strtolower($variant->name), 'video') ? 'Video Thumbnail/Poster' : 'Before Image' }}
+                                    </label>
+                                    <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all shadow-inner">
+                                        <div class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5 shadow-xl">
+                                            <template x-if="preview"><img :src="preview" class="w-full h-full object-cover"></template>
                                             <template x-if="!preview">
                                                 <div class="w-full h-full flex items-center justify-center text-slate-600">
                                                     <i class="ri-image-2-line text-2xl"></i></div>
                                             </template>
                                         </div>
-                                        <input type="file" name="image_before"
-                                            @change="preview = URL.createObjectURL($event.target.files[0])"
-                                            class="text-xs text-slate-400">
+                                        <div class="flex flex-col gap-2">
+                                            <input type="file" name="image_before" @change="preview = URL.createObjectURL($event.target.files[0])" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-indigo-500/10 file:text-indigo-400 hover:file:bg-indigo-500/20">
+                                            <p class="text-[9px] text-slate-600 font-bold uppercase tracking-tight">Recommended: 800x800px</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div
-                                    x-data="{ preview: '{{ $variant->image_after ? asset('storage/' . $variant->image_after) : '' }}' }">
-                                    <label
-                                        class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">After
-                                        Image</label>
-                                    <div
-                                        class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all">
-                                        <div
-                                            class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5 shadow-xl">
-                                            <template x-if="preview"><img :src="preview"
-                                                    class="w-full h-full object-cover"></template>
+                                <div x-data="{ preview: '{{ $variant->image_after ? asset('storage/' . $variant->image_after) : '' }}' }">
+                                    <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">
+                                        {{ str_contains(strtolower($variant->name), 'video') ? 'Result Preview' : 'After Image' }}
+                                    </label>
+                                    <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl group hover:bg-white/[0.08] transition-all shadow-inner">
+                                        <div class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5 shadow-xl">
+                                            <template x-if="preview"><img :src="preview" class="w-full h-full object-cover"></template>
                                             <template x-if="!preview">
                                                 <div class="w-full h-full flex items-center justify-center text-slate-600">
                                                     <i class="ri-image-2-line text-2xl"></i></div>
                                             </template>
                                         </div>
-                                        <input type="file" name="image_after"
-                                            @change="preview = URL.createObjectURL($event.target.files[0])"
-                                            class="text-xs text-slate-400">
+                                        <div class="flex flex-col gap-2">
+                                            <input type="file" name="image_after" @change="preview = URL.createObjectURL($event.target.files[0])" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20">
+                                            <p class="text-[9px] text-slate-600 font-bold uppercase tracking-tight">Recommended: 800x800px</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

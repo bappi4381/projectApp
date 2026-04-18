@@ -61,5 +61,12 @@ Route::get('/it-solutions', function () {
     return view('it.index');
 })->name('it.index');
 
+// Chat System Routes
+Route::prefix('chat')->name('chat.')->group(function () {
+    Route::post('/init', [App\Http\Controllers\ChatController::class, 'init'])->name('init');
+    Route::post('/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('send');
+    Route::get('/history/{token}', [App\Http\Controllers\ChatController::class, 'getHistory'])->name('history');
+});
+
 // Admin Panel Routes
 require __DIR__ . '/admin.php';

@@ -48,11 +48,17 @@ class GraphicsStudioController extends Controller
                     $q->where('is_active', true)->whereNull('parent_id');
                 }
             ]);
+            
+            $isVedio = \Illuminate\Support\Str::contains(strtolower($category->name), 'video') || \Illuminate\Support\Str::contains(strtolower($category->name), 'production');
+            $videoSubCategories = $isVedio ? $category->subcategories : collect();
+
             return view('graphics.service-detail', [
                 'service' => $category,
                 'isGroup' => true,
                 'level' => 'category',
                 'popularServices' => $popularServices,
+                'videoSubCategories' => $videoSubCategories,
+                'isVedio' => $isVedio
             ]);
         }
 
@@ -89,6 +95,19 @@ class GraphicsStudioController extends Controller
 
         $level = $service->parent_id ? 'variant' : 'service';
 
+        // Detect Video Context
+        $categoryName = $service->subCategory->category->name ?? '';
+        $isVedio = \Illuminate\Support\Str::contains(strtolower($categoryName), 'video') || \Illuminate\Support\Str::contains(strtolower($service->name), 'video');
+
+        if ($isVedio) {
+            $catId = $service->subCategory->category_id ?? null;
+            $videoSubCategories = \App\Models\SubCategory::where('category_id', $catId)
+                ->where('is_active', true)
+                ->with(['services' => function($q){ $q->where('is_active', true); }])
+                ->get();
+            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories'));
+        }
+
         return view('graphics.service-detail', compact('service', 'level', 'popularServices'));
     }
 
@@ -99,7 +118,24 @@ class GraphicsStudioController extends Controller
     {
         $service = Service::where('slug', $slug)
             ->where('is_active', true)
+            ->with(['subCategory.category', 'parent'])
             ->firstOrFail();
+
+        $level = 'variant';
+        $popularServices = Service::where('is_active', true)->whereNull('parent_id')->inRandomOrder()->limit(16)->get();
+
+        // Detect Video Context for Variants
+        $categoryName = $service->subCategory->category->name ?? '';
+        $isVedio = \Illuminate\Support\Str::contains(strtolower($categoryName), 'video') || \Illuminate\Support\Str::contains(strtolower($service->name), 'video');
+
+        if ($isVedio) {
+            $catId = $service->subCategory->category_id ?? null;
+            $videoSubCategories = \App\Models\SubCategory::where('category_id', $catId)
+                ->where('is_active', true)
+                ->with(['services' => function($q){ $q->where('is_active', true); }])
+                ->get();
+            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories'));
+        }
 
         return view('graphics.service-variant', compact('service'));
     }

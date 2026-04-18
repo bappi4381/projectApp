@@ -81,6 +81,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // Home Page Settings
             Route::get('/home-page', [HomePageController::class, 'edit'])->name('home-page.edit');
             Route::put('/home-page', [HomePageController::class, 'update'])->name('home-page.update');
+
+            // Real-time Chat Management
+            Route::prefix('chat')->name('chat.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('index');
+                Route::get('/messages/{guestId}', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('messages');
+                Route::post('/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('send');
+            });
         });
 
         // IT Solutions Domain
