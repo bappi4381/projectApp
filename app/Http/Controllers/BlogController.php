@@ -22,7 +22,7 @@ class BlogController extends Controller
         $brands = Brand::active()->orderBy('sort_order', 'asc')->get();
         
         // Fetch Level 3 Services under the "Image Editing" Category
-        $pricingServices = Service::whereHas('category', function($q) {
+        $pricingServices = Service::whereHas('serviceCategory', function($q) {
                 $q->where('slug', 'image-editing');
             })
             ->whereNull('parent_id') // Level 3 services don't have a parent service

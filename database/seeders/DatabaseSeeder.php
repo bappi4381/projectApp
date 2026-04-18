@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             BlogPostSeeder::class,
             GraphicsStudioSeeder::class, // For Brands/Clients
+            PortfolioSeeder::class,
         ]);
 
     }

@@ -109,8 +109,8 @@ class GraphicsStudioController extends Controller
      */
     public function services() { return view('graphics.services'); }
     public function portfolio() {
-        $page = \App\Models\PortfolioPage::settings();
-        return view('graphics.portfolio', compact('page'));
+        $portfolios = \App\Models\Portfolio::where('is_active', true)->orderBy('order', 'asc')->get();
+        return view('graphics.portfolio', compact('portfolios'));
     }
     public function offers() { return view('graphics.offers'); }
     public function payment() { return view('graphics.payment'); }

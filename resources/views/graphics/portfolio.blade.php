@@ -8,13 +8,13 @@
         {{-- Header Section --}}
         <div class="text-center mb-20 reveal">
             <span class="inline-block px-4 py-1.5 rounded-full bg-[#6366f1]/10 text-[#818cf8] text-sm font-semibold tracking-wide border border-[#6366f1]/20 mb-6 uppercase">
-                {{ $page->hero_badge }}
+                Our Work
             </span>
             <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight text-white drop-shadow-lg">
-                {{ $page->hero_title_regular }} <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#22d3ee]">{{ $page->hero_title_highlight }}</span>
+                Visuals that <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#22d3ee]">Speak Louder.</span>
             </h1>
             <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                {{ $page->hero_subtitle }}
+                Explore our digital playground where imagination meets pixel-perfect execution. We transform concepts into captivating visual journeys.
             </p>
         </div>
 
@@ -22,8 +22,7 @@
             {{-- Filters (Interactive) --}}
             <div class="flex flex-wrap justify-center gap-2 md:gap-3 mb-16 reveal" style="animation-delay: 0.1s">
                 @php
-                    $showcaseItems = $page->showcase_items ?? [];
-                    $categories = collect($showcaseItems)->pluck('category')->unique()->filter()->values()->all();
+                    $categories = $portfolios->pluck('category')->unique()->filter()->values()->all();
                     array_unshift($categories, 'All Work');
                 @endphp
                 @foreach($categories as $filter)
@@ -38,17 +37,13 @@
 
             {{-- Portfolio Before/After Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 xl:gap-14">
-            @php
-                $showcaseItems = $page->showcase_items ?? [];
-            @endphp
-
-            @foreach($showcaseItems as $i => $item)
+            @foreach($portfolios as $i => $item)
             <div class="group flex flex-col reveal" 
-                 x-show="activeFilter === 'All Work' || activeFilter === '{{ $item['category'] }}'"
+                 x-show="activeFilter === 'All Work' || activeFilter === '{{ $item->category }}'"
                  x-transition:enter="transition ease-out duration-300"
                  x-transition:enter-start="opacity-0 scale-95"
                  x-transition:enter-end="opacity-100 scale-100"
-                 style="animation-delay: {{ ($i % 3) * 0.15 }}s">
+                 style="animation-delay: {{ ($loop->index % 3) * 0.15 }}s">
                 {{-- Comparison Slider --}}
                 <div class="relative w-full aspect-[4/5] overflow-hidden rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] mb-8 bg-slate-900 border border-slate-800"
                     x-data="{ 
@@ -72,7 +67,7 @@
                 >
                     {{-- After Image (Full background) --}}
                     <div class="absolute inset-0 z-0">
-                        <img src="{{ !empty($item['after']) ? asset('storage/'.$item['after']) : $item['fallback_after'] }}" alt="After" class="w-full h-full object-cover">
+                        <img src="{{ !empty($item->after_image) ? (Str::startsWith($item->after_image, 'http') ? $item->after_image : asset('storage/'.$item->after_image)) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="After" class="w-full h-full object-cover">
                         <div class="absolute bottom-6 right-6 px-4 py-1.5 bg-[#6366f1]/90 backdrop-blur-md rounded-lg text-[10px] font-black text-white uppercase tracking-widest z-10 border border-[#6366f1]/30">AFTER</div>
                     </div>
 
@@ -80,7 +75,7 @@
                     <div class="absolute inset-0 z-10 overflow-hidden slider-smooth" 
                          :style="'clip-path: inset(0 ' + (100 - position) + '% 0 0)'">
                          <div class="w-[800px] h-full relative">
-                            <img src="{{ !empty($item['before']) ? asset('storage/'.$item['before']) : $item['fallback_before'] }}" alt="Before" class="absolute h-full object-cover grayscale brightness-[0.4] contrast-125 sepia-[0.2]" style="width: 800px; max-width: none;">
+                            <img src="{{ !empty($item->before_image) ? (Str::startsWith($item->before_image, 'http') ? $item->before_image : asset('storage/'.$item->before_image)) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="Before" class="absolute h-full object-cover grayscale brightness-[0.4] contrast-125 sepia-[0.2]" style="width: 800px; max-width: none;">
                          </div>
                         <div class="absolute bottom-6 left-6 px-4 py-1.5 bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] font-black text-white uppercase tracking-widest z-10 border border-slate-700/50">BEFORE</div>
                     </div>
@@ -97,11 +92,11 @@
                 {{-- Content --}}
                 <div class="text-left">
                     <span class="inline-block px-3 py-1 bg-[#22d3ee]/10 text-[#22d3ee] text-[10px] font-bold uppercase tracking-widest rounded-md mb-4 border border-[#22d3ee]/20">
-                        {{ $item['category'] }}
+                        {{ $item->category }}
                     </span>
-                    <h4 class="text-2xl font-bold text-white mb-3 group-hover:text-[#22d3ee] transition-colors leading-tight">{{ $item['title'] }}</h4>
+                    <h4 class="text-2xl font-bold text-white mb-3 group-hover:text-[#22d3ee] transition-colors leading-tight">{{ $item->title }}</h4>
                     <p class="text-slate-400 text-sm leading-relaxed">
-                        {{ $item['desc'] }}
+                        {{ $item->description }}
                     </p>
                 </div>
             </div>
@@ -115,12 +110,12 @@
             <div class="absolute top-0 right-0 w-full md:w-1/2 h-full bg-gradient-to-l from-[#22d3ee]/10 to-transparent pointer-events-none"></div>
             
             <div class="relative z-10 md:w-2/3 mb-8 md:mb-0 text-center md:text-left">
-                <h2 class="text-3xl md:text-5xl font-black text-white mb-4">{{ $page->cta_title }}</h2>
-                <p class="text-slate-400 text-lg max-w-lg">{{ $page->cta_desc }}</p>
+                <h2 class="text-3xl md:text-5xl font-black text-white mb-4">Start Your Next Big Project</h2>
+                <p class="text-slate-400 text-lg max-w-lg">Let's collaborate and build something extraordinary together. Our team is ready to bring your vision to life.</p>
             </div>
             <div class="relative z-10 md:w-1/3 flex justify-center md:justify-end">
-                <a href="{{ $page->cta_btn_link }}" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-bold hover:bg-[#22d3ee] hover:text-white transition-all shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[#22d3ee]/30 group">
-                    {{ $page->cta_btn_label }}
+                <a href="#" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-slate-900 font-bold hover:bg-[#22d3ee] hover:text-white transition-all shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[#22d3ee]/30 group">
+                    Contact Us Now
                     <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>

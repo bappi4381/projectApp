@@ -7,8 +7,8 @@
     {{-- Header --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 reveal">
         <div>
-            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Services & Variants</h1>
-            <p class="text-slate-400 font-medium text-sm">Manage Level 3 (Primary Services) and Level 4 (Variants). Each can have its own Details Page.</p>
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Main Services</h1>
+            <p class="text-slate-400 font-medium text-sm">Manage Level 3 (Primary Services). Variants are managed in their dedicated section.</p>
         </div>
         <a href="{{ route('admin.graphics.services.create') }}" class="group relative px-8 py-4 bg-indigo-600 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-indigo-500/20 overflow-hidden flex items-center gap-3 self-start">
             <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -42,14 +42,8 @@
                 @endforeach
             </select>
 
-            <select name="level" class="bg-slate-800/50 border border-white/5 rounded-xl px-4 py-3 text-sm text-slate-400 focus:outline-none focus:border-indigo-500/50 transition-all select-dark">
-                <option value="">All Levels</option>
-                <option value="primary" {{ request('level') == 'primary' ? 'selected' : '' }}>Level 3 — Primary Services</option>
-                <option value="variant"  {{ request('level') == 'variant'  ? 'selected' : '' }}>Level 4 — Variants</option>
-            </select>
-
             <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-black uppercase rounded-xl transition-all">Filter</button>
-            @if(request()->anyFilled(['search', 'sub_category', 'level']))
+            @if(request()->anyFilled(['search', 'sub_category']))
                 <a href="{{ route('admin.graphics.services.index') }}" class="px-6 py-3 bg-white/5 text-slate-400 hover:text-white text-[11px] font-black uppercase rounded-xl transition-all">Reset</a>
             @endif
         </form>
@@ -62,8 +56,7 @@
                 <thead>
                     <tr class="bg-white/[0.02] border-b border-white/5">
                         <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Service</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Hierarchy</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Level</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Group</th>
                         <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Pricing</th>
                         <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Details Page</th>
                         <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
@@ -100,25 +93,7 @@
                                 <span class="text-[11px] font-semibold text-slate-400">
                                     {{ $service->subCategory->name ?? '—' }}
                                 </span>
-                                @if($service->parent)
-                                    <span class="text-[10px] text-violet-400 font-medium italic">
-                                        ↳ Variant of: {{ $service->parent->name }}
-                                    </span>
-                                @endif
                             </div>
-                        </td>
-
-                        {{-- Level Badge --}}
-                        <td class="px-8 py-5">
-                            @if($service->parent_id)
-                                <span class="px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[9px] font-black uppercase tracking-widest">
-                                    L4 Variant
-                                </span>
-                            @else
-                                <span class="px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-black uppercase tracking-widest">
-                                    L3 Primary
-                                </span>
-                            @endif
                         </td>
 
                         {{-- Pricing --}}

@@ -14,6 +14,9 @@ class Service extends Model
         'name',
         'slug',
         'description',
+        'summary_bullets',
+        'necessity_text',
+        'features_table_heading',
         'icon',
         'category_id',
         'sub_category_id',
@@ -29,6 +32,7 @@ class Service extends Model
         'discount_tag',
         'image_before',
         'image_after',
+        'video_url',
         'has_details',
         'show_on_pricing',
     ];
@@ -45,6 +49,7 @@ class Service extends Model
 
     protected $casts = [
         'features' => 'array',
+        'summary_bullets' => 'array',
         'faqs' => 'array',
         'methods' => 'array',
         'is_active' => 'boolean',
@@ -58,9 +63,9 @@ class Service extends Model
     }
 
 
-    public function category()
+    public function serviceCategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function subCategory()

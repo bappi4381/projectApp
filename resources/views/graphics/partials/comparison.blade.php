@@ -14,26 +14,7 @@
         {{-- 3-Column Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 xl:gap-14">
             @php
-            $showcaseItems = [
-                [
-                    'title' => 'Shoe Photo Editing',
-                    'desc' => 'Shoe photo editing always requires an extra bit of attention due to the complex designs most of the shoes contain. Our experienced editors scan your images, figure out the flaws, and take necessary actions to remove them.',
-                    'before' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
-                    'after' => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', // Replace with edited version if available
-                ],
-                [
-                    'title' => 'Apparel/ Clothing Photo Editing',
-                    'desc' => 'If you start up an apparel online store, we can help you to upgrade your product photos to fascinate your audience. We do color correction, brightness & contrast adjustments, and ghost mannequin effects for a clean look.',
-                    'before' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
-                    'after' => 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
-                ],
-                [
-                    'title' => 'Cosmetics Photo Editing',
-                    'desc' => 'Are you failing to attract customers in your cosmetics e-commerce store due to low-quality product photos? We specialize in cosmetics photo editing regardless of their size, shape, and appearance.',
-                    'before' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
-                    'after' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
-                ]
-            ];
+            $showcaseItems = \App\Models\Portfolio::where('is_active', true)->where('show_on_home', true)->orderBy('order', 'asc')->take(3)->get();
             @endphp
 
             @foreach($showcaseItems as $i => $item)
@@ -61,14 +42,14 @@
                 >
                     {{-- After Image (Full background) --}}
                     <div class="absolute inset-0">
-                        <img src="{{ $item['after'] }}" alt="After" class="w-full h-full object-cover">
+                        <img src="{{ !empty($item->after_image) ? (Str::startsWith($item->after_image, 'http') ? $item->after_image : asset('storage/'.$item->after_image)) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="After" class="w-full h-full object-cover">
                         <div class="absolute bottom-6 right-6 px-4 py-1.5 bg-indigo-600/90 backdrop-blur-md rounded-lg text-[11px] font-black text-white uppercase tracking-widest z-10 shadow-lg">AFTER</div>
                     </div>
 
                     {{-- Before Image (Clipped) --}}
                     <div class="absolute inset-0 z-10 overflow-hidden slider-smooth" 
                          :style="'clip-path: inset(0 ' + (100 - position) + '% 0 0)'">
-                        <img src="{{ $item['before'] }}" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 contrast-75">
+                        <img src="{{ !empty($item->before_image) ? (Str::startsWith($item->before_image, 'http') ? $item->before_image : asset('storage/'.$item->before_image)) : 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80' }}" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 contrast-75">
                         <div class="absolute bottom-6 left-6 px-4 py-1.5 bg-slate-800/80 backdrop-blur-md rounded-lg text-[11px] font-black text-white uppercase tracking-widest z-10 shadow-lg">BEFORE</div>
                     </div>
 
@@ -83,9 +64,9 @@
 
                 {{-- Content --}}
                 <div class="text-center">
-                    <h4 class="text-2xl font-black text-slate-900 mb-4 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{{ $item['title'] }}</h4>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{{ $item->title }}</h4>
                     <p class="text-slate-500 text-base leading-relaxed px-2">
-                        {{ $item['desc'] }}
+                        {{ $item->description }}
                     </p>
                 </div>
             </div>

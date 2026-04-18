@@ -14,7 +14,8 @@ class GraphicsController extends Controller
 {
     public function servicesIndex(Request $request)
     {
-        $query = Service::with(['subCategory.category', 'parent'])->latest();
+        // Only fetch Level 3 Primary Services (parent_id is null)
+        $query = Service::whereNull('parent_id')->with(['subCategory.category', 'parent'])->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -134,6 +135,10 @@ class GraphicsController extends Controller
             'discount_tag'      => 'nullable|string|max:255',
             'image_before'      => 'nullable|image|max:10240',
             'image_after'       => 'nullable|image|max:10240',
+            'video_url'         => 'nullable|url',
+            'summary_bullets'   => 'nullable|array',
+            'necessity_text'    => 'nullable|string',
+            'features_table_heading' => 'nullable|string|max:255',
             'has_details'       => 'boolean',
             'show_on_pricing'   => 'boolean',
         ]);
@@ -203,6 +208,10 @@ class GraphicsController extends Controller
             'discount_tag'      => 'nullable|string|max:255',
             'image_before'      => 'nullable|image|max:10240',
             'image_after'       => 'nullable|image|max:10240',
+            'video_url'         => 'nullable|url',
+            'summary_bullets'   => 'nullable|array',
+            'necessity_text'    => 'nullable|string',
+            'features_table_heading' => 'nullable|string|max:255',
             'is_active'         => 'boolean',
             'has_details'       => 'boolean',
             'show_on_pricing'   => 'boolean',

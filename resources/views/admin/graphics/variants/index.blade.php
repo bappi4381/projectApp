@@ -51,10 +51,10 @@
                                 <a href="{{ route('admin.graphics.services.show', $v->id) }}" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-all" title="Preview Details">
                                     <i class="ri-eye-line"></i>
                                 </a>
-                                <a href="{{ route('admin.graphics.services.edit', $v->id) }}" class="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all">
+                                <a href="{{ route('admin.graphics.variants.edit', $v->id) }}" class="w-9 h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all">
                                     <i class="ri-edit-line"></i>
                                 </a>
-                                <form action="{{ route('admin.graphics.services.destroy', $v->id) }}" method="POST" onsubmit="return confirm('Archive this variant?');">
+                                <form action="{{ route('admin.graphics.variants.destroy', $v->id) }}" method="POST" onsubmit="return confirm('Archive this variant?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="w-9 h-9 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all">

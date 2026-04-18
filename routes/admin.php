@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\EcommercePageController;
-use App\Http\Controllers\Admin\PortfolioPageController;
+use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\HomePageController;
 
 /*
@@ -52,6 +52,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::get('/', [GraphicsController::class, 'variantsIndex'])->name('index');
                 Route::get('/create', [GraphicsController::class, 'variantsCreate'])->name('create');
                 Route::post('/', [GraphicsController::class, 'variantsStore'])->name('store');
+                Route::get('/{variant}/edit', [GraphicsController::class, 'variantsEdit'])->name('edit');
+                Route::put('/{variant}', [GraphicsController::class, 'variantsUpdate'])->name('update');
+                Route::delete('/{variant}', [GraphicsController::class, 'servicesDestroy'])->name('destroy');
             });
 
             // Graphics Categories & Sub-Categories
@@ -72,9 +75,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/ecommerce-page', [EcommercePageController::class, 'update'])->name('ecommerce-page.update');
             Route::delete('/ecommerce-page/portfolio', [EcommercePageController::class, 'deletePortfolioImage'])->name('ecommerce-page.delete-portfolio');
 
-            // Portfolio Page Settings
-            Route::get('/portfolio-page', [PortfolioPageController::class, 'edit'])->name('portfolio-page.edit');
-            Route::put('/portfolio-page', [PortfolioPageController::class, 'update'])->name('portfolio-page.update');
+            // Portfolio Items CRUD
+            Route::resource('portfolios', PortfolioController::class);
 
             // Home Page Settings
             Route::get('/home-page', [HomePageController::class, 'edit'])->name('home-page.edit');
