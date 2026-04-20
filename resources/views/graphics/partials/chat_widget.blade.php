@@ -82,21 +82,7 @@ function graphicsChat() {
             if (this.sessionToken) {
                 this.isRegistered = true;
                 await this.loadHistory();
-                
-                // Polling Fallback
-                setInterval(() => {
-                    if (!window.Echo || !window.Echo.connector.pusher.connected) {
-                        this.loadHistory();
-                    }
-                }, 5000);
-
-                // Real-time (Primary)
-                if (window.Echo) {
-                    window.Echo.channel('chat.guest.' + this.sessionToken)
-                        .listen('.MessageSent', (e) => {
-                            this.appendMessage(e.message);
-                        });
-                }
+                this.startListeners();
             }
         },
         toggle() { this.isOpen = !this.isOpen; },
@@ -120,9 +106,28 @@ function graphicsChat() {
                     this.sessionToken = data.user.session_token;
                     localStorage.setItem('chat_session_token', this.sessionToken);
                     this.renderMessages(data.history);
+                    this.startListeners();
                 }
             } catch (err) { console.error('Chat init fail:', err); }
             this.isLoading = false;
+        },
+        startListeners() {
+            if (!this.sessionToken) return;
+            
+            // Polling Fallback
+            setInterval(() => {
+                if (!window.Echo || !window.Echo.connector.pusher.connected) {
+                    this.loadHistory();
+                }
+            }, 5000);
+
+            // Real-time (Primary)
+            if (window.Echo) {
+                window.Echo.channel('chat.guest.' + this.sessionToken)
+                    .listen('.MessageSent', (e) => {
+                        this.appendMessage(e.message);
+                    });
+            }
         },
         async sendMessage() {
             if(!this.messageBody.trim() || !this.sessionToken) return;
