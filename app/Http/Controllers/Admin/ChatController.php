@@ -12,9 +12,14 @@ class ChatController extends Controller
 {
     public function index()
     {
-        $users = GuestChatUser::with(['messages' => function($q) {
+        $users = GuestChatUser::withCount(['messages' => function($q) {
+            $q->where('sender_type', 'guest')->where('is_seen', false);
+        }])
+        ->with(['messages' => function($q) {
             $q->latest()->limit(1);
-        }])->orderBy('last_active_at', 'desc')->get();
+        }])
+        ->orderBy('last_active_at', 'desc')
+        ->get();
 
         return view('admin.chat.index', compact('users'));
     }

@@ -22,18 +22,28 @@
                             <button onclick="loadMessages({{ $user->id }})"
                                 class="w-full text-left p-4 border-b border-white/5 hover:bg-white/5 transition-all relative group user-item-{{ $user->id }}"
                                 id="user-{{ $user->id }}">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold shrink-0">
-                                        {{ strtoupper(substr($user->name ?? $user->email, 0, 1)) }}
+                                <div class="flex items-center gap-3 w-full">
+                                    <div class="relative shrink-0">
+                                        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 font-bold">
+                                            {{ strtoupper(substr($user->name ?? $user->email, 0, 1)) }}
+                                        </div>
+                                        @php
+                                            $isOnline = $user->is_online || ($user->last_active_at && \Carbon\Carbon::parse($user->last_active_at)->gt(now()->subMinutes(5)));
+                                        @endphp
+                                        @if($isOnline)
+                                            <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#1a1c23] rounded-full shadow-[0_0_10px_#10b981]"></div>
+                                        @endif
                                     </div>
-                                    <div class="truncate">
-                                        <h6 class="text-white font-bold text-sm truncate">{{ $user->name ?? 'Guest User' }}</h6>
-                                        <p class="text-slate-500 text-xs truncate m-0">{{ $user->email }}</p>
+                                    <div class="flex-grow truncate pr-6">
+                                        <h6 class="text-white font-bold text-sm truncate m-0">{{ $user->name ?? 'Guest User' }}</h6>
+                                        <p class="text-slate-500 text-[10px] truncate m-0">{{ $user->email }}</p>
                                     </div>
-                                    <span
-                                        class="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] d-none"
-                                        id="unread-{{ $user->id }}"></span>
+                                    
+                                    @if($user->messages_count > 0)
+                                        <div class="absolute right-4 top-1/2 -translate-y-1/2 bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-lg shadow-lg shadow-indigo-600/30" id="unread-badge-{{ $user->id }}">
+                                            {{ $user->messages_count }}
+                                        </div>
+                                    @endif
                                 </div>
                             </button>
                         @endforeach
@@ -49,14 +59,16 @@
                     <!-- Header -->
                     <div class="p-4 border-b border-white/5 flex items-center justify-between bg-white/[0.02] shrink-0">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold"
-                                id="activeUserAvatar">?</div>
+                            <div class="relative">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold"
+                                    id="activeUserAvatar">?
+                                </div>
+                                <div id="activeUserStatusDot" class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-slate-500 border-2 border-[#1a1c23] rounded-full"></div>
+                            </div>
                             <div>
-                                <h6 class="text-white font-bold m-0" id="activeUserName text-indigo-100">Select User</h6>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
-                                    <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Active
-                                        Now</span>
+                                <h6 class="text-white font-bold m-0" id="activeUserName">Select User</h6>
+                                <div class="flex items-center gap-1.5 mt-0.5" id="statusIndicator">
+                                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider" id="statusLabel">Unknown</span>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +169,29 @@
                     .then(data => {
                         renderMessages(data.messages);
                         scrollToBottom();
+                        
+                        // Hide unread badge for this user
+                        const badge = document.getElementById('unread-badge-' + guestId);
+                        if (badge) badge.style.display = 'none';
+
+                        // Update Active Header
+                        const isOnline = data.user.is_online || (data.user.last_active_at && (new Date() - new Date(data.user.last_active_at)) < 300000);
+                        updateHeaderStatus(isOnline);
                     });
+            }
+
+            function updateHeaderStatus(isOnline) {
+                const dot = document.getElementById('activeUserStatusDot');
+                const label = document.getElementById('statusLabel');
+                if (isOnline) {
+                    dot.className = "absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#1a1c23] rounded-full shadow-[0_0_10px_#10b981]";
+                    label.innerText = "Active Now";
+                    label.className = "text-[10px] text-emerald-400 font-bold uppercase tracking-wider";
+                } else {
+                    dot.className = "absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-slate-500 border-2 border-[#1a1c23] rounded-full";
+                    label.innerText = "Offline";
+                    label.className = "text-[10px] text-slate-500 font-bold uppercase tracking-wider";
+                }
             }
 
             function renderMessages(messages) {
@@ -234,19 +268,27 @@
                 }
             }, 5000);
 
-            // User List Refresh (to see new chats)
-            setInterval(() => {
+            // User List Refresh (to see new chats, unread counts, and online status)
+            function refreshUserList() {
                 fetch(window.location.href)
                     .then(response => response.text())
                     .then(html => {
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
-                        const newList = doc.querySelector('#userListContainer');
+                        const newList = doc.querySelector('#chatUsersList');
                         if (newList) {
-                            document.querySelector('#userListContainer').innerHTML = newList.innerHTML;
+                            document.querySelector('#chatUsersList').innerHTML = newList.innerHTML;
+                            // Re-apply active state if necessary
+                            if (activeGuestId) {
+                                document.querySelectorAll('.user-item-' + activeGuestId).forEach(el => {
+                                    el.classList.add('bg-white/5', 'border-indigo-500/50');
+                                });
+                            }
                         }
                     });
-            }, 10000);
+            }
+
+            setInterval(refreshUserList, 15000);
 
             // Real-time listener (Primary)
             if (window.Echo) {
@@ -254,13 +296,17 @@
                     .listen('.MessageSent', (e) => {
                         console.log('Real-time message received:', e);
                         if (activeGuestId == e.message.guest_chat_user_id) {
-                            // If this is the active user, refresh their messages
+                            // If this is the active user, fetch messages and mark as seen
                             fetch(`/admin/graphics/chat/messages/${activeGuestId}`)
                                 .then(res => res.json())
-                                .then(data => renderMessages(data.messages));
+                                .then(data => {
+                                    renderMessages(data.messages);
+                                    scrollToBottom();
+                                });
+                        } else {
+                            // If it's not the active user, just refresh the list to show new unread count
+                            refreshUserList();
                         }
-                        // Trigger a list refresh immediately to show unread status
-                        location.reload(); // Simple way for list update, can be optimized later
                     });
             }
         </script>
