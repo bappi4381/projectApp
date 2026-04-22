@@ -240,12 +240,12 @@
                         </div>
                     @endif
 
-                    {{-- Category Cloud --}}
+                    {{-- Used Disciplines Cloud --}}
                     <div class="pt-10">
                         <h5 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6 pl-2">Disciplines</h5>
                         <div class="flex flex-wrap gap-2">
-                            @foreach($services as $s)
-                                <a href="#" class="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-bold text-slate-500 hover:bg-white hover:text-indigo-600 hover:border-indigo-600 transition-all uppercase tracking-widest">{{ $s->name }}</a>
+                            @foreach($disciplines as $name)
+                                <a href="#" class="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-bold text-slate-500 hover:bg-white hover:text-indigo-600 hover:border-indigo-600 transition-all uppercase tracking-widest">{{ $name }}</a>
                             @endforeach
                         </div>
                     </div>

@@ -52,10 +52,23 @@ class BlogController extends Controller
     {
         $post = BlogPost::where('slug', $slug)->published()->firstOrFail();
         
-        // Fetch only Level 3 services (those without a parent)
-        $services = Service::whereNull('parent_id')
-            ->where('is_active', true)
-            ->get();
+        // Fetch all unique categories from published posts to extract used Disciplines (L3)
+        $usedCategories = BlogPost::published()->pluck('category')->unique();
+        $disciplines = [];
+        
+        foreach ($usedCategories as $cat) {
+            $parts = explode(' -> ', $cat);
+            // If it has at least 3 parts, the 3rd part is our L3 Discipline
+            if (count($parts) >= 3) {
+                $disciplines[] = trim($parts[2]);
+            } elseif (count($parts) == 1 && !empty($parts[0]) && !in_array($parts[0], ['Editorial News', 'Our Process'])) {
+                // If it's a legacy or single part category (and not hardcoded news types)
+                $disciplines[] = trim($parts[0]);
+            }
+        }
+        
+        $disciplines = array_unique($disciplines);
+        sort($disciplines);
             
         // Get related posts (excluding current one)
         $otherPosts = BlogPost::where('id', '!=', $post->id)
@@ -66,7 +79,7 @@ class BlogController extends Controller
         return view('graphics.blog-single', [
             'post' => $post,
             'otherPosts' => $otherPosts,
-            'services' => $services
+            'disciplines' => $disciplines
         ]);
     }
 }
