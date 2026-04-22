@@ -118,7 +118,7 @@
                     <span class="breadcrumb-item"></span>
                     <a href="{{ route('graphics.blog') }}" class="hover:text-indigo-600 transition-colors">Editorial</a>
                     <span class="breadcrumb-item"></span>
-                    <span class="text-indigo-600 truncate max-w-[150px]">{{ $post->category }}</span>
+                    <span class="text-indigo-600 truncate max-w-[150px]">{{ explode(' -> ', $post->category)[0] }}</span>
                 </nav>
 
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#0f172a] leading-[1.1] tracking-tight mb-12">
@@ -138,7 +138,7 @@
                     <div class="flex items-center gap-3 text-slate-400 text-xs font-bold uppercase tracking-widest">
                         <span>{{ $post->published_at->format('M d, Y') }}</span>
                         <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                        <span>12 Min Read</span>
+                        <span>{{ $post->read_time ?? '5' }} Min Read</span>
                     </div>
                 </div>
             </header>
@@ -172,7 +172,16 @@
                     </div>
 
                     <article class="prose-refined">
-                        {!! $post->content !!}
+                        @if(is_array($post->content))
+                            @foreach($post->content as $block)
+                                @if(isset($block['type']) && $block['type'] == 'text')
+                                    <p>{!! $block['data'] !!}</p>
+                                @endif
+                                {{-- Add more block types if they existed --}}
+                            @endforeach
+                        @else
+                            {!! $post->content !!}
+                        @endif
                     </article>
 
                     {{-- Author Bio Card --}}
@@ -221,7 +230,7 @@
                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                                     </div>
                                     <div>
-                                        <span class="text-[8px] font-black text-indigo-500 uppercase tracking-widest block mb-1">{{ $related->category }}</span>
+                                        <span class="text-[8px] font-black text-indigo-500 uppercase tracking-widest block mb-1">{{ explode(' -> ', $related->category)[0] }}</span>
                                         <h6 class="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-snug line-clamp-2">
                                             {{ $related->title }}
                                         </h6>
@@ -235,11 +244,9 @@
                     <div class="pt-10">
                         <h5 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6 pl-2">Disciplines</h5>
                         <div class="flex flex-wrap gap-2">
-                            @if(is_object($services) && method_exists($services, 'take'))
-                                @foreach($services->take(8) as $s)
-                                    <a href="#" class="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-bold text-slate-500 hover:bg-white hover:text-indigo-600 hover:border-indigo-600 transition-all uppercase tracking-widest">{{ $s->name }}</a>
-                                @endforeach
-                            @endif
+                            @foreach($services as $s)
+                                <a href="#" class="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-[9px] font-bold text-slate-500 hover:bg-white hover:text-indigo-600 hover:border-indigo-600 transition-all uppercase tracking-widest">{{ $s->name }}</a>
+                            @endforeach
                         </div>
                     </div>
                 </aside>

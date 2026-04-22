@@ -36,8 +36,9 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $services = Service::all();
-        return view('admin.graphics.blog.create', compact('services'));
+        $categories = \App\Models\Category::with('subcategories.services')->get();
+        $services = \App\Models\Service::whereNull('parent_id')->get();
+        return view('admin.graphics.blog.create', compact('services', 'categories'));
     }
 
     /**
@@ -65,8 +66,9 @@ class BlogController extends Controller
      */
     public function edit(BlogPost $blog)
     {
-        $services = Service::all();
-        return view('admin.graphics.blog.edit', ['post' => $blog, 'services' => $services]);
+        $categories = \App\Models\Category::with('subcategories.services')->get();
+        $services = \App\Models\Service::whereNull('parent_id')->get();
+        return view('admin.graphics.blog.edit', ['post' => $blog, 'services' => $services, 'categories' => $categories]);
     }
 
     /**

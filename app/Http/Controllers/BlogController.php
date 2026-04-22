@@ -51,8 +51,12 @@ class BlogController extends Controller
     public function show($slug)
     {
         $post = BlogPost::where('slug', $slug)->published()->firstOrFail();
-        $services = Service::all();
         
+        // Fetch only Level 3 services (those without a parent)
+        $services = Service::whereNull('parent_id')
+            ->where('is_active', true)
+            ->get();
+            
         // Get related posts (excluding current one)
         $otherPosts = BlogPost::where('id', '!=', $post->id)
             ->published()

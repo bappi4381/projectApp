@@ -201,16 +201,118 @@
                 <div class="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 shadow-2xl space-y-8">
                     <h3 class="text-white font-black text-sm uppercase tracking-widest border-b border-white/5 pb-4">Story Parameters</h3>
                     
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">Assigned Discipline</label>
-                        <select id="category-select" name="category" required>
-                            <option value="">Select Category...</option>
-                            @foreach($services as $service)
-                                <option value="{{ $service->name }}" {{ old('category', $post->category) == $service->name ? 'selected' : '' }}>{{ $service->name }}</option>
-                            @endforeach
-                            <option value="General" {{ old('category', $post->category) == 'General' ? 'selected' : '' }}>Editorial News</option>
-                            <option value="Process" {{ old('category', $post->category) == 'Process' ? 'selected' : '' }}>Our Process</option>
-                        </select>
+                    <div x-data="{ 
+                        categories: {{ $categories->toJson() }},
+                        selectedL1: '',
+                        selectedL2: '',
+                        selectedL3: '',
+                        subCategories: [],
+                        services: [],
+                        
+                        init() {
+                            const existing = '{{ $post->category }}';
+                            if (existing) {
+                                const parts = existing.split(' -> ');
+                                if (parts.length >= 1) {
+                                    const cat = this.categories.find(c => c.name == parts[0]);
+                                    if (cat) {
+                                        this.selectedL1 = cat.id;
+                                        this.updateSubCategories();
+                                        
+                                        if (parts.length >= 2) {
+                                            const sub = this.subCategories.find(s => s.name == parts[1]);
+                                            if (sub) {
+                                                this.selectedL2 = sub.id;
+                                                this.updateServices();
+                                                
+                                                if (parts.length >= 3) {
+                                                    const svc = this.services.find(s => s.name == parts[2]);
+                                                    if (svc) {
+                                                        this.selectedL3 = svc.id;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Might be a hardcoded category (e.g. Editorial News)
+                                        this.selectedL1 = parts[0];
+                                    }
+                                }
+                            }
+                        },
+
+                        updateSubCategories() {
+                            const cat = this.categories.find(c => c.id == this.selectedL1);
+                            this.subCategories = cat ? cat.subcategories : [];
+                            // Don't reset selectedL2/L3 if we are in init phase (handled manually)
+                        },
+                        
+                        updateServices() {
+                            const sub = this.subCategories.find(s => s.id == this.selectedL2);
+                            this.services = sub ? sub.services : [];
+                        },
+
+                        getFinalCategory() {
+                            let parts = [];
+                            if (this.selectedL1) {
+                                // Check if it's an ID (number-ish) or a string (hardcoded categories)
+                                if (isNaN(this.selectedL1)) {
+                                    return this.selectedL1;
+                                }
+                                const cat = this.categories.find(c => c.id == this.selectedL1);
+                                if (cat) parts.push(cat.name);
+                            }
+                            if (this.selectedL2) {
+                                const sub = this.subCategories.find(s => s.id == this.selectedL2);
+                                if (sub) parts.push(sub.name);
+                            }
+                            if (this.selectedL3) {
+                                const svc = this.services.find(s => s.id == this.selectedL3);
+                                if (svc) parts.push(svc.name);
+                            }
+                            return parts.join(' -> ');
+                        }
+                    }" class="space-y-4">
+                        <input type="hidden" name="category" :value="getFinalCategory()">
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2 ml-1">Level 1: Vertical</label>
+                            <select x-model="selectedL1" @change="selectedL2=''; selectedL3=''; services=[]; updateSubCategories()" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-bold select-dark">
+                                <option value="">Select Vertical...</option>
+                                <option value="Editorial News">Editorial News</option>
+                                <option value="Our Process">Our Process</option>
+                                <template x-for="cat in categories" :key="cat.id">
+                                    <option :value="cat.id" x-text="cat.name"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div x-show="subCategories.length > 0" x-cloak>
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2 ml-1">Level 2: Group</label>
+                            <select x-model="selectedL2" @change="selectedL3=''; updateServices()" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-bold select-dark">
+                                <option value="">Select Group...</option>
+                                <template x-for="sub in subCategories" :key="sub.id">
+                                    <option :value="sub.id" x-text="sub.name"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div x-show="services.length > 0" x-cloak>
+                            <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2 ml-1">Level 3: Core Service</label>
+                            <select x-model="selectedL3" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-all font-bold select-dark">
+                                <option value="">Select Service...</option>
+                                <template x-for="svc in services" :key="svc.id">
+                                    <option :value="svc.id" x-text="svc.name"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div x-show="selectedL1" class="pt-2">
+                             <div class="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                                <span class="text-[9px] font-black text-indigo-400 uppercase">Selected Hierarchy:</span>
+                                <p class="text-xs text-slate-300 font-bold mt-1" x-text="getFinalCategory()"></p>
+                             </div>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -286,15 +388,7 @@
             });
 
             // Tom Select
-            new TomSelect('#category-select', {
-                create: true,
-                persist: false,
-                sortField: {
-                    field: "text",
-                    direction: "asc"
-                },
-                placeholder: "Search or define category..."
-            });
+            // Removed #category-select TomSelect as it is now handled by Alpine hierarchical selects
         });
     </script>
 @endpush
