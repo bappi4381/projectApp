@@ -200,12 +200,16 @@ class GraphicsStudioController extends Controller
      */
     public function services() {
         $categories = \App\Models\Category::where('is_active', true)
-            ->with(['services' => function($q) {
-                $q->where('is_active', true)->whereNull('parent_id')
-                  ->with(['variants' => function($q2) {
-                      $q2->where('is_active', true);
-                  }]);
-            }])
+            ->with([
+                'subcategories' => function($q) {
+                    $q->where('is_active', true)->with(['services' => function($sq) {
+                        $sq->where('is_active', true)->whereNull('parent_id');
+                    }]);
+                },
+                'services' => function($q) {
+                    $q->where('is_active', true)->whereNull('parent_id');
+                }
+            ])
             ->orderBy('id', 'asc')
             ->get();
             
