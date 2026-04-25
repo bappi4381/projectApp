@@ -36,7 +36,11 @@ class CategoryController extends Controller
             'starting_price' => 'nullable|numeric',
             'price_unit' => 'nullable|string',
             'is_active' => 'boolean',
-            'has_details' => 'boolean'
+            'has_details' => 'boolean',
+            'hero_heading' => 'nullable|string|max:255',
+            'short_description' => 'nullable|string',
+            'video_link' => 'nullable|url|max:255',
+            'full_description' => 'nullable|string'
         ]);
 
         if ($request->hasFile('image_before')) {
@@ -74,7 +78,11 @@ class CategoryController extends Controller
             'starting_price' => 'nullable|numeric',
             'price_unit' => 'nullable|string',
             'is_active' => 'boolean',
-            'has_details' => 'boolean'
+            'has_details' => 'boolean',
+            'hero_heading' => 'nullable|string|max:255',
+            'short_description' => 'nullable|string',
+            'video_link' => 'nullable|url|max:255',
+            'full_description' => 'nullable|string'
         ]);
 
         if ($request->hasFile('image_before')) {

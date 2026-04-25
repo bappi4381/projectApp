@@ -377,11 +377,13 @@
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-                @foreach($page->portfolio_images ?? [] as $img)
-                <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
-                    <img src="{{ !empty($img['image_path']) ? asset('storage/'.$img['image_path']) : $img['image_url'] }}"
-                        alt="Portfolio" class="w-full h-full object-cover">
-                </div>
+                @foreach($page->workflow_sections ?? [] as $wf)
+                    @if(!empty($wf['after_image']))
+                    <div class="border border-slate-200 aspect-[4/3] overflow-hidden bg-[#f8f8f8]">
+                        <img src="{{ asset('storage/'.$wf['after_image']) }}"
+                            alt="Portfolio" class="w-full h-full object-cover">
+                    </div>
+                    @endif
                 @endforeach
             </div>
 

@@ -96,6 +96,59 @@ class AppServiceProvider extends ServiceProvider
             $view->with('navbarData', $navbarData);
             $view->with('navbarServices', $navbarData);
         });
+        
+        \Illuminate\Support\Facades\View::composer('graphics.partials.video-navbar', function ($view) {
+            $categories = \App\Models\Category::where('is_active', true)
+                ->with([
+                    'subcategories' => function ($q) {
+                        $q->where('is_active', true)->with([
+                            'services' => function ($sq) {
+                                $sq->where('is_active', true)->whereNull('parent_id')->orderBy('id');
+                            }
+                        ]);
+                    },
+                    'services' => function ($q) {
+                        $q->where('is_active', true)->whereNull('sub_category_id')->whereNull('parent_id')->orderBy('id');
+                    }
+                ])->get();
+
+            $navbarData = $categories->map(function ($cat) {
+                $groups = $cat->subcategories->map(function ($sub) {
+                    return [
+                        'id'          => $sub->id,
+                        'name'        => $sub->name,
+                        'slug'        => $sub->slug,
+                        'has_details' => (bool) $sub->has_details,
+                        'services'    => $sub->services->map(function ($svc) {
+                            return ['id' => $svc->id, 'name' => $svc->name, 'slug' => $svc->slug, 'has_details' => (bool) $svc->has_details];
+                        })->values()->all(),
+                    ];
+                });
+
+                $groupsCollection = collect($groups);
+                if ($cat->services->isNotEmpty()) {
+                    $groupsCollection->push([
+                        'id'          => 0,
+                        'name'        => 'More Services',
+                        'slug'        => $cat->slug,
+                        'has_details' => false,
+                        'services'    => $cat->services->map(function ($svc) {
+                            return ['id' => $svc->id, 'name' => $svc->name, 'slug' => $svc->slug, 'has_details' => (bool) $svc->has_details];
+                        })->values()->all(),
+                    ]);
+                }
+
+                return [
+                    'id'          => $cat->id,
+                    'name'        => $cat->name,
+                    'slug'        => $cat->slug,
+                    'has_details' => (bool) $cat->has_details,
+                    'groups'      => $groupsCollection->all(),
+                ];
+            })->values()->all();
+
+            $view->with('navbarData', $navbarData);
+        });
 
         // Share Latest Blog Posts with the common partial
         \Illuminate\Support\Facades\View::composer('graphics.partials.blog', function ($view) {

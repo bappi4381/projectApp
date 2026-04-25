@@ -115,6 +115,28 @@
                     </div>
                 </div>
 
+                {{-- Context Selection --}}
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">Attach to Category</label>
+                        <select name="category_id" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all select-dark">
+                            <option value="">Global (All Categories)</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.2em] font-black text-slate-500 mb-3 ml-1">Attach to Service</label>
+                        <select name="service_id" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all select-dark">
+                            <option value="">Any Service</option>
+                            @foreach($services as $svc)
+                                <option value="{{ $svc->id }}">{{ $svc->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <div class="flex items-center justify-between p-4 bg-slate-900/50 rounded-2xl border border-white/5 mt-6">
                     <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Active Representation</span>
                     <label class="relative inline-flex items-center cursor-pointer">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Service;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class GraphicsStudioController extends Controller
@@ -46,18 +47,49 @@ class GraphicsStudioController extends Controller
             $category->load([
                 'subcategories.services' => function ($q) {
                     $q->where('is_active', true)->whereNull('parent_id');
+                },
+                'services' => function ($q) {
+                    $q->where('is_active', true)->whereNull('parent_id');
                 }
             ]);
             
-            $isVedio = \Illuminate\Support\Str::contains(strtolower($category->name), 'video') || \Illuminate\Support\Str::contains(strtolower($category->name), 'production');
-            $videoSubCategories = $isVedio ? $category->subcategories : collect();
+            if ($category->slug === 'image-editing') {
+                $categories = collect([$category]);
+                return view('graphics.services', [
+                    'categories' => $categories,
+                    'heroTitle' => strtoupper($category->name) . ' SERVICES',
+                    'heroDescription' => $category->description ?? 'Professional ' . $category->name . ' and retouching solutions tailored for photographers and e-commerce.'
+                ]);
+            }
 
-            return view('graphics.service-detail', [
+            $isVedio = \Illuminate\Support\Str::contains(strtolower($category->name), 'video') || \Illuminate\Support\Str::contains(strtolower($category->name), 'production');
+            
+            $videoSubCategories = collect();
+            $testimonials = Testimonial::where('is_active', true)
+                ->where(function($q) use ($category) {
+                    $q->where('category_id', $category->id)
+                      ->orWhereNull('category_id');
+                })
+                ->orderBy('sort_order', 'asc')
+                ->get();
+
+            if ($isVedio) {
+                // Fetch all subcategories from categories related to video/production
+                $videoSubCategories = SubCategory::whereHas('category', function($q) {
+                    $q->where('name', 'LIKE', '%Video%')
+                      ->orWhere('name', 'LIKE', '%Production%');
+                })->where('is_active', true)->get();
+            }
+
+            $viewName = $isVedio ? 'graphics.video-service' : 'graphics.service-detail';
+
+            return view($viewName, [
                 'service' => $category,
                 'isGroup' => true,
                 'level' => 'category',
                 'popularServices' => $popularServices,
                 'videoSubCategories' => $videoSubCategories,
+                'testimonials' => $testimonials,
                 'isVedio' => $isVedio
             ]);
         }
@@ -73,11 +105,34 @@ class GraphicsStudioController extends Controller
                     $q->where('is_active', true)->whereNull('parent_id')->with('variants');
                 }
             ]);
-            return view('graphics.service-detail', [
+            $isVedio = \Illuminate\Support\Str::contains(strtolower($subCategory->category->name ?? ''), 'video') || \Illuminate\Support\Str::contains(strtolower($subCategory->name), 'video');
+            
+            $videoSubCategories = collect();
+            $testimonials = Testimonial::where('is_active', true)
+                ->where(function($q) use ($subCategory) {
+                    $q->where('category_id', $subCategory->category_id)
+                      ->orWhereNull('category_id');
+                })
+                ->orderBy('sort_order', 'asc')
+                ->get();
+
+            if ($isVedio) {
+                $videoSubCategories = SubCategory::whereHas('category', function($q) {
+                    $q->where('name', 'LIKE', '%Video%')
+                      ->orWhere('name', 'LIKE', '%Production%');
+                })->where('is_active', true)->get();
+            }
+
+            $viewName = $isVedio ? 'graphics.video-service' : 'graphics.service-detail';
+
+            return view($viewName, [
                 'service' => $subCategory,
                 'isGroup' => true,
                 'level' => 'subgroup',
                 'popularServices' => $popularServices,
+                'videoSubCategories' => $videoSubCategories,
+                'testimonials' => $testimonials,
+                'isVedio' => $isVedio
             ]);
         }
 
@@ -143,7 +198,19 @@ class GraphicsStudioController extends Controller
     /**
      * Helper for simple static-like pages.
      */
-    public function services() { return view('graphics.services'); }
+    public function services() {
+        $categories = \App\Models\Category::where('is_active', true)
+            ->with(['services' => function($q) {
+                $q->where('is_active', true)->whereNull('parent_id')
+                  ->with(['variants' => function($q2) {
+                      $q2->where('is_active', true);
+                  }]);
+            }])
+            ->orderBy('id', 'asc')
+            ->get();
+            
+        return view('graphics.services', compact('categories'));
+    }
     public function portfolio() {
         $portfolios = \App\Models\Portfolio::where('is_active', true)->orderBy('order', 'asc')->get();
         return view('graphics.portfolio', compact('portfolios'));

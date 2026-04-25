@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
+use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +25,9 @@ class TestimonialController extends Controller
      */
     public function create()
     {
-        return view('admin.graphics.testimonials.create');
+        $categories = Category::all();
+        $services = Service::whereNull('parent_id')->get();
+        return view('admin.graphics.testimonials.create', compact('categories', 'services'));
     }
 
     /**
@@ -51,7 +55,9 @@ class TestimonialController extends Controller
      */
     public function edit(Testimonial $testimonial)
     {
-        return view('admin.graphics.testimonials.edit', compact('testimonial'));
+        $categories = Category::all();
+        $services = Service::whereNull('parent_id')->get();
+        return view('admin.graphics.testimonials.edit', compact('testimonial', 'categories', 'services'));
     }
 
     /**
@@ -96,6 +102,8 @@ class TestimonialController extends Controller
         $testimonial->rating = $validated['rating'];
         $testimonial->sort_order = $validated['sort_order'] ?? 0;
         $testimonial->is_active = $request->has('is_active');
+        $testimonial->category_id = $request->category_id;
+        $testimonial->service_id = $request->service_id;
 
         if ($request->hasFile('avatar')) {
             if ($testimonial->avatar) {

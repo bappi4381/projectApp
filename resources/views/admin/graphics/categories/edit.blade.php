@@ -23,16 +23,7 @@
 
     <div x-data="{ 
         hasDetails: {{ $category->has_details ? 'true' : 'false' }},
-        isActive: {{ $category->is_active ? 'true' : 'false' }},
-        features: {{ json_encode($category->features ?? []) }},
-        faqs: {{ json_encode($category->faqs ?? []) }},
-        methods: {{ json_encode($category->methods ?? []) }},
-        addFeature() { this.features.push({ name: '', price: '' }) },
-        removeFeature(index) { this.features.splice(index, 1) },
-        addFaq() { this.faqs.push({ question: '', answer: '' }) },
-        removeFaq(index) { this.faqs.splice(index, 1) },
-        addMethod() { this.methods.push({ title: '', description: '' }) },
-        removeMethod(index) { this.methods.splice(index, 1) }
+        isActive: {{ $category->is_active ? 'true' : 'false' }}
     }">
         <form action="{{ route('admin.graphics.categories.update', $category) }}" method="POST" enctype="multipart/form-data" class="space-y-10">
             @csrf
@@ -98,90 +89,30 @@
 
                     <div class="space-y-8">
                         <div>
-                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Landing Page Description</label>
-                            <textarea name="description" rows="4" class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all resize-none">{{ old('description', $category->description) }}</textarea>
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Hero Heading</label>
+                            <input type="text" name="hero_heading" value="{{ old('hero_heading', $category->hero_heading) }}" placeholder="e.g. Professional Image Editing"
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-emerald-500 transition-all mb-6">
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div x-data="{ preview: '{{ $category->image_before ? asset('storage/'.$category->image_before) : '' }}' }">
-                                <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Before Image</label>
-                                <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
-                                    <div class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
-                                        <template x-if="preview">
-                                            <img :src="preview" class="w-full h-full object-cover">
-                                        </template>
-                                        <template x-if="!preview">
-                                            <div class="w-full h-full flex items-center justify-center text-slate-600"><i class="ri-image-2-line text-2xl"></i></div>
-                                        </template>
-                                    </div>
-                                    <input type="file" name="image_before" @change="preview = URL.createObjectURL($event.target.files[0])" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition-all">
-                                </div>
-                            </div>
-                            <div x-data="{ preview: '{{ $category->image_after ? asset('storage/'.$category->image_after) : '' }}' }">
-                                <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">After Image</label>
-                                <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
-                                    <div class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
-                                        <template x-if="preview">
-                                            <img :src="preview" class="w-full h-full object-cover">
-                                        </template>
-                                        <template x-if="!preview">
-                                            <div class="w-full h-full flex items-center justify-center text-slate-600"><i class="ri-image-2-line text-2xl"></i></div>
-                                        </template>
-                                    </div>
-                                    <input type="file" name="image_after" @change="preview = URL.createObjectURL($event.target.files[0])" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition-all">
-                                </div>
-                            </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Short Description</label>
+                            <textarea name="short_description" rows="2" placeholder="Brief summary of the vertical..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all resize-none mb-6">{{ old('short_description', $category->short_description) }}</textarea>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Starting Price ($)</label>
-                                <input type="number" step="0.01" name="starting_price" value="{{ old('starting_price', $category->starting_price) }}" 
-                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-sm font-bold text-white focus:outline-none focus:border-emerald-500 transition-all">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Price Unit</label>
-                                <input type="text" name="price_unit" value="{{ old('price_unit', $category->price_unit) }}" 
-                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-sm font-bold text-white focus:outline-none focus:border-emerald-500 transition-all">
-                            </div>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Video Link (YouTube/Vimeo)</label>
+                            <input type="url" name="video_link" value="{{ old('video_link', $category->video_link) }}" placeholder="https://..."
+                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-emerald-500 transition-all mb-6">
                         </div>
-                    </div>
-                </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10">
-                        <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-lg font-bold text-white tracking-tight">FAQ Builder</h3>
-                            <button type="button" @click="addFaq()" class="text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300">+ Add FAQ</button>
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Full/Landing Page Description</label>
+                            <textarea name="full_description" rows="5" placeholder="Detailed description for the landing page..." class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all resize-none mb-6">{{ old('full_description', $category->full_description) }}</textarea>
                         </div>
-                        <div class="space-y-4">
-                            <template x-for="(faq, index) in faqs" :key="index">
-                                <div class="p-4 bg-white/5 border border-white/10 rounded-2xl relative group">
-                                    <button type="button" @click="removeFaq(index)" class="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i class="ri-close-line text-xs"></i>
-                                    </button>
-                                    <input type="text" :name="'faqs['+index+'][question]'" x-model="faq.question" placeholder="Question" class="w-full bg-transparent border-none text-xs font-bold text-white focus:ring-0 mb-2">
-                                    <textarea :name="'faqs['+index+'][answer]'" x-model="faq.answer" placeholder="Answer..." class="w-full bg-transparent border-none text-[11px] text-slate-400 focus:ring-0 resize-none h-20"></textarea>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10">
-                        <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-lg font-bold text-white tracking-tight">Work Methods</h3>
-                            <button type="button" @click="addMethod()" class="text-[10px] font-black uppercase text-emerald-400 hover:text-emerald-300">+ Add Step</button>
-                        </div>
-                        <div class="space-y-4">
-                            <template x-for="(method, index) in methods" :key="index">
-                                <div class="p-4 bg-white/5 border border-white/10 rounded-2xl relative group">
-                                    <button type="button" @click="removeMethod(index)" class="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <i class="ri-close-line text-xs"></i>
-                                    </button>
-                                    <input type="text" :name="'methods['+index+'][title]'" x-model="method.title" placeholder="Step Title" class="w-full bg-transparent border-none text-xs font-bold text-white focus:ring-0 mb-2">
-                                    <textarea :name="'methods['+index+'][description]'" x-model="method.description" placeholder="Describe the process..." class="w-full bg-transparent border-none text-[11px] text-slate-400 focus:ring-0 resize-none h-20"></textarea>
-                                </div>
-                            </template>
+                        
+                        <div>
+                            <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Old Description (Legacy/Fallback)</label>
+                            <textarea name="description" rows="3" class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all resize-none">{{ old('description', $category->description) }}</textarea>
                         </div>
                     </div>
                 </div>

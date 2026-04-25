@@ -78,9 +78,9 @@
 
         .studio-nav-link {
             position: relative;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: white;
             transition: all 0.3s ease;
@@ -181,7 +181,7 @@
             </a>
 
             {{-- Desktop Hub Navigation --}}
-            <div class="hidden xl:flex items-center gap-10">
+            <div class="hidden xl:flex items-center gap-8">
                 @if(Request::routeIs('graphics.get-quote'))
                     <a href="{{ route('graphics.index') }}" class="studio-nav-link transition-colors"
                         :class="activeSection === 'home' ? 'text-yellow-400' : 'text-white hover:text-white/80'">
@@ -208,28 +208,19 @@
                         <div x-data="{ isOpen: false }" @mouseenter="isOpen = true"
                             @mouseleave="isOpen = false" class="relative group">
 
-                            {{-- Level 1: Category (clickable if has_details) --}}
-                            @if($category['has_details'])
-                                <a href="{{ route('graphics.service-detail', $category['slug']) }}"
-                                    class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
-                                    :class="isOpen ? 'text-yellow-400' : ''">
-                                    {{ strtoupper($category['name']) }}
-                                    @if(count($category['groups']))
-                                        <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="isOpen ? 'rotate-180' : ''"></i>
-                                    @endif
-                                    <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
-                                </a>
-                            @else
-                                <a href="#"
-                                    class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
-                                    :class="isOpen ? 'text-yellow-400' : ''">
-                                    {{ strtoupper($category['name']) }}
-                                    @if(count($category['groups']))
-                                        <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="isOpen ? 'rotate-180' : ''"></i>
-                                    @endif
-                                    <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
-                                </a>
-                            @endif
+                            {{-- Level 1: Category --}}
+                            @php
+                                $catUrl = $category['has_details'] ? route('graphics.service-detail', $category['slug']) : route('graphics.services') . '#' . \Illuminate\Support\Str::slug($category['name']);
+                            @endphp
+                            <a href="{{ $catUrl }}"
+                                class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer"
+                                :class="isOpen ? 'text-yellow-400' : ''">
+                                {{ strtoupper($category['name']) }}
+                                @if(count($category['groups']))
+                                    <i class="ri-arrow-down-s-line text-[14px] transition-transform duration-300" :class="isOpen ? 'rotate-180' : ''"></i>
+                                @endif
+                                <span class="studio-link-dot" :class="isOpen ? 'active-dot' : ''"></span>
+                            </a>
 
                             {{-- Mega Dropdown --}}
                             @if(count($category['groups']))
@@ -396,10 +387,15 @@
                     @foreach($navbarData as $category)
                         <div x-data="{ isCatOpen: false }">
                             {{-- Level 1 --}}
-                            <button @click="isCatOpen = !isCatOpen"
-                                class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors text-white/70 hover:text-white">
-                                {{ $category['name'] }} <i :class="isCatOpen ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
-                            </button>
+                            <div class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors text-white/70 hover:text-white">
+                                @php
+                                    $catUrl = $category['has_details'] ? route('graphics.service-detail', $category['slug']) : route('graphics.services') . '#' . \Illuminate\Support\Str::slug($category['name']);
+                                @endphp
+                                <a href="{{ $catUrl }}" class="flex-1 text-left" @click="open = false">{{ $category['name'] }}</a>
+                                <button @click="isCatOpen = !isCatOpen" class="px-4 py-2">
+                                    <i :class="isCatOpen ? 'ri-subtract-line' : 'ri-arrow-right-down-line'"></i>
+                                </button>
+                            </div>
                             <div x-show="isCatOpen" class="mt-6 flex flex-col gap-8 pl-4 border-l border-white/10" x-collapse>
                                 @foreach($category['groups'] as $group)
                                     <div>

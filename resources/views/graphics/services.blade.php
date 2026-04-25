@@ -7,8 +7,8 @@
 
         {{-- ── HERO SECTION ────────────────────────────────── --}}
         @include('graphics.partials.service-hero', [
-            'title' => 'POST PRODUCTION SERVICES',
-            'description' => 'Professional image editing and retouching solutions tailored for photographers, e-commerce, and creative agencies.',
+            'title' => $heroTitle ?? 'POST PRODUCTION SERVICES',
+            'description' => $heroDescription ?? 'Professional image editing and retouching solutions tailored for photographers, e-commerce, and creative agencies.',
             'hero_image' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1200&q=80',
             'video_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ'
         ])
@@ -17,7 +17,7 @@
         <div class="container mx-auto px-4 md:px-8 max-w-5xl py-20">
             <div class="text-center">
                 <h2 class="text-3xl md:text-4xl font-black text-[#082f49] uppercase tracking-wide mb-6">
-                    PROFESSIONAL<br>PHOTOSHOP SERVICE
+                    {{ $heroTitle ?? 'PROFESSIONAL' }}<br>{{ isset($heroTitle) ? 'SOLUTIONS' : 'PHOTOSHOP SERVICE' }}
                 </h2>
 
                 <div class="flex justify-center gap-2 mb-12">
@@ -105,192 +105,137 @@
 
         {{-- ── SERVICES GRID ───────────────────────────────── --}}
         <div class="container mx-auto px-4 md:px-6 max-w-6xl py-8 bg-[#f0f9ff]">
-            <div class="text-center mb-12">
-                <h2 class="text-2xl md:text-3xl font-black text-[#082f49] uppercase tracking-wide">
-                    Services Provided By Our Photoshop Experts
-                </h2>
-                <div class="w-16 h-1 bg-[#38bdf8] mx-auto mt-4 rounded-full"></div>
-            </div>
+            @foreach($categories as $category)
+                @php
+                    $displayServices = collect();
+                    // Add services from subcategories
+                    if($category->relationLoaded('subcategories')) {
+                        foreach($category->subcategories as $sub) {
+                            $displayServices = $displayServices->merge($sub->services->whereNull('parent_id'));
+                        }
+                    }
+                    // Add direct services
+                    $displayServices = $displayServices->merge($category->services->whereNull('parent_id'));
+                    
+                    // Filter active and unique
+                    $displayServices = $displayServices->where('is_active', true)->unique('id');
+                @endphp
 
-            @php
-                // Fetch all active services that have details or are main services
-                $dbServices = \App\Models\Service::where('is_active', true)
-                    ->whereNull('parent_id') // Level 3 services
-                    ->with(['variants' => function($q) {
-                        $q->where('is_active', true);
-                    }])
-                    ->get();
-            @endphp
+                @if($displayServices->count() > 0)
+                <div class="mb-20" id="{{ Str::slug($category->name) }}">
+                    <div class="text-center mb-12">
+                        <h2 class="text-2xl md:text-3xl font-black text-[#082f49] uppercase tracking-wide">
+                            {{ $category->name }} Services
+                        </h2>
+                        <div class="w-16 h-1 bg-[#38bdf8] mx-auto mt-4 rounded-full"></div>
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                @foreach($dbServices as $i => $svc)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        @foreach($displayServices as $i => $svc)
                     <div class="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200 flex flex-col">
-                        {{-- Before/After Image Slider --}}
-                        <div class="relative overflow-hidden bg-gray-100 before-after-container" style="height: 320px;"
-                            data-index="{{ $i }}">
-                            @if($svc->image_before && $svc->image_after)
-                                {{-- Before Image (full) --}}
-                                <img src="{{ asset('storage/' . $svc->image_after) }}" alt="{{ $svc->name }} After"
-                                    class="absolute inset-0 w-full h-full object-cover">
-
-                                {{-- After Image (clipped left side) --}}
-                                <div class="absolute inset-0 before-after-clip"
-                                    style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                                    <img src="{{ asset('storage/' . $svc->image_before) }}" alt="{{ $svc->name }} Before"
-                                        class="absolute inset-0 w-full h-full object-cover">
-                                </div>
-                            @else
-                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-20">
-                                <div class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold">SAMPLE PREVIEW</div>
-                            @endif
-
-                            {{-- Drag Handle --}}
-                            <div class="absolute top-0 bottom-0 z-20 before-after-handle"
-                                style="left: 50%; transform: translateX(-50%);">
-                                <div class="absolute top-0 bottom-0 w-0.5 bg-white/80"
-                                    style="left: 50%; transform: translateX(-50%);"></div>
-                                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center cursor-ew-resize"
-                                    style="background: rgba(0,0,0,0.5); left: 50%;">
-                                    <i class="ri-arrow-left-right-line text-white text-sm"></i>
-                                </div>
+                        @if(Str::contains(strtolower($category->name), ['video', 'animation', 'motion']))
+                            {{-- Video Production Layout --}}
+                            <div class="relative overflow-hidden bg-gray-100" style="height: 320px;">
+                                @if($svc->video_url)
+                                    <iframe class="w-full h-full" src="{{ str_replace('watch?v=', 'embed/', $svc->video_url) }}" title="{{ $svc->name }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                @elseif($svc->image_after)
+                                    <img src="{{ asset('storage/' . $svc->image_after) }}" alt="{{ $svc->name }}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:bg-[#0ea5e9] hover:text-white transition-colors group">
+                                            <i class="ri-play-fill text-3xl text-[#0f172a] group-hover:text-white"></i>
+                                        </div>
+                                    </div>
+                                @else
+                                    <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-40">
+                                    <div class="absolute inset-0 flex items-center justify-center text-slate-500 font-bold">VIDEO PREVIEW</div>
+                                @endif
                             </div>
+                        @else
+                            {{-- Before/After Image Slider (Image Editing Layout) --}}
+                            <div class="relative overflow-hidden bg-gray-100 before-after-container" style="height: 320px;"
+                                data-index="{{ $i }}">
+                                @if($svc->image_before && $svc->image_after)
+                                    {{-- Before Image (full) --}}
+                                    <img src="{{ asset('storage/' . $svc->image_after) }}" alt="{{ $svc->name }} After"
+                                        class="absolute inset-0 w-full h-full object-cover">
 
-                            {{-- BEFORE / AFTER Labels --}}
-                            <div class="absolute bottom-3 left-3 z-20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded"
-                                style="background: #e67e22;">BEFORE</div>
-                            <div class="absolute bottom-3 right-3 z-20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded"
-                                style="background: #7f8c8d;">AFTER</div>
-                        </div>
+                                    {{-- After Image (clipped left side) --}}
+                                    <div class="absolute inset-0 before-after-clip"
+                                        style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                                        <img src="{{ asset('storage/' . $svc->image_before) }}" alt="{{ $svc->name }} Before"
+                                            class="absolute inset-0 w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-20">
+                                    <div class="absolute inset-0 flex items-center justify-center text-slate-400 font-bold">SAMPLE PREVIEW</div>
+                                @endif
+
+                                {{-- Drag Handle --}}
+                                <div class="absolute top-0 bottom-0 z-20 before-after-handle"
+                                    style="left: 50%; transform: translateX(-50%);">
+                                    <div class="absolute top-0 bottom-0 w-0.5 bg-white/80"
+                                        style="left: 50%; transform: translateX(-50%);"></div>
+                                    <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center cursor-ew-resize"
+                                        style="background: rgba(0,0,0,0.5); left: 50%;">
+                                        <i class="ri-arrow-left-right-line text-white text-sm"></i>
+                                    </div>
+                                </div>
+
+                                {{-- BEFORE / AFTER Labels --}}
+                                <div class="absolute bottom-3 left-3 z-20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded"
+                                    style="background: #e67e22;">BEFORE</div>
+                                <div class="absolute bottom-3 right-3 z-20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded"
+                                    style="background: #7f8c8d;">AFTER</div>
+                            </div>
+                        @endif
 
                         {{-- Content --}}
-                        <div class="p-6 flex-1 flex flex-col">
-                            <h3 class="text-lg font-bold text-center mb-3 group" style="color: #c0392b;">
-                                {{ $svc->name }}
+                        <div class="p-8 flex-1 flex flex-col">
+                            <h3 class="text-[22px] font-black text-center mb-4 transition-colors hover:text-[#0ea5e9]" style="color: #0f172a;">
+                                <a href="{{ route('graphics.service-detail', $svc->slug) }}">{{ $svc->name }}</a>
                             </h3>
-                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-1 text-justify line-clamp-4">
-                                {{ $svc->description ?? 'Professional image editing services with guaranteed quality and fast turnaround.' }}
+                            
+                            <p class="text-slate-500 text-[15px] leading-relaxed mb-8 flex-1 text-center line-clamp-4 font-light">
+                                {{ $svc->description ?? (Str::contains(strtolower($category->name), ['video', 'animation', 'motion']) ? 'Professional video production services with guaranteed quality and fast turnaround.' : 'Professional image editing services with guaranteed quality and fast turnaround.') }}
                             </p>
 
-                            {{-- Stats Row --}}
-                            <div class="grid grid-cols-2 gap-3 mb-6">
-                                <div class="border border-gray-100 bg-gray-50/50 rounded-xl py-3 px-3 text-center transition-all hover:bg-white hover:shadow-sm">
-                                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Starts From</div>
-                                    <div class="text-xl font-black text-slate-800 tracking-tighter">${{ number_format($svc->starting_price ?? 0.49, 2) }}</div>
+                            {{-- CEBD Style Stats Row --}}
+                            <div class="flex items-center justify-between border-t border-b border-slate-100 py-4 mb-8">
+                                <div class="text-center w-1/2 border-r border-slate-100">
+                                    <div class="text-[13px] text-slate-500 font-bold mb-1">Starts From</div>
+                                    <div class="text-2xl font-black text-[#0ea5e9]">${{ number_format($svc->starting_price ?? 0.49, 2) }}</div>
                                 </div>
-                                <div class="border border-gray-100 bg-gray-50/50 rounded-xl py-3 px-3 text-center transition-all hover:bg-white hover:shadow-sm">
-                                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest mb-1">Daily Cap</div>
-                                    <div class="text-xl font-black text-slate-800 tracking-tighter">{{ $svc->delivery_capacity ?? '5000' }}</div>
-                                </div>
-                            </div>
-
-                            {{-- Dynamic Variants Grid (The specific request) --}}
-                            <div class="grid grid-cols-2 gap-x-6 gap-y-3 mb-8 border-t border-gray-50 pt-6">
-                                @php
-                                    // Get the features (tiers) from JSON
-                                    $tiers = $svc->features ?? [];
-                                    // Cross-reference with Level 4 Variants from DB
-                                    $dbVariants = $svc->variants;
-                                @endphp
-                                @foreach($tiers as $tier)
-                                    @php
-                                        // Try to find if a database variant exists with this name to get its link
-                                        $linkedVariant = $dbVariants->firstWhere('name', $tier['name']);
-                                    @endphp
-                                    <div class="flex items-center justify-between group/v transition-all">
-                                        <div class="flex items-center gap-2 overflow-hidden">
-                                            <span class="w-1 h-1 rounded-full bg-emerald-500 group-hover/v:scale-125 transition-transform"></span>
-                                            @if($linkedVariant && $linkedVariant->has_details)
-                                                <a href="{{ route('graphics.service-detail', $linkedVariant->slug) }}" 
-                                                   class="text-[12px] font-bold text-slate-600 hover:text-indigo-600 truncate transition-colors border-b border-transparent hover:border-indigo-200">
-                                                    {{ $tier['name'] }}
-                                                </a>
-                                            @else
-                                                <span class="text-[12px] font-medium text-slate-500 truncate">{{ $tier['name'] }}</span>
-                                            @endif
-                                        </div>
-                                        <span class="text-[11px] font-black text-slate-400 font-mono tracking-tighter ml-2">{{ $tier['price'] }}</span>
+                                <div class="text-center w-1/2">
+                                    <div class="text-[13px] text-slate-500 font-bold mb-1">
+                                        {{ Str::contains(strtolower($category->name), ['video', 'animation', 'motion']) ? 'Videos/24Hr' : 'Images/24Hr' }}
                                     </div>
-                                @endforeach
+                                    <div class="text-2xl font-black text-slate-800">{{ $svc->delivery_capacity ?? (Str::contains(strtolower($category->name), ['video', 'animation', 'motion']) ? '50' : '3000') }}</div>
+                                </div>
                             </div>
 
                             {{-- Action Buttons --}}
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center justify-center gap-4">
                                 @if($svc->has_details)
                                     <a href="{{ route('graphics.service-detail', $svc->slug) }}"
-                                        class="py-3 text-[11px] font-black tracking-widest text-center border-2 rounded-xl transition-all duration-300 hover:bg-[#0ea5e9] hover:text-white"
+                                        class="px-8 py-3 text-[13px] font-bold tracking-wide text-center border-2 rounded-full transition-all duration-300 hover:bg-[#0ea5e9] hover:text-white"
                                         style="color: #0ea5e9; border-color: #0ea5e9;">
-                                        VIEW DETAILS
+                                        View Details
                                     </a>
-                                @else
-                                    <button disabled class="py-3 text-[11px] font-black tracking-widest text-center border-2 border-gray-100 text-gray-300 rounded-xl cursor-not-allowed">
-                                        NO DETAILS
-                                    </button>
                                 @endif
 
                                 <a href="{{ route('graphics.get-quote') }}"
-                                    class="py-3 text-[11px] font-black tracking-widest text-center text-white rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all"
-                                    style="background: linear-gradient(to right, #0ea5e9, #2dd4bf);">
-                                    GET A QUOTE
+                                    class="px-8 py-3 text-[13px] font-bold tracking-wide text-center text-white rounded-full shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-0.5 transition-all"
+                                    style="background: #0ea5e9;">
+                                    Get A Quote
                                 </a>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-
-            {{-- Disclaimer Alert --}}
-            <div
-                class="mt-12 bg-red-50 text-red-500/80 p-5 rounded flex items-start gap-4 border border-red-100 max-w-5xl mx-auto shadow-sm">
-                <i class="ri-error-warning-line text-xl mt-0.5"></i>
-                <p class="text-sm">
-                    <span class="font-bold italic">Disclaimer:</span> <span class="text-gray-500">The before/after photos
-                        are used as a sample of services we offer. The actual price of displayed images might be higher than
-                        the mentioned Starting Price. For accurate prices, please</span> <a
-                        href="{{ route('graphics.get-quote') }}"
-                        class="text-gray-600 underline underline-offset-4 decoration-1 hover:text-red-500">Request a
-                        Quote</a>
-                </p>
-            </div>
-        </div>
-
-        {{-- ── FEATURED PORTFOLIOS ────────────────────────── --}}
-        <div class="bg-[#f0f9ff] py-20 mt-16 border-t border-slate-200">
-            <div class="container mx-auto px-4 md:px-6 max-w-6xl text-center">
-                <h2 class="text-2xl md:text-3xl font-black text-[#082f49] uppercase tracking-wide mb-2">
-                    Also Featured in Our Clients' Portfolios
-                </h2>
-                <div class="w-16 h-1 bg-[#38bdf8] mx-auto mt-4 rounded-full mb-12"></div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    @php
-                        $portfolios = [
-                            ['name' => 'Magazine Retouching', 'img' => 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80', 'desc' => 'Flawless skin retouching, color grading, and composition adjustments used by top fashion and lifestyle magazines globally.'],
-                            ['name' => 'Print Media Design', 'img' => 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80', 'desc' => 'High-resolution CMYK conversions, layout formatting, and prepress adjustments ensuring perfect prints without color bleeding.'],
-                            ['name' => 'Creative Manipulation', 'img' => 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', 'desc' => 'Surreal compositions and digital art combining multiple images, advanced blending, and custom lighting effects for advertising campaigns.'],
-                            ['name' => 'Social Media Content', 'img' => 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80', 'desc' => 'Eye-catching banner designs, ad creatives, and profile imagery tailored specifically for Instagram, Facebook, and modern social platforms.'],
-                        ];
-                    @endphp
-
-                    @foreach($portfolios as $port)
-                        <div
-                            class="bg-white rounded-xl overflow-hidden shadow-sm border border-[#e0e7ff] hover:shadow-md transition-all group">
-                            <div class="h-64 overflow-hidden relative">
-                                <img src="{{ $port['img'] }}" alt="{{ $port['name'] }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#082f49]/80 to-transparent"></div>
-                                <h3 class="absolute bottom-6 left-6 text-xl font-bold text-white">{{ $port['name'] }}</h3>
-                            </div>
-                            <div class="p-6">
-                                <p class="text-slate-600 text-sm leading-relaxed mb-6">{{ $port['desc'] }}</p>
-                                <a href="{{ route('graphics.portfolio') }}"
-                                    class="inline-block py-2 px-6 text-sm font-bold text-white bg-[#0ea5e9] rounded-full hover:bg-[#0284c7] transition-colors">
-                                    View Work
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
+                @endif
+            @endforeach
         </div>
 
         {{-- ── TESTIMONIALS ───────────────────────────────── --}}

@@ -122,7 +122,7 @@
 
                 {{-- Right Button --}}
                 <div class="mt-8">
-                    <a href="{{ route('graphics.services') }}" class="block w-full text-center py-4 rounded-md bg-gradient-to-r from-[#0984e3] to-[#1ebba3] text-[13px] font-black uppercase tracking-widest text-white hover:shadow-lg transition-all duration-300">
+                    <a href="{{ route('graphics.service-detail', 'image-editing') }}" class="block w-full text-center py-4 rounded-md bg-gradient-to-r from-[#0984e3] to-[#1ebba3] text-[13px] font-black uppercase tracking-widest text-white hover:shadow-lg transition-all duration-300">
                         Check For More Services
                     </a>
                 </div>
