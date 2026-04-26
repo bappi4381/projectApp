@@ -7,7 +7,7 @@
     @include('graphics.partials.video-navbar', ['videoSubCategories' => $videoSubCategories])
 @endsection
 
-@section('title', $service->name . ' | Video Production | Graphics Studio')
+@section('title', ($service->hero_heading ?? $service->name) . ' | Video Production | Graphics Studio')
 
 @section('content')
 <div class="bg-white min-h-screen text-slate-800 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
@@ -22,11 +22,10 @@
                 {{-- Left Side: Content --}}
                 <div class="w-full lg:w-7/12 text-center lg:text-left">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6">
-                        Video Editing and <br>
-                        Post Production Services
+                        {!! $service->hero_heading ?? 'Video Editing and <br> Post Production Services' !!}
                     </h1>
                     <p class="text-slate-300 text-lg md:text-xl font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8">
-                        Quickly and easily turn traditional videos into cinematic masterpieces through professional editing and post-production.
+                        {{ $service->description ?? $service->short_description ?? 'Quickly and easily turn traditional videos into cinematic masterpieces through professional editing and post-production.' }}
                     </p>
                     
                     {{-- Rating --}}
@@ -117,28 +116,44 @@
             <p class="text-slate-500 text-sm mb-16">Step by step process to ensure the highest quality for your video projects.</p>
             
             <div class="flex flex-wrap justify-center items-start gap-12 lg:gap-20">
-                @php
-                    $steps = [
-                        ['icon' => 'ri-upload-cloud-2-line', 'title' => 'Upload Files'],
-                        ['icon' => 'ri-settings-3-line', 'title' => 'Work In Progress'],
-                        ['icon' => 'ri-checkbox-circle-line', 'title' => 'Delivery'],
-                        ['icon' => 'ri-wallet-3-line', 'title' => 'Payment'],
-                        ['icon' => 'ri-feedback-line', 'title' => 'Feedback']
-                    ];
-                @endphp
-                @foreach($steps as $index => $step)
-                    <div class="flex flex-col items-center group w-32">
-                        <div class="w-20 h-20 rounded-2xl bg-white shadow-lg flex items-center justify-center text-3xl text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all mb-4 relative">
-                            <i class="{{ $step['icon'] }}"></i>
-                            @if($index < count($steps) - 1)
-                                <div class="hidden lg:block absolute -right-12 top-1/2 -translate-y-1/2 text-slate-300">
-                                    <i class="ri-arrow-right-s-line text-2xl"></i>
-                                </div>
-                            @endif
+                @if($service->methods && count($service->methods) > 0)
+                    @foreach($service->methods as $index => $method)
+                        <div class="flex flex-col items-center group w-32">
+                            <div class="w-20 h-20 rounded-2xl bg-white shadow-lg flex items-center justify-center text-3xl text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all mb-4 relative">
+                                <i class="ri-settings-4-line"></i>
+                                @if($index < count($service->methods) - 1)
+                                    <div class="hidden lg:block absolute -right-12 top-1/2 -translate-y-1/2 text-slate-300">
+                                        <i class="ri-arrow-right-s-line text-2xl"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $method['title'] }}</span>
                         </div>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $step['title'] }}</span>
-                    </div>
-                @endforeach
+                    @endforeach
+                @else
+                    @php
+                        $steps = [
+                            ['icon' => 'ri-upload-cloud-2-line', 'title' => 'Upload Files'],
+                            ['icon' => 'ri-settings-3-line', 'title' => 'Work In Progress'],
+                            ['icon' => 'ri-checkbox-circle-line', 'title' => 'Delivery'],
+                            ['icon' => 'ri-wallet-3-line', 'title' => 'Payment'],
+                            ['icon' => 'ri-feedback-line', 'title' => 'Feedback']
+                        ];
+                    @endphp
+                    @foreach($steps as $index => $step)
+                        <div class="flex flex-col items-center group w-32">
+                            <div class="w-20 h-20 rounded-2xl bg-white shadow-lg flex items-center justify-center text-3xl text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all mb-4 relative">
+                                <i class="{{ $step['icon'] }}"></i>
+                                @if($index < count($steps) - 1)
+                                    <div class="hidden lg:block absolute -right-12 top-1/2 -translate-y-1/2 text-slate-300">
+                                        <i class="ri-arrow-right-s-line text-2xl"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ $step['title'] }}</span>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
@@ -164,35 +179,29 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50 text-[13px] font-bold text-slate-600">
-                        @php
-                            $pricingRows = [
-                                ['name' => 'Video Editing', 'low' => '$45', 'med' => '$85', 'high' => '$145', 'icon' => 'ri-vidicon-line'],
-                                ['name' => 'Audio Mastering', 'low' => '$25', 'med' => '$55', 'high' => '$95', 'icon' => 'ri-mic-line'],
-                                ['name' => 'Color Grading', 'low' => '$40', 'med' => '$75', 'high' => '$130', 'icon' => 'ri-contrast-drop-line'],
-                                ['name' => 'Motion Graphics', 'low' => '$65', 'med' => '$120', 'high' => '$195', 'icon' => 'ri-pulse-line'],
-                                ['name' => '3D Rendering', 'low' => '$95', 'med' => '$185', 'high' => '$350', 'icon' => 'ri-instance-line'],
-                            ];
-                        @endphp
-                        @foreach($pricingRows as $row)
+                        @forelse($videoPricings as $pricing)
                         <tr class="hover:bg-slate-50 transition-colors group">
                             <td class="py-6 px-10">
                                 <div class="flex items-center gap-4">
                                     <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                                        <i class="{{ $row['icon'] }}"></i>
+                                        <i class="ri-vidicon-line"></i>
                                     </div>
-                                    <span class="font-black text-[#0b2b3d] uppercase tracking-tight">{{ $row['name'] }}</span>
+                                    <span class="font-black text-[#0b2b3d] uppercase tracking-tight">{{ $pricing->service_name }}</span>
                                 </div>
                             </td>
-                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $row['low'] }}<span class="text-[10px] opacity-50 ml-1">/hr</span></td>
-                            <td class="py-6 px-10 text-center font-black text-emerald-600 bg-emerald-500/[0.02]">{{ $row['med'] }}<span class="text-[10px] opacity-50 ml-1">/hr</span></td>
-                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $row['high'] }}<span class="text-[10px] opacity-50 ml-1">/hr</span></td>
+                            @php $tiers = $pricing->pricing_tiers ?? []; @endphp
+                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $tiers[0]['price'] ?? '-' }}</td>
+                            <td class="py-6 px-10 text-center font-black text-emerald-600 bg-emerald-500/[0.02]">{{ $tiers[1]['price'] ?? '-' }}</td>
+                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $tiers[2]['price'] ?? '-' }}</td>
                         </tr>
-                        @endforeach
+                        @empty
+                            <tr><td colspan="4" class="py-12 text-center text-slate-400 italic">No pricing defined yet.</td></tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
             
-            <a href="{{ route('graphics.pricing') }}" class="inline-block mt-12 text-[11px] font-black uppercase tracking-widest text-emerald-500 hover:text-emerald-600 border-b-2 border-emerald-500/20 pb-1">View Full Pricing</a>
+            <a href="{{ route('graphics.video-pricing') }}" class="inline-block mt-12 text-[11px] font-black uppercase tracking-widest text-emerald-500 hover:text-emerald-600 border-b-2 border-emerald-500/20 pb-1">View Full Pricing</a>
         </div>
     </section>
 

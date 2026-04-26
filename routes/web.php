@@ -28,6 +28,7 @@ Route::prefix('graphics-studio')->name('graphics.')->group(function () {
     Route::get('/services', [GraphicsStudioController::class, 'services'])->name('services');
     Route::get('/portfolio', [GraphicsStudioController::class, 'portfolio'])->name('portfolio');
     Route::get('/pricing', [GraphicsStudioController::class, 'pricing'])->name('pricing');
+    Route::get('/video-editing-cost', [GraphicsStudioController::class, 'videoPricing'])->name('video-pricing');
     Route::get('/offers', [GraphicsStudioController::class, 'offers'])->name('offers');
     Route::get('/payment', [GraphicsStudioController::class, 'payment'])->name('payment');
     Route::get('/get-quote', [GraphicsStudioController::class, 'getQuote'])->name('get-quote');

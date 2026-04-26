@@ -12,6 +12,7 @@ class Service extends Model
     protected $fillable = [
         'parent_id',
         'name',
+        'service_type',
         'slug',
         'description',
         'summary_bullets',
@@ -24,8 +25,10 @@ class Service extends Model
         'starting_price',
         'price_unit',
         'features',
+        'pricing_tiers',
         'faqs',
         'methods',
+        'work_samples',
         'delivery_capacity',
         'delivery_unit',
         'discount_upto',
@@ -33,6 +36,7 @@ class Service extends Model
         'image_before',
         'image_after',
         'video_url',
+        'audio_file',
         'has_details',
         'show_on_pricing',
     ];
@@ -49,9 +53,11 @@ class Service extends Model
 
     protected $casts = [
         'features' => 'array',
+        'pricing_tiers' => 'array',
         'summary_bullets' => 'array',
         'faqs' => 'array',
         'methods' => 'array',
+        'work_samples' => 'array',
         'is_active' => 'boolean',
         'has_details' => 'boolean',
         'show_on_pricing' => 'boolean'

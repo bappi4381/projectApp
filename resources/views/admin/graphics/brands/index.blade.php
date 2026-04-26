@@ -73,5 +73,12 @@
         </div>
         @endforelse
     </div>
+
+    {{-- Pagination --}}
+    @if($brands->hasPages())
+    <div class="mt-12 flex justify-center">
+        {{ $brands->links() }}
+    </div>
+    @endif
 </div>
 @endsection

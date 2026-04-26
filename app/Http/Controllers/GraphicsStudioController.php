@@ -82,6 +82,7 @@ class GraphicsStudioController extends Controller
             }
 
             $viewName = $isVedio ? 'graphics.video-service' : 'graphics.service-detail';
+            $videoPricings = $isVedio ? \App\Models\VideoPricing::where('is_active', true)->orderBy('order_column')->get() : collect();
 
             return view($viewName, [
                 'service' => $category,
@@ -90,7 +91,8 @@ class GraphicsStudioController extends Controller
                 'popularServices' => $popularServices,
                 'videoSubCategories' => $videoSubCategories,
                 'testimonials' => $testimonials,
-                'isVedio' => $isVedio
+                'isVedio' => $isVedio,
+                'videoPricings' => $videoPricings
             ]);
         }
 
@@ -124,6 +126,7 @@ class GraphicsStudioController extends Controller
             }
 
             $viewName = $isVedio ? 'graphics.video-service' : 'graphics.service-detail';
+            $videoPricings = $isVedio ? \App\Models\VideoPricing::where('is_active', true)->orderBy('order_column')->get() : collect();
 
             return view($viewName, [
                 'service' => $subCategory,
@@ -132,7 +135,8 @@ class GraphicsStudioController extends Controller
                 'popularServices' => $popularServices,
                 'videoSubCategories' => $videoSubCategories,
                 'testimonials' => $testimonials,
-                'isVedio' => $isVedio
+                'isVedio' => $isVedio,
+                'videoPricings' => $videoPricings
             ]);
         }
 
@@ -160,7 +164,8 @@ class GraphicsStudioController extends Controller
                 ->where('is_active', true)
                 ->with(['services' => function($q){ $q->where('is_active', true); }])
                 ->get();
-            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories'));
+            $videoPricings = \App\Models\VideoPricing::where('is_active', true)->orderBy('order_column')->get();
+            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
         }
 
         return view('graphics.service-detail', compact('service', 'level', 'popularServices'));
@@ -189,7 +194,8 @@ class GraphicsStudioController extends Controller
                 ->where('is_active', true)
                 ->with(['services' => function($q){ $q->where('is_active', true); }])
                 ->get();
-            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories'));
+            $videoPricings = \App\Models\VideoPricing::where('is_active', true)->orderBy('order_column')->get();
+            return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
         }
 
         return view('graphics.service-variant', compact('service'));
@@ -232,4 +238,29 @@ class GraphicsStudioController extends Controller
     public function firstOrderFree() { return view('graphics.first-order-free'); }
     public function comebackCampaign() { return view('graphics.comeback-campaign'); }
     public function christmasPhotoEditing() { return view('graphics.christmas-photo-editing'); }
+
+    public function videoPricing()
+    {
+        $videoServices = \App\Models\VideoPricing::where('is_active', true)
+            ->orderBy('order_column')
+            ->get();
+
+        // Fetch video production category with all its subcategories and services
+        $videoCategory = \App\Models\Category::where('is_active', true)
+            ->where(function($q) {
+                $q->where('name', 'LIKE', '%Video%')
+                  ->orWhere('name', 'LIKE', '%Production%');
+            })
+            ->with(['subcategories' => function($q) {
+                $q->where('is_active', true)
+                  ->with(['services' => function($sq) {
+                      $sq->where('is_active', true)->whereNull('parent_id');
+                  }]);
+            }])
+            ->first();
+
+        $videoSubCategories = $videoCategory?->subcategories ?? collect();
+
+        return view('graphics.video-pricing', compact('videoServices', 'videoSubCategories', 'videoCategory'));
+    }
 }

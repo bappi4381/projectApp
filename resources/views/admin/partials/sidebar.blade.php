@@ -123,25 +123,29 @@
 
         <div x-data="{ open: @json($isServiceMgmt) }" class="space-y-1">
             <button @click="open = !open"
-                class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.02] rounded-xl transition-all group/btn">
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Service Architecture</p>
+                class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.04] rounded-xl transition-all group/btn border border-transparent hover:border-white/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Service Architecture</p>
+                </div>
                 <i class="ri-arrow-down-s-line text-slate-600 transition-transform duration-300"
                     :class="open ? 'rotate-180' : ''"></i>
             </button>
-
-            <div x-show="open" x-transition:enter="transition ease-out duration-300"
+ 
+            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                class="pt-2 space-y-1">
-                {!! renderSidebarItem('admin.graphics.categories.index', 'ri-node-tree', 'Primary Verticals', 'L1') !!}
-                {!! renderSidebarItem('admin.graphics.subcategories.index', 'ri-survey-line', 'Architecture Groups', 'L2') !!}
-                {!! renderSidebarItem('admin.graphics.services.index', 'ri-scissors-2-line', 'Core Services', 'L3') !!}
-                {!! renderSidebarItem('admin.graphics.variants.index', 'ri-bubble-chart-line', 'Variant Detail Pages', 'L4') !!}
+                class="pt-2 space-y-1 pl-3 border-l border-white/5 ml-4">
+                {!! renderSidebarItem('admin.graphics.categories.index', 'ri-node-tree', 'L1 Verticals', 'Category') !!}
+                {!! renderSidebarItem('admin.graphics.subcategories.index', 'ri-survey-line', 'L2 Groups', 'SubGroup') !!}
+                {!! renderSidebarItem('admin.graphics.services.index', 'ri-scissors-2-line', 'L3 Core Services', 'Service') !!}
+                {!! renderSidebarItem('admin.graphics.variants.index', 'ri-bubble-chart-line', 'L4 Detail Variants', 'Variant') !!}
             </div>
         </div>
 
         {{-- Menu Group: Pricing & Rates --}}
         <div class="space-y-1">
             {!! renderSidebarItem('admin.graphics.price-list.index', 'ri-price-tag-3-line', 'Pricing List', 'Pricing', 'emerald') !!}
+            {!! renderSidebarItem('admin.graphics.video-pricing.index', 'ri-video-line', 'Video Pricing', 'NEW', 'emerald') !!}
         </div>
 
         {{-- Menu Group: Studio Content --}}

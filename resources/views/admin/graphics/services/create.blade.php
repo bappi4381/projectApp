@@ -24,19 +24,27 @@
 
         <div x-data="{ 
                 hasDetails: {{ old('has_details') ? 'true' : 'false' }},
+                serviceType: '{{ old('service_type', 'image') }}',
                 features: [],
                 faqs: [],
                 methods: [],
-                addFeature() { this.features.push({ name: '', price: '' }) },
-                removeFeature(index) { this.features.splice(index, 1) },
+                work_samples: [],
                 addFaq() { this.faqs.push({ question: '', answer: '' }) },
                 removeFaq(index) { this.faqs.splice(index, 1) },
                 addMethod() { this.methods.push({ title: '', description: '', image: null, preview: null }) },
                 removeMethod(index) { this.methods.splice(index, 1) },
+                addWorkSample() { this.work_samples.push({ type: 'video', title: '', file: null, url: '', preview: null }) },
+                removeWorkSample(index) { this.work_samples.splice(index, 1) },
                 handleMethodImage(index, event) {
                     const file = event.target.files[0];
                     if (file) {
                         this.methods[index].preview = URL.createObjectURL(file);
+                    }
+                },
+                handleWorkSampleFile(index, event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.work_samples[index].preview = URL.createObjectURL(file);
                     }
                 }
             }">
@@ -57,11 +65,17 @@
                             <label
                                 class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Parent
                                 Group (SubCategory)</label>
-                            <select name="sub_category_id" required
+                            <select name="sub_category_id" required @change="serviceType = $event.target.options[$event.target.selectedIndex].dataset.type || 'image'"
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all select-dark shadow-inner">
-                                <option value="">Select Group</option>
+                                <option value="" data-type="image">Select Group</option>
                                 @foreach($subCategories as $sub)
-                                    <option value="{{ $sub->id }}" {{ old('sub_category_id') == $sub->id ? 'selected' : '' }}>
+                                    @php
+                                        $subType = 'image';
+                                        $nameStr = strtolower($sub->name . ' ' . ($sub->category->name ?? ''));
+                                        if (str_contains($nameStr, 'video')) $subType = 'video';
+                                        elseif (str_contains($nameStr, 'audio')) $subType = 'audio';
+                                    @endphp
+                                    <option value="{{ $sub->id }}" data-type="{{ $subType }}" {{ old('sub_category_id') == $sub->id ? 'selected' : '' }}>
                                         {{ $sub->name }} ({{ $sub->category->name ?? 'N/A' }})</option>
                                 @endforeach
                             </select>
@@ -75,6 +89,7 @@
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all shadow-inner">
                         </div>
                     </div>
+                    <input type="hidden" name="service_type" x-model="serviceType">
 
                     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div>
@@ -145,25 +160,44 @@
                                     class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500 transition-all resize-none">{{ old('description') }}</textarea>
                             </div>
 
-                            <div>
+                            <div x-show="serviceType === 'video'" x-cloak x-transition>
                                 <label
                                     class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">YouTube
-                                    Showcase Link (Optional)</label>
+                                    Showcase Link (For Video Production)</label>
                                 <div class="relative group">
                                     <div
                                         class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-rose-500">
                                         <i class="ri-youtube-fill text-xl"></i></div>
                                     <input type="url" name="video_url" value="{{ old('video_url') }}"
                                         placeholder="https://www.youtube.com/watch?v=..."
-                                        class="w-full bg-white/5 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-rose-500 transition-all">
+                                        class="w-full bg-white/5 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-rose-500 transition-all shadow-inner">
+                                </div>
+                            </div>
+                            
+                            <div x-show="serviceType === 'audio'" x-cloak x-transition>
+                                <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Audio Sample (For Audio Editing)</label>
+                                <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl shadow-inner group">
+                                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center text-slate-600 border border-white/5 shrink-0">
+                                        <i class="ri-mic-line text-2xl"></i>
+                                    </div>
+                                    <input type="file" name="audio_file" accept="audio/*" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-rose-500/10 file:text-rose-400 hover:file:bg-rose-500/20 w-full">
                                 </div>
                             </div>
 
+                            <div x-show="serviceType === 'image'" x-cloak x-transition>
+                                <label
+                                    class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Cinematic
+                                    Narrative (The Story / Why Us)</label>
+                                <textarea name="necessity_text" rows="5"
+                                    placeholder="Describe the impact and narrative of this service..."
+                                    class="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm font-medium text-slate-300 focus:outline-none focus:border-indigo-500 transition-all resize-none shadow-inner">{{ old('necessity_text') }}</textarea>
+                            </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div x-data="{ preview: null }">
+                                <div x-data="{ preview: null }" x-show="serviceType === 'image'">
                                     <label
                                         class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Before
-                                        Image</label>
+                                        Image (For Slider)</label>
                                     <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
                                         <div
                                             class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
@@ -183,7 +217,7 @@
                                 <div x-data="{ preview: null }">
                                     <label
                                         class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">After
-                                        Image</label>
+                                        Image <span x-text="serviceType === 'image' ? '(For Slider)' : '(Cover/Thumbnail)'"></span></label>
                                     <div class="flex items-center gap-6 p-4 bg-white/5 border border-white/10 rounded-2xl">
                                         <div
                                             class="w-24 h-24 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/5">
@@ -203,7 +237,7 @@
                             </div>
 
                             {{-- Stats & Pricing --}}
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" x-show="serviceType === 'image'" x-cloak x-transition>
                                 <div class="space-y-3">
                                     <label
                                         class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Starting
@@ -238,8 +272,8 @@
                         </div>
                     </div>
 
-                    {{-- Feature Grid --}}
-                    <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10">
+                    {{-- Feature Grid (For Image) --}}
+                    <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10" x-show="serviceType === 'image'" x-cloak x-transition>
                         <div class="flex items-center justify-between mb-8">
                             <h3 class="text-lg font-bold text-white tracking-tight">Complexity Tiers & Features</h3>
                             <button type="button" @click="addFeature()"
@@ -263,7 +297,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10" x-show="hasDetails && serviceType === 'image'" x-cloak x-transition>
                         {{-- FAQ Builder --}}
                         <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10">
                             <div class="flex items-center justify-between mb-8">
@@ -341,6 +375,131 @@
                                     </div>
                                 </template>
                             </div>
+                        </div>
+                    </div>
+
+                    {{-- Work Sample Builder (For Video/Audio) --}}
+                    <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10 mt-10 overflow-hidden relative" x-show="hasDetails && serviceType !== 'image'" x-cloak x-transition>
+                        {{-- Background Decor --}}
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[100px] -mr-32 -mt-32"></div>
+
+                        <div class="flex items-center justify-between mb-10 relative z-10">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/20 shadow-lg">
+                                    <i class="ri-gallery-line text-xl text-indigo-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white tracking-tight">Portfolio Showcase</h3>
+                                    <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1">Manage Video, Audio or Image samples</p>
+                                </div>
+                            </div>
+                            <button type="button" @click="addWorkSample()"
+                                class="group px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-indigo-500/20 active:scale-95 flex items-center gap-2">
+                                <i class="ri-add-line text-lg"></i> Add New Sample
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                            <template x-for="(sample, index) in work_samples" :key="index">
+                                <div class="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] relative group transition-all hover:bg-white/[0.08] hover:border-white/20 hover:shadow-2xl">
+                                    {{-- Delete Button --}}
+                                    <button type="button" @click="removeWorkSample(index)"
+                                        class="absolute -top-3 -right-3 w-10 h-10 bg-slate-900 border border-white/10 text-rose-500 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-2xl z-10 hover:bg-rose-500 hover:text-white hover:scale-110">
+                                        <i class="ri-delete-bin-7-line text-lg"></i>
+                                    </button>
+
+                                    <div class="space-y-6">
+                                        {{-- Header: Type & Title --}}
+                                        <div class="flex flex-col gap-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="shrink-0">
+                                                    <div class="w-10 h-10 rounded-xl bg-slate-900/80 flex items-center justify-center border border-white/5 shadow-inner">
+                                                        <template x-if="sample.type === 'video'"><i class="ri-video-line text-rose-400"></i></template>
+                                                        <template x-if="sample.type === 'image'"><i class="ri-image-line text-emerald-400"></i></template>
+                                                        <template x-if="sample.type === 'audio'"><i class="ri-mic-line text-amber-400"></i></template>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <select :name="'work_samples['+index+'][type]'" x-model="sample.type" 
+                                                        class="w-full bg-transparent border-none text-[11px] font-black uppercase tracking-widest text-indigo-400 focus:ring-0 p-0 cursor-pointer">
+                                                        <option value="video" class="bg-slate-900">Video Production</option>
+                                                        <option value="image" class="bg-slate-900">Image Showcase</option>
+                                                        <option value="audio" class="bg-slate-900">Audio Sample</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <input type="text" :name="'work_samples['+index+'][title]'" x-model="sample.title" 
+                                                placeholder="Project Title (e.g. Nike Commercial 2024)" 
+                                                class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-all shadow-inner">
+                                        </div>
+
+                                        {{-- Media Content Area --}}
+                                        <div class="p-6 bg-slate-900/40 rounded-3xl border border-white/5 shadow-inner min-h-[120px] flex items-center">
+                                            {{-- Video URL Input --}}
+                                            <template x-if="sample.type === 'video'">
+                                                <div class="w-full">
+                                                    <label class="block text-[9px] uppercase font-black text-slate-500 mb-3 ml-1 tracking-widest">YouTube / Vimeo Link</label>
+                                                    <div class="relative group/input">
+                                                        <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-rose-500/50 group-focus-within/input:text-rose-500 transition-colors">
+                                                            <i class="ri-youtube-fill text-xl"></i>
+                                                        </div>
+                                                        <input type="url" :name="'work_samples['+index+'][url]'" x-model="sample.url" 
+                                                            placeholder="https://www.youtube.com/watch?v=..." 
+                                                            class="w-full bg-slate-900 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-xs font-bold text-white focus:outline-none focus:border-rose-500 transition-all shadow-2xl">
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            {{-- File Upload Area --}}
+                                            <template x-if="sample.type === 'image' || sample.type === 'audio'">
+                                                <div class="flex items-center gap-6 w-full">
+                                                    <div class="w-20 h-20 rounded-2xl bg-slate-800 border border-white/10 flex items-center justify-center overflow-hidden shadow-2xl shrink-0 group/preview">
+                                                        <template x-if="sample.type === 'image' && sample.preview">
+                                                            <img :src="sample.preview" class="w-full h-full object-cover group-hover/preview:scale-110 transition-transform duration-500">
+                                                        </template>
+                                                        <template x-if="sample.type === 'image' && !sample.preview">
+                                                            <i class="ri-image-2-fill text-2xl text-slate-700"></i>
+                                                        </template>
+                                                        <template x-if="sample.type === 'audio'">
+                                                            <div class="relative">
+                                                                <i class="ri-volume-up-fill text-2xl text-amber-500/40 animate-pulse"></i>
+                                                                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center border-2 border-slate-800">
+                                                                    <i class="ri-mic-fill text-[8px] text-white"></i>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    <div class="flex-1 space-y-3">
+                                                        <label class="block text-[9px] uppercase font-black text-slate-500 ml-1 tracking-widest">
+                                                            <span x-text="sample.type === 'image' ? 'Upload Preview' : 'Audio File'"></span>
+                                                        </label>
+                                                        <div class="relative">
+                                                            <input type="file" :name="'work_samples['+index+'][file]'" @change="handleWorkSampleFile(index, $event)" 
+                                                                class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                                                            <div class="bg-indigo-500/5 border border-indigo-500/20 rounded-xl px-4 py-3 flex items-center justify-between group-hover:bg-indigo-500/10 transition-all cursor-pointer">
+                                                                <span class="text-[10px] font-black uppercase text-indigo-400">Choose File</span>
+                                                                <i class="ri-upload-cloud-2-line text-indigo-500"></i>
+                                                            </div>
+                                                        </div>
+                                                        <p class="text-[8px] text-slate-600 font-bold ml-1 uppercase" x-text="sample.type === 'image' ? 'JPG/PNG • Max 5MB' : 'MP3/WAV • Max 20MB'"></p>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            
+                            {{-- Empty State --}}
+                            <template x-if="work_samples.length === 0">
+                                <div class="col-span-full py-20 border-2 border-dashed border-white/5 rounded-[3rem] flex flex-col items-center justify-center text-center group/empty cursor-pointer hover:bg-white/5 transition-all" @click="addWorkSample()">
+                                    <div class="w-16 h-16 rounded-full bg-slate-900 border border-white/5 flex items-center justify-center mb-4 group-hover/empty:scale-110 transition-all duration-500">
+                                        <i class="ri-add-line text-3xl text-slate-700 group-hover/empty:text-indigo-500 transition-colors"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-600 group-hover/empty:text-slate-400 transition-colors">Your Portfolio is Empty</h4>
+                                    <p class="text-[10px] text-slate-700 uppercase font-black tracking-widest mt-1">Click to add your first work sample</p>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>

@@ -104,16 +104,34 @@ class GraphicsController extends Controller
                 // If no new image, keep the old one
                 elseif (isset($method['old_image'])) {
                     $methods[$index]['image'] = $method['old_image'];
-                    unset($methods[$index]['old_image']);
-                } else {
-                    $methods[$index]['image'] = null;
                 }
+                unset($methods[$index]['old_image']);
                 
                 // Remove preview from the array before saving to DB
                 unset($methods[$index]['preview']);
             }
         }
         return $methods;
+    }
+
+    private function handleWorkSampleFiles(Request $request, $existingSamples = [])
+    {
+        $samples = $request->input('work_samples', []);
+
+        if (!empty($samples)) {
+            foreach ($samples as $index => $sample) {
+                if ($request->hasFile("work_samples.{$index}.file")) {
+                    if (isset($existingSamples[$index]['file'])) {
+                        Storage::disk('public')->delete($existingSamples[$index]['file']);
+                    }
+                    $samples[$index]['file'] = $request->file("work_samples.{$index}.file")->store('work_samples', 'public');
+                } elseif (isset($sample['old_file'])) {
+                    $samples[$index]['file'] = $sample['old_file'];
+                }
+                unset($samples[$index]['old_file']);
+            }
+        }
+        return $samples;
     }
 
     public function servicesStore(Request $request)
@@ -127,15 +145,19 @@ class GraphicsController extends Controller
             'starting_price'    => 'nullable|numeric',
             'price_unit'        => 'nullable|string|max:255',
             'features'          => 'nullable|array',
+            'pricing_tiers'     => 'nullable|array',
             'faqs'              => 'nullable|array',
             'methods'           => 'nullable|array',
+            'work_samples'      => 'nullable|array',
             'delivery_capacity' => 'nullable|integer',
             'delivery_unit'     => 'nullable|string|max:255',
             'discount_upto'     => 'nullable|integer',
             'discount_tag'      => 'nullable|string|max:255',
+            'service_type'      => 'nullable|in:image,video,audio',
             'image_before'      => 'nullable|image|max:10240',
             'image_after'       => 'nullable|image|max:10240',
             'video_url'         => 'nullable|url',
+            'audio_file'        => 'nullable|file|mimes:mp3,wav,ogg|max:20480',
             'summary_bullets'   => 'nullable|array',
             'necessity_text'    => 'nullable|string',
             'features_table_heading' => 'nullable|string|max:255',
@@ -154,9 +176,15 @@ class GraphicsController extends Controller
         if ($request->hasFile('image_after')) {
             $validated['image_after'] = $request->file('image_after')->store('services', 'public');
         }
+        if ($request->hasFile('audio_file')) {
+            $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+        }
 
         // Handle Method Images
         $validated['methods'] = $this->handleMethodImages($request);
+
+        // Handle Work Samples
+        $validated['work_samples'] = $this->handleWorkSampleFiles($request);
 
         $slug = Str::slug($validated['name']);
         $originalSlug = $slug;
@@ -200,15 +228,18 @@ class GraphicsController extends Controller
             'starting_price'    => 'nullable|numeric',
             'price_unit'        => 'nullable|string|max:255',
             'features'          => 'nullable|array',
+            'pricing_tiers'     => 'nullable|array',
             'faqs'              => 'nullable|array',
             'methods'           => 'nullable|array',
             'delivery_capacity' => 'nullable|integer',
             'delivery_unit'     => 'nullable|string|max:255',
             'discount_upto'     => 'nullable|integer',
             'discount_tag'      => 'nullable|string|max:255',
+            'service_type'      => 'nullable|in:image,video,audio',
             'image_before'      => 'nullable|image|max:10240',
             'image_after'       => 'nullable|image|max:10240',
             'video_url'         => 'nullable|url',
+            'audio_file'        => 'nullable|file|mimes:mp3,wav,ogg|max:20480',
             'summary_bullets'   => 'nullable|array',
             'necessity_text'    => 'nullable|string',
             'features_table_heading' => 'nullable|string|max:255',
@@ -230,9 +261,16 @@ class GraphicsController extends Controller
             if ($service->image_after) Storage::disk('public')->delete($service->image_after);
             $validated['image_after'] = $request->file('image_after')->store('services', 'public');
         }
+        if ($request->hasFile('audio_file')) {
+            if ($service->audio_file) Storage::disk('public')->delete($service->audio_file);
+            $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+        }
 
         // Handle Method Images
         $validated['methods'] = $this->handleMethodImages($request, $service->methods);
+
+        // Handle Work Samples
+        $validated['work_samples'] = $this->handleWorkSampleFiles($request, $service->work_samples);
 
         if ($request->name !== $service->name) {
             $slug = Str::slug($request->name);

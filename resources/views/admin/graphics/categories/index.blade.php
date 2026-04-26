@@ -25,18 +25,18 @@
     </div>
 
     {{-- Tabs Navigation --}}
-    <div class="flex gap-2 mb-8 p-1 bg-white/5 rounded-2xl w-fit">
+    <div class="flex gap-3 mb-8 p-1.5 bg-slate-900 border border-white/5 rounded-2xl w-fit shadow-inner">
         <button @click="activeTab = 'categories'" 
-            :class="activeTab === 'categories' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'"
-            class="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
-            <i class="ri-folder-3-line"></i>
-            Primary Categories
+            :class="activeTab === 'categories' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-500 hover:text-white hover:bg-white/5'"
+            class="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-3">
+            <i class="ri-node-tree text-lg"></i>
+            L1 Verticals
         </button>
         <button @click="activeTab = 'subcategories'" 
-            :class="activeTab === 'subcategories' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'"
-            class="px-8 py-3 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
-            <i class="ri-folder-reduce-line"></i>
-            Navigation Sub-Groups
+            :class="activeTab === 'subcategories' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-500 hover:text-white hover:bg-white/5'"
+            class="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-3">
+            <i class="ri-survey-line text-lg"></i>
+            L2 Groups
         </button>
     </div>
 
@@ -99,6 +99,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($categories->hasPages())
+                <div class="px-6 py-4 bg-white/5 border-t border-white/5">
+                    {{ $categories->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
@@ -162,6 +168,12 @@
                     </tbody>
                 </table>
             </div>
+
+            @if($subCategories->hasPages())
+                <div class="px-6 py-4 bg-white/5 border-t border-white/5">
+                    {{ $subCategories->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </div>

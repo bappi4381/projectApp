@@ -83,6 +83,12 @@
                 @endforelse
             </tbody>
         </table>
+
+        @if($portfolios->hasPages())
+            <div class="px-6 py-4 bg-white/5 border-t border-white/5">
+                {{ $portfolios->links() }}
+            </div>
+        @endif
     </div>
 </div>
 @endsection

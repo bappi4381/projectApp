@@ -78,6 +78,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // Portfolio Items CRUD
             Route::resource('portfolios', PortfolioController::class);
 
+            // Video Pricing Module
+            Route::resource('video-pricing', \App\Http\Controllers\Admin\VideoPricingController::class);
+
             // Home Page Settings
             Route::get('/home-page', [HomePageController::class, 'edit'])->name('home-page.edit');
             Route::put('/home-page', [HomePageController::class, 'update'])->name('home-page.update');

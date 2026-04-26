@@ -55,43 +55,45 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-white/[0.02] border-b border-white/5">
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Service</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Group</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Pricing</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Details Page</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
-                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Actions</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Service Identity</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Architecture Path</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Price Point</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Visibility</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Lifecycle</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Operations</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
                     @forelse($services as $service)
                     <tr class="hover:bg-white/[0.02] transition-all group {{ $service->parent_id ? 'opacity-80' : '' }}">
 
-                        {{-- Service Name & Icon --}}
                         <td class="px-8 py-5">
                             <div class="flex items-center gap-4">
                                 {{-- Indent visual for variants --}}
                                 @if($service->parent_id)
-                                    <span class="text-slate-700 text-lg pl-1">↳</span>
+                                    <div class="w-6 h-px bg-slate-800 relative -mr-2">
+                                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+                                    </div>
                                 @endif
-                                <div class="w-11 h-11 rounded-xl {{ $service->parent_id ? 'bg-violet-500/10 border-violet-500/20 text-violet-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' }} flex items-center justify-center border group-hover:scale-110 transition-transform">
-                                    <i class="{{ $service->icon ?? 'ri-image-line' }}"></i>
+                                <div class="w-12 h-12 rounded-2xl {{ $service->parent_id ? 'bg-violet-500/10 border-violet-500/20 text-violet-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' }} flex items-center justify-center border group-hover:scale-110 group-hover:border-indigo-500/40 transition-all shadow-lg group-hover:shadow-indigo-500/10">
+                                    <i class="{{ $service->icon ?? 'ri-image-line' }} text-lg"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white text-sm tracking-tight">{{ $service->name }}</h4>
-                                    <p class="text-[10px] text-slate-500 font-mono">{{ $service->slug }}</p>
+                                    <h4 class="font-black text-white text-[13px] tracking-tight group-hover:text-indigo-400 transition-colors">{{ $service->name }}</h4>
+                                    <p class="text-[9px] text-slate-500 font-mono uppercase tracking-widest mt-0.5">{{ $service->slug }}</p>
                                 </div>
                             </div>
                         </td>
 
                         {{-- Hierarchy / Group --}}
                         <td class="px-8 py-5">
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                                    {{ $service->subCategory->category->name ?? '—' }}
+                            <div class="flex flex-col gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-[0.1em] w-fit">
+                                    {{ $service->subCategory->category->name ?? 'Standalone' }}
                                 </span>
-                                <span class="text-[11px] font-semibold text-slate-400">
-                                    {{ $service->subCategory->name ?? '—' }}
+                                <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1.5">
+                                    <i class="ri-arrow-right-s-line text-indigo-500 opacity-50"></i>
+                                    {{ $service->subCategory->name ?? 'General' }}
                                 </span>
                             </div>
                         </td>
@@ -99,29 +101,29 @@
                         {{-- Pricing --}}
                         <td class="px-8 py-5">
                             @if($service->starting_price)
-                                <div>
-                                    <span class="text-sm font-black text-emerald-400 font-mono">${{ number_format($service->starting_price, 2) }}</span>
-                                    <p class="text-[10px] text-slate-600">{{ $service->price_unit }}</p>
+                                <div class="flex flex-col">
+                                    <span class="text-[13px] font-black text-emerald-400 font-mono tracking-tight">${{ number_format($service->starting_price, 2) }}</span>
+                                    <span class="text-[9px] text-slate-600 font-black uppercase tracking-widest">{{ $service->price_unit }}</span>
                                 </div>
                             @else
-                                <span class="text-slate-600 text-xs italic">—</span>
+                                <span class="text-slate-700 text-[10px] font-black uppercase tracking-widest italic">— No Rate —</span>
                             @endif
                         </td>
 
                         {{-- Has Details Page --}}
                         <td class="px-8 py-5">
                             @if($service->has_details)
-                                <div class="flex flex-col gap-1">
-                                    <span class="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
-                                        <i class="ri-checkbox-circle-fill text-[14px]"></i> Yes
+                                <div class="flex flex-col gap-2">
+                                    <span class="flex items-center gap-1.5 text-[9px] font-black text-indigo-400 uppercase tracking-[0.15em] bg-indigo-500/10 px-2 py-0.5 rounded-full w-fit border border-indigo-500/20">
+                                        <i class="ri-pages-line"></i> Detailed
                                     </span>
-                                    <a href="{{ route('graphics.service-detail', $service->slug) }}" target="_blank" class="text-[10px] text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
-                                        <i class="ri-external-link-line"></i> Preview
+                                    <a href="{{ route('graphics.service-detail', $service->slug) }}" target="_blank" class="text-[10px] text-slate-500 hover:text-white font-bold flex items-center gap-1.5 group/prev transition-colors">
+                                        <i class="ri-external-link-line opacity-50 group-hover/prev:opacity-100"></i> View Page
                                     </a>
                                 </div>
                             @else
-                                <span class="flex items-center gap-1.5 text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                                    <i class="ri-close-circle-fill text-[14px]"></i> No
+                                <span class="text-[9px] font-black text-slate-600 uppercase tracking-[0.15em] bg-white/5 px-2 py-0.5 rounded-full w-fit border border-white/5">
+                                    Simple
                                 </span>
                             @endif
                         </td>
@@ -129,19 +131,21 @@
                         {{-- Status --}}
                         <td class="px-8 py-5">
                             @if($service->is_active)
-                                <span class="flex items-center gap-1.5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live
-                                </span>
+                                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 w-fit">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)] animate-pulse"></span>
+                                    <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Published</span>
+                                </div>
                             @else
-                                <span class="flex items-center gap-1.5 text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span> Draft
-                                </span>
+                                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/50 border border-white/5 w-fit">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Draft</span>
+                                </div>
                             @endif
                         </td>
 
                         {{-- Actions --}}
                         <td class="px-8 py-5 text-right">
-                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="flex items-center justify-end gap-2">
                                 <a href="{{ route('admin.graphics.services.edit', $service) }}"
                                     class="p-2.5 rounded-xl bg-white/5 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-all" title="Edit">
                                     <i class="ri-edit-2-line"></i>
@@ -170,7 +174,7 @@
         </div>
 
         @if($services->hasPages())
-            <div class="px-8 py-6 bg-white/[0.01] border-t border-white/5">
+            <div class="px-8 py-6 bg-white/[0.02] border-t border-white/5">
                 {{ $services->links() }}
             </div>
         @endif

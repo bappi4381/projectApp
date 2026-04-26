@@ -11,8 +11,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('subcategories')->latest()->get();
-        $subCategories = \App\Models\SubCategory::with('category')->withCount('services')->latest()->get();
+        $categories = Category::withCount('subcategories')->latest()->paginate(15, ['*'], 'categories_page');
+        $subCategories = \App\Models\SubCategory::with('category')->withCount('services')->latest()->paginate(15, ['*'], 'subcategories_page');
         
         return view('admin.graphics.categories.index', compact('categories', 'subCategories'));
     }

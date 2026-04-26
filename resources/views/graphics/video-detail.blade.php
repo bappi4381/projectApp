@@ -103,43 +103,42 @@
     <section class="py-24 bg-slate-50 border-y border-slate-100">
         <div class="container mx-auto px-6 max-w-7xl">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Video Editing Process</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Our Process</h2>
                 <p class="text-slate-500 text-lg">We always prefer the simplest way for our clients. No hassle! Experience a seamless workflow designed for efficiency.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {{-- Step 1 --}}
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="ri-upload-cloud-2-line"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">1. Upload Raw Files</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Securely upload your raw footage, product images, and instructions via our easy-to-use portal.</p>
-                </div>
-                {{-- Step 2 --}}
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-green-500 group-hover:text-white transition-colors">
-                        <i class="ri-scissors-cut-line"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">2. Expert Editing</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Our seasoned editors get to work, cutting, color grading, and adding animations to make your product shine.</p>
-                </div>
-                {{-- Step 3 --}}
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                        <i class="ri-search-eye-line"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">3. Review & Revise</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Receive your draft and request any tweaks. We ensure the final cut perfectly aligns with your brand vision.</p>
-                </div>
-                {{-- Step 4 --}}
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                    <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <i class="ri-download-cloud-2-line"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800 mb-3">4. Download Final</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Get the final, high-converting video in your desired format, ready to be published on your e-commerce platforms.</p>
-                </div>
+                @if($service->methods && count($service->methods) > 0)
+                    @foreach($service->methods as $index => $method)
+                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors overflow-hidden">
+                                @if(isset($method['image']) && $method['image'])
+                                    <img src="{{ asset('storage/' . $method['image']) }}" class="w-full h-full object-cover">
+                                @else
+                                    <i class="ri-settings-4-line"></i>
+                                @endif
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">{{ $index + 1 }}. {{ $method['title'] }}</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">{{ $method['description'] }}</p>
+                        </div>
+                    @endforeach
+                @else
+                    {{-- Default Steps --}}
+                    @foreach([
+                        ['icon' => 'ri-upload-cloud-2-line', 'color' => 'blue', 'title' => 'Upload Raw Files', 'desc' => 'Securely upload your raw footage, product images, and instructions via our easy-to-use portal.'],
+                        ['icon' => 'ri-scissors-cut-line', 'color' => 'green', 'title' => 'Expert Editing', 'desc' => 'Our seasoned editors get to work, cutting, color grading, and adding animations to make your product shine.'],
+                        ['icon' => 'ri-search-eye-line', 'color' => 'orange', 'title' => 'Review & Revise', 'desc' => 'Receive your draft and request any tweaks. We ensure the final cut perfectly aligns with your brand vision.'],
+                        ['icon' => 'ri-download-cloud-2-line', 'color' => 'purple', 'title' => 'Download Final', 'desc' => 'Get the final, high-converting video in your desired format, ready to be published on your e-commerce platforms.']
+                    ] as $i => $step)
+                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                            <div class="w-14 h-14 bg-{{ $step['color'] }}-50 text-{{ $step['color'] }}-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-{{ $step['color'] }}-600 group-hover:text-white transition-colors">
+                                <i class="{{ $step['icon'] }}"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">{{ $i + 1 }}. {{ $step['title'] }}</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">{{ $step['desc'] }}</p>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
@@ -152,30 +151,46 @@
                     <div class="text-blue-600 font-bold uppercase tracking-widest text-sm mb-2">Our Work</div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Result Driven Outcome</h2>
                 </div>
-                <div class="mt-6 md:mt-0">
-                    <a href="#" class="text-blue-600 font-bold hover:text-blue-700 flex items-center gap-1 group">
-                        View All Portfolio <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
-                    </a>
-                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @for($i=1; $i<=3; $i++)
-                <div class="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer">
-                    <div class="aspect-[4/3] overflow-hidden">
-                        <img src="{{ $service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                @if($service->variants && $service->variants->count() > 0)
+                    @foreach($service->variants as $variant)
+                    <div class="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer">
+                        <div class="aspect-[4/3] overflow-hidden">
+                            <img src="{{ $variant->image_after ? asset('storage/' . $variant->image_after) : 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h4 class="text-white font-bold text-lg">{{ $variant->name }}</h4>
+                            <p class="text-slate-300 text-sm">${{ number_format($variant->starting_price ?? 0, 2) }} {{ $variant->price_unit }}</p>
+                        </div>
+                        @if($variant->video_url)
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-blue-600 text-2xl shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                 <i class="ri-play-fill ml-1"></i>
+                             </div>
+                        </div>
+                        @endif
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                        <h4 class="text-white font-bold text-lg">E-Commerce Product Reel</h4>
-                        <p class="text-slate-300 text-sm">Color Grading & Animation</p>
+                    @endforeach
+                @else
+                    @for($i=1; $i<=3; $i++)
+                    <div class="group relative rounded-2xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer">
+                        <div class="aspect-[4/3] overflow-hidden">
+                            <img src="{{ $service->image_after ? asset('storage/' . $service->image_after) : 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <h4 class="text-white font-bold text-lg">E-Commerce Product Reel</h4>
+                            <p class="text-slate-300 text-sm">Color Grading & Animation</p>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-blue-600 text-2xl shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                 <i class="ri-play-fill ml-1"></i>
+                             </div>
+                        </div>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                         <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-blue-600 text-2xl shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                             <i class="ri-play-fill ml-1"></i>
-                         </div>
-                    </div>
-                </div>
-                @endfor
+                    @endfor
+                @endif
             </div>
         </div>
     </section>
@@ -197,7 +212,21 @@
                 </div>
 
                 <div class="divide-y divide-slate-100">
-                    @forelse($service->features ?? [] as $f)
+                    @php 
+                        $displayFeatures = ($service->features && count($service->features) > 0) ? $service->features : [];
+                        // If no specific features, use the global video pricings we passed
+                        if(empty($displayFeatures) && isset($videoPricings)) {
+                            $displayFeatures = $videoPricings->map(function($vp){
+                                $t = $vp->pricing_tiers ?? [];
+                                return [
+                                    'name' => $vp->service_name,
+                                    'price' => ($t[0]['price'] ?? '-') . ' | ' . ($t[1]['price'] ?? '-') . ' | ' . ($t[2]['price'] ?? '-')
+                                ];
+                            })->toArray();
+                        }
+                    @endphp
+
+                    @forelse($displayFeatures as $f)
                     <div class="grid grid-cols-1 md:grid-cols-12 py-5 px-6 md:px-10 items-center hover:bg-blue-50/50 transition-colors">
                         <div class="col-span-1 md:col-span-6 mb-4 md:mb-0">
                             <h4 class="text-slate-800 font-bold text-sm">{{ $f['name'] }}</h4>
@@ -230,8 +259,8 @@
             </div>
             
             <div class="text-center mt-10">
-                <a href="{{ route('graphics.pricing') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-600 font-bold rounded-lg hover:bg-blue-100 transition-colors">
-                    View All Pricing <i class="ri-arrow-right-line"></i>
+                <a href="{{ route('graphics.video-pricing') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-600 font-bold rounded-lg hover:bg-blue-100 transition-colors">
+                    View Full Pricing <i class="ri-arrow-right-line"></i>
                 </a>
             </div>
         </div>
