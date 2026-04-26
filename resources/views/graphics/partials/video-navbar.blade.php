@@ -1,4 +1,5 @@
 {{-- resources/views/partials/graphics-navbar.blade.php --}}
+@php $theme = $theme ?? 'dark'; @endphp
 <nav id="main-navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out" x-data="{ 
         open: false, 
         servicesOpen: false, 
@@ -66,7 +67,7 @@
 
         /* Color Transitions */
         .nav-text {
-            color: white;
+            color: {{ $theme === 'light' ? '#0f172a' : 'white' }};
             transition: color 0.4s ease;
         }
 
@@ -80,7 +81,7 @@
             font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: white;
+            color: {{ $theme === 'light' ? '#0f172a' : 'white' }};
             transition: all 0.3s ease;
         }
 
@@ -98,11 +99,15 @@
             left: 50%;
             width: 4px;
             height: 4px;
-            background: #facc15;
+            background: {{ $theme === 'light' ? '#2563eb' : '#facc15' }};
             border-radius: 50%;
             opacity: 0;
             transform: translateX(-50%) scale(0);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-scrolled .studio-link-dot {
+            background: #facc15;
         }
 
         .studio-nav-link:hover .studio-link-dot {
@@ -117,12 +122,12 @@
 
         /* Logo Transitions */
         .logo-text-primary {
-            color: white;
+            color: {{ $theme === 'light' ? '#0f172a' : 'white' }};
             transition: color 0.4s ease;
         }
 
         .logo-text-secondary {
-            color: rgba(255, 255, 255, 0.4);
+            color: {{ $theme === 'light' ? '#64748b' : 'rgba(255, 255, 255, 0.4)' }};
             transition: color 0.4s ease;
         }
 
@@ -132,6 +137,17 @@
 
         .nav-scrolled .logo-text-secondary {
             color: rgba(255, 255, 255, 0.4);
+        }
+
+        .mobile-trigger {
+            background: {{ $theme === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)' }};
+            border: 1px solid {{ $theme === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)' }};
+            transition: all 0.4s ease;
+        }
+        
+        .nav-scrolled .mobile-trigger {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         @keyframes spin-slow {
@@ -274,7 +290,7 @@
 
             {{-- Mobile Trigger --}}
             <button @click="open = !open"
-                class="xl:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 text-white nav-text">
+                class="xl:hidden w-12 h-12 flex items-center justify-center rounded-2xl mobile-trigger nav-text">
                 <i class="ri-menu-right-line text-2xl" x-show="!open"></i>
                 <i class="ri-close-line text-2xl" x-show="open" x-cloak></i>
             </button>

@@ -4,7 +4,7 @@
 @extends('layouts.app')
 
 @section('custom_navbar')
-    @include('graphics.partials.video-navbar', ['videoSubCategories' => $videoSubCategories ?? []])
+    @include('graphics.partials.video-navbar', ['videoSubCategories' => $videoSubCategories ?? [], 'theme' => 'light'])
 @endsection
 
 @section('title', $service->name . ' | Video Production | Graphics Studio')
