@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GraphicsStudioController;
+use App\Http\Controllers\PaymentController;
 
 /* |-------------------------------------------------------------------------- | Web Routes — PixelForge Group |-------------------------------------------------------------------------- */
 
@@ -56,6 +57,10 @@ Route::prefix('graphics-studio')->name('graphics.')->group(function () {
     Route::post('/get-quote', function () {
         return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');
     })->name('get-quote.post');
+
+    // Payment API (PayPal)
+    Route::post('/payment/create-order', [PaymentController::class, 'createPaypalOrder'])->name('payment.create-order');
+    Route::post('/payment/capture-order', [PaymentController::class, 'capturePaypalOrder'])->name('payment.capture-order');
 });
 
 // IT Solutions Domain
