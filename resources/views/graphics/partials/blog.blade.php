@@ -1,5 +1,5 @@
 {{-- resources/views/graphics/partials/blog.blade.php --}}
-<section id="offers" class="relative py-24 md:py-32 bg-slate-900/50">
+<section id="blog-section" class="relative py-24 md:py-32 bg-slate-950">
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header --}}
         <div class="text-center mb-16 reveal">
@@ -9,15 +9,17 @@
             <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
                 From Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Design Blog</span>
             </h2>
-            <p class="text-slate-400 max-w-xl mx-auto">Stay updated with the latest trends in e-commerce photography, photo editing techniques, and industry insights.</p>
+            <p class="text-slate-400 max-w-xl mx-auto font-medium">Stay updated with the latest trends in e-commerce photography, photo editing techniques, and industry insights.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @forelse($posts as $i => $post)
-            <div class="group bg-slate-950 border border-white/[0.06] rounded-3xl overflow-hidden hover:border-blue-500/30 transition-all duration-500 reveal" style="animation-delay:{{ $i * 0.15 }}s">
+            @forelse($posts->take(3) as $i => $post)
+            <div class="group bg-slate-900/50 border border-white/[0.06] rounded-3xl overflow-hidden hover:border-blue-500/30 transition-all duration-500 reveal" style="animation-delay:{{ $i * 0.15 }}s">
                 {{-- Image --}}
                 <div class="relative h-56 overflow-hidden">
-                    <img src="{{ Str::startsWith($post->featured_image, 'http') ? $post->featured_image : asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <img src="{{ Str::startsWith($post->featured_image, 'http') ? $post->featured_image : asset('storage/' . $post->featured_image) }}" 
+                         alt="{{ $post->title }}" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
                     <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-blue-600/80 backdrop-blur-sm text-[10px] font-bold text-white uppercase tracking-widest">
                         {{ explode(' -> ', $post->category)[0] }}
@@ -52,6 +54,14 @@
                 <p class="text-slate-500">Check back soon for latest design insights and industry trends.</p>
             </div>
             @endforelse
+        </div>
+
+        {{-- View All Button --}}
+        <div class="mt-16 text-center reveal">
+            <a href="{{ route('graphics.blog') }}" class="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-black text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 shadow-xl shadow-blue-600/20 group">
+                View All Stories
+                <i class="ri-arrow-right-line group-hover:translate-x-2 transition-transform"></i>
+            </a>
         </div>
     </div>
 </section>

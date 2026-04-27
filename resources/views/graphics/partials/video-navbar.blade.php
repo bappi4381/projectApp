@@ -195,7 +195,12 @@
 
             {{-- Desktop Hub Navigation --}}
             <div class="hidden xl:flex items-center gap-8">
-                @if(Request::routeIs('graphics.get-quote'))
+                @if(Request::routeIs('graphics.get-quote') || Request::routeIs('graphics.video-quote'))
+                    <a href="{{ route('graphics.index') }}" class="studio-nav-link transition-colors"
+                        :class="activeSection === 'home' ? 'text-yellow-400' : ''">
+                        Home
+                        <span class="studio-link-dot" :class="activeSection === 'home' ? 'active-dot' : ''"></span>
+                    </a>
                     <a href="{{ route('graphics.payment') }}" class="studio-nav-link transition-colors"
                         :class="activeSection === 'payment' ? 'text-yellow-400' : ''">
                         Payment
@@ -263,7 +268,7 @@
 
 
 
-                    <a href="{{ route('graphics.get-quote') }}" class="studio-nav-link transition-colors"
+                    <a href="{{ route('graphics.video-quote') }}" class="studio-nav-link transition-colors"
                         :class="activeSection === 'quote' ? 'text-yellow-400' : ''">
                         Get a Quote
                         <span class="studio-link-dot" :class="activeSection === 'quote' ? 'active-dot' : ''"></span>
@@ -272,7 +277,7 @@
             </div>
 
             {{-- Action Group --}}
-            @if(!Request::routeIs('graphics.get-quote'))
+            @if(!Request::routeIs('graphics.get-quote') && !Request::routeIs('graphics.video-quote'))
                 <div class="hidden lg:flex items-center gap-6">
                     <a href="{{ route('graphics.upload') }}"
                         class="relative group overflow-hidden px-10 py-4 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-yellow-400/20">
@@ -310,7 +315,7 @@
             </div>
 
             <div class="py-10 space-y-6 px-8">
-                @if(Request::routeIs('graphics.get-quote'))
+                @if(Request::routeIs('graphics.get-quote') || Request::routeIs('graphics.video-quote'))
                     <a href="{{ route('graphics.index') }}" @click="open = false"
                         class="block text-2xl font-black tracking-tighter transition-colors"
                         :class="activeSection === 'home' || '{{ Request::routeIs('graphics.index') }}' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">HOME</a>
@@ -374,7 +379,7 @@
 
 
 
-                    <a href="{{ route('graphics.get-quote') }}" @click="open = false"
+                    <a href="{{ route('graphics.video-quote') }}" @click="open = false"
                         class="block text-2xl font-black tracking-tighter uppercase transition-colors"
                         :class="activeSection === 'quote' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">GET A
                         QUOTE</a>

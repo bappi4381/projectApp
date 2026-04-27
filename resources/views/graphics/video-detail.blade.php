@@ -39,7 +39,7 @@
                          {{ $service->description ?? 'We are a video editing company that specializes in eCommerce videos. We understand the importance of a strong e-commerce video and work diligently to create videos that sell.' }}
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="{{ route('graphics.get-quote') }}" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-1 transition-all duration-300">
+                        <a href="{{ route('graphics.video-quote') }}" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-1 transition-all duration-300">
                             Get A Quote
                         </a>
                         <a href="{{ route('graphics.get-quote') }}" class="px-8 py-4 bg-white text-slate-700 font-bold rounded-lg border border-slate-200 hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center gap-2">
@@ -195,105 +195,116 @@
         </div>
     </section>
 
-    {{-- ── 4. RATE MATRIX / HOW WE QUOTE ── --}}
-    <section class="py-24 bg-slate-50 border-t border-slate-100">
-        <div class="container mx-auto px-6 max-w-5xl">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">How We Quote</h2>
-                <p class="text-slate-500 text-lg">Transparent pricing tailored to your specific video editing needs.</p>
+    {{-- ── 4. PRICING SECTION ── --}}
+    <section class="py-20 bg-white border-t border-slate-100">
+        <div class="container mx-auto px-6 max-w-2xl text-center">
+
+            {{-- Header --}}
+            <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Pricing</span>
+            <h2 class="text-3xl md:text-4xl font-black uppercase text-[#0b1f3a] mb-4">How We Quote</h2>
+            <div class="flex justify-center gap-2 mb-10">
+                <span class="w-4 h-1.5 bg-green-400 rounded-full"></span>
+                <span class="w-4 h-1.5 bg-yellow-400 rounded-full"></span>
+                <span class="w-4 h-1.5 bg-[#3ab1d8] rounded-full"></span>
+                <span class="w-4 h-1.5 bg-[#0b1f3a] rounded-full"></span>
             </div>
 
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                <div class="grid grid-cols-12 bg-slate-50 border-b border-slate-100 py-4 px-6 md:px-10 hidden md:grid">
-                    <div class="col-span-6 text-xs font-bold uppercase tracking-widest text-slate-500">Service Feature</div>
-                    <div class="col-span-2 text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Basic</div>
-                    <div class="col-span-2 text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Standard</div>
-                    <div class="col-span-2 text-xs font-bold uppercase tracking-widest text-slate-500 text-center">Premium</div>
+            {{-- Column Headers --}}
+            <div class="flex items-center mb-2 px-1">
+                <div class="w-[44%]"></div>
+                <div class="flex-1 flex">
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Basic</span>
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Medium</span>
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Advanced</span>
                 </div>
+            </div>
 
-                <div class="divide-y divide-slate-100">
-                    @php 
-                        $displayFeatures = ($service->features && count($service->features) > 0) ? $service->features : [];
-                        // If no specific features, use the global video pricings we passed
-                        if(empty($displayFeatures) && isset($videoPricings)) {
-                            $displayFeatures = $videoPricings->map(function($vp){
-                                $t = $vp->pricing_tiers ?? [];
-                                return [
-                                    'name' => $vp->service_name,
-                                    'price' => ($t[0]['price'] ?? '-') . ' | ' . ($t[1]['price'] ?? '-') . ' | ' . ($t[2]['price'] ?? '-')
-                                ];
-                            })->toArray();
-                        }
-                    @endphp
-
-                    @forelse($displayFeatures as $f)
-                    <div class="grid grid-cols-1 md:grid-cols-12 py-5 px-6 md:px-10 items-center hover:bg-blue-50/50 transition-colors">
-                        <div class="col-span-1 md:col-span-6 mb-4 md:mb-0">
-                            <h4 class="text-slate-800 font-bold text-sm">{{ $f['name'] }}</h4>
+            {{-- Pricing Rows --}}
+            <div class="space-y-2.5">
+                @php
+                    $pricingRows = [];
+                    if(isset($videoPricings) && $videoPricings->count() > 0) {
+                        $pricingRows = $videoPricings;
+                    }
+                @endphp
+                @forelse($pricingRows as $pricing)
+                    @php $tiers = $pricing->pricing_tiers ?? []; @endphp
+                    <div class="flex items-center gap-2">
+                        {{-- Service Name Pill --}}
+                        <div class="w-[44%] shrink-0">
+                            <div class="bg-[#0b1f3a] text-white text-[11px] font-black uppercase tracking-wider rounded-full py-3.5 px-6 text-left leading-none">
+                                {{ $pricing->service_name }}
+                            </div>
                         </div>
-                        
-                        @php
-                            $price = $f['price'] ?? '-';
-                            $tiers = str_contains($price, '|') ? explode('|', $price) : [$price, $price, $price];
-                        @endphp
-                        
-                        <div class="col-span-1 md:col-span-6 grid grid-cols-3 gap-2 text-center text-sm font-medium text-slate-600">
-                            <div class="flex flex-col md:block">
-                                <span class="md:hidden text-xs text-slate-400 mb-1">Basic</span>
-                                {{ trim($tiers[0] ?? '-') }}
-                            </div>
-                            <div class="flex flex-col md:block">
-                                <span class="md:hidden text-xs text-slate-400 mb-1">Standard</span>
-                                {{ trim($tiers[1] ?? '-') }}
-                            </div>
-                            <div class="flex flex-col md:block">
-                                <span class="md:hidden text-xs text-slate-400 mb-1">Premium</span>
-                                <span class="text-blue-600 font-bold">{{ trim($tiers[2] ?? '-') }}</span>
-                            </div>
+                        {{-- Prices with | separator --}}
+                        <div class="flex-1 bg-[#ebebeb] rounded-full py-3.5 flex items-center justify-center">
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[0]['price'] ?? '—' }}/h</span>
+                            <span class="text-slate-400 text-sm px-1">|</span>
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[1]['price'] ?? '—' }}/h</span>
+                            <span class="text-slate-400 text-sm px-1">|</span>
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[2]['price'] ?? '—' }}/h</span>
                         </div>
                     </div>
-                    @empty
-                        <div class="py-12 text-center italic text-slate-400">Custom pricing tiers available in admin.</div>
-                    @endforelse
-                </div>
+                @empty
+                    <div class="py-10 text-slate-400 italic text-sm">No pricing defined yet.</div>
+                @endforelse
             </div>
-            
-            <div class="text-center mt-10">
-                <a href="{{ route('graphics.video-pricing') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-600 font-bold rounded-lg hover:bg-blue-100 transition-colors">
-                    View Full Pricing <i class="ri-arrow-right-line"></i>
+
+            {{-- View All Pricing --}}
+            <div class="mt-8">
+                <a href="{{ route('graphics.video-pricing') }}" class="text-[#3ab1d8] text-sm font-black hover:underline">View All Pricing</a>
+            </div>
+
+            {{-- Offer Text --}}
+            <p class="mt-4 text-sm">
+                <span class="text-orange-500 font-black">20% Off</span>
+                <span class="text-[#3ab1d8] font-semibold italic"> on Bulk Video Editing Services.</span>
+            </p>
+
+            {{-- GET A QUOTE Button --}}
+            <div class="mt-6">
+                <a href="{{ route('graphics.video-quote') }}"
+                   class="inline-block px-10 py-3.5 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md shadow-lg transition-all active:scale-95">
+                    Get A Quote
                 </a>
             </div>
-        </div>
-    </section>
 
-    {{-- ── 5. CTA SECTION ── --}}
-    <section class="py-24 bg-white border-t border-slate-100">
-        <div class="container mx-auto px-6 max-w-4xl text-center">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Need Accurate Pricing? Send Us a Quote Request</h2>
-            <p class="text-blue-600 font-bold mb-10 text-lg">We Usually Reply Within 10 Minutes</p>
+            {{-- Need Accurate Pricing Section --}}
+            <div class="mt-16 text-center">
+                <h3 class="text-xl md:text-2xl font-black text-[#0b1f3a] mb-1">Need Accurate Pricing? Send Us a Quote Request</h3>
+                <p class="text-[#3ab1d8] font-bold italic text-sm mb-8">We Usually Reply Within 10 Minutes</p>
 
-            <div class="p-1 lg:p-2 bg-gradient-to-r from-blue-100 to-green-100 rounded-3xl mx-auto max-w-2xl mb-16">
-                <div class="bg-white p-10 md:p-14 rounded-[1.5rem] border border-white shadow-sm hover:shadow-lg transition-shadow relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700"></div>
-                    
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-4xl mb-6">
-                            <i class="ri-cloud-upload-line"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-2">Upload Your Files</h3>
-                        <p class="text-slate-500 text-sm mb-8">Max 500mb/file, up to 5 files only.</p>
-                        
-                        <a href="{{ route('graphics.get-quote') }}" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300 w-full md:w-auto">
-                            Go to Upload Page
-                        </a>
-                    </div>
+                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 mb-6">
+                    <p class="text-[#3ab1d8] font-semibold text-sm mb-4">Upload Your Files (max 600mb/file, 6 files only)</p>
+                    <a href="{{ route('graphics.upload') }}"
+                       class="inline-flex items-center gap-2 px-8 py-3 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md transition-all">
+                        <i class="ri-upload-cloud-2-line text-base"></i> Upload Files
+                    </a>
                 </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed max-w-lg mx-auto">
+                    Note: If you have raw footage and sample video files, send us a download link in the Instruction box or you can upload them
+                    through our Upload Page. Please mention Quote Details in the message.
+                </p>
+
+                <div class="flex gap-0 mt-8 border border-slate-200 rounded overflow-hidden text-xs font-black uppercase tracking-widest">
+                    <a href="{{ route('graphics.video-pricing') }}"
+                       class="flex-1 py-3 text-slate-500 hover:bg-slate-50 border-r border-slate-200 transition-colors">
+                        &laquo; Previous
+                    </a>
+                    <a href="{{ route('graphics.video-quote') }}"
+                       class="flex-1 py-3 text-slate-500 hover:bg-slate-50 transition-colors">
+                        Next &raquo;
+                    </a>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-6">
+                    By submitting Quote you are automatically agreeing with our
+                    <a href="#" class="text-[#3ab1d8] hover:underline">Terms and Conditions</a> and
+                    <a href="#" class="text-[#3ab1d8] hover:underline">Privacy Policy</a>
+                </p>
             </div>
 
-            <p class="text-sm text-slate-500">
-                Note: If you have raw footage, send us a download link in the Instruction box or upload them. <br class="hidden md:block">
-                By submitting a Quote you agree to our Terms and Conditions.
-            </p>
         </div>
     </section>
 

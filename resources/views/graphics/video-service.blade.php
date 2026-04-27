@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="{{ route('graphics.get-quote') }}" class="px-8 py-4 bg-[#1ebba3] text-white font-black uppercase tracking-widest text-xs rounded-md shadow-xl hover:bg-[#199f8a] transition-all">Get A Quote</a>
+                        <a href="{{ route('graphics.video-quote') }}" class="px-8 py-4 bg-[#1ebba3] text-white font-black uppercase tracking-widest text-xs rounded-md shadow-xl hover:bg-[#199f8a] transition-all">Get A Quote</a>
                         <a href="#" class="px-8 py-4 bg-white text-[#0b2b3d] font-black uppercase tracking-widest text-xs rounded-md shadow-xl hover:bg-slate-100 transition-all">Free Trial</a>
                     </div>
                 </div>
@@ -159,49 +159,109 @@
     </section>
 
     {{-- ── 4. PRICING SECTION ── --}}
-    <section class="py-24 bg-white">
-        <div class="container mx-auto px-6 max-w-4xl text-center">
-            <div class="mb-16">
-                <span class="text-xs font-black text-emerald-500 uppercase tracking-widest mb-2 block">Pricing</span>
-                <h2 class="text-3xl md:text-4xl font-black uppercase text-[#082f49]">How We Quote</h2>
-                <div class="w-12 h-1 bg-yellow-400 mx-auto mt-4 rounded-full"></div>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6 max-w-2xl text-center">
+
+            {{-- Header --}}
+            <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Pricing</span>
+            <h2 class="text-3xl md:text-4xl font-black uppercase text-[#0b1f3a] mb-4">How We Quote</h2>
+            <div class="flex justify-center gap-2 mb-10">
+                <span class="w-4 h-1.5 bg-green-400 rounded-full"></span>
+                <span class="w-4 h-1.5 bg-yellow-400 rounded-full"></span>
+                <span class="w-4 h-1.5 bg-[#3ab1d8] rounded-full"></span>
+                <span class="w-4 h-1.5 bg-[#0b1f3a] rounded-full"></span>
             </div>
 
-            <div class="overflow-hidden rounded-[2rem] border border-slate-100 shadow-2xl relative">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-emerald-500"></div>
-                <table class="w-full text-left border-collapse bg-white">
-                    <thead class="bg-[#0b2b3d] text-white">
-                        <tr>
-                            <th class="py-6 px-10 text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Service Category</th>
-                            <th class="py-6 px-10 text-[10px] font-black uppercase tracking-[0.2em] opacity-70 text-center">Basic / 1080p</th>
-                            <th class="py-6 px-10 text-[10px] font-black uppercase tracking-[0.2em] opacity-70 text-center bg-emerald-500/10 text-emerald-400">Pro / 4K</th>
-                            <th class="py-6 px-10 text-[10px] font-black uppercase tracking-[0.2em] opacity-70 text-center">Premium / Raw</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50 text-[13px] font-bold text-slate-600">
-                        @forelse($videoPricings as $pricing)
-                        <tr class="hover:bg-slate-50 transition-colors group">
-                            <td class="py-6 px-10">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                                        <i class="ri-vidicon-line"></i>
-                                    </div>
-                                    <span class="font-black text-[#0b2b3d] uppercase tracking-tight">{{ $pricing->service_name }}</span>
-                                </div>
-                            </td>
-                            @php $tiers = $pricing->pricing_tiers ?? []; @endphp
-                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $tiers[0]['price'] ?? '-' }}</td>
-                            <td class="py-6 px-10 text-center font-black text-emerald-600 bg-emerald-500/[0.02]">{{ $tiers[1]['price'] ?? '-' }}</td>
-                            <td class="py-6 px-10 text-center font-black text-slate-400">{{ $tiers[2]['price'] ?? '-' }}</td>
-                        </tr>
-                        @empty
-                            <tr><td colspan="4" class="py-12 text-center text-slate-400 italic">No pricing defined yet.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            {{-- Column Headers --}}
+            <div class="flex items-center mb-2 px-1">
+                <div class="w-[44%]"></div>
+                <div class="flex-1 flex">
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Basic</span>
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Medium</span>
+                    <span class="flex-1 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Advanced</span>
+                </div>
             </div>
-            
-            <a href="{{ route('graphics.video-pricing') }}" class="inline-block mt-12 text-[11px] font-black uppercase tracking-widest text-emerald-500 hover:text-emerald-600 border-b-2 border-emerald-500/20 pb-1">View Full Pricing</a>
+
+            {{-- Pricing Rows --}}
+            <div class="space-y-2.5">
+                @forelse($videoPricings as $pricing)
+                    @php $tiers = $pricing->pricing_tiers ?? []; @endphp
+                    <div class="flex items-center gap-2">
+                        {{-- Service Name Pill --}}
+                        <div class="w-[44%] shrink-0">
+                            <div class="bg-[#0b1f3a] text-white text-[11px] font-black uppercase tracking-wider rounded-full py-3.5 px-6 text-left leading-none">
+                                {{ $pricing->service_name }}
+                            </div>
+                        </div>
+                        {{-- Prices with | separator --}}
+                        <div class="flex-1 bg-[#ebebeb] rounded-full py-3.5 flex items-center justify-center">
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[0]['price'] ?? '—' }}/h</span>
+                            <span class="text-slate-400 text-sm px-1">|</span>
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[1]['price'] ?? '—' }}/h</span>
+                            <span class="text-slate-400 text-sm px-1">|</span>
+                            <span class="flex-1 text-center text-[13px] font-black text-slate-600">${{ $tiers[2]['price'] ?? '—' }}/h</span>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-10 text-slate-400 italic text-sm">No pricing defined yet.</div>
+                @endforelse
+            </div>
+
+            {{-- View All Pricing --}}
+            <div class="mt-8">
+                <a href="{{ route('graphics.video-pricing') }}" class="text-[#3ab1d8] text-sm font-black hover:underline">View All Pricing</a>
+            </div>
+
+            {{-- Offer Text --}}
+            <p class="mt-4 text-sm">
+                <span class="text-orange-500 font-black">20% Off</span>
+                <span class="text-[#3ab1d8] font-semibold italic"> on Bulk Video Editing Services.</span>
+            </p>
+
+            {{-- GET A QUOTE Button --}}
+            <div class="mt-6">
+                <a href="{{ route('graphics.video-quote') }}"
+                   class="inline-block px-10 py-3.5 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md shadow-lg transition-all active:scale-95">
+                    Get A Quote
+                </a>
+            </div>
+
+            {{-- Need Accurate Pricing Section --}}
+            <div class="mt-16 text-center">
+                <h3 class="text-xl md:text-2xl font-black text-[#0b1f3a] mb-1">Need Accurate Pricing? Send Us a Quote Request</h3>
+                <p class="text-[#3ab1d8] font-bold italic text-sm mb-8">We Usually Reply Within 10 Minutes</p>
+
+                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 mb-6">
+                    <p class="text-[#3ab1d8] font-semibold text-sm mb-4">Upload Your Files (max 600mb/file, 6 files only)</p>
+                    <a href="{{ route('graphics.upload') }}"
+                       class="inline-flex items-center gap-2 px-8 py-3 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md transition-all">
+                        <i class="ri-upload-cloud-2-line text-base"></i> Upload Files
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed max-w-lg mx-auto">
+                    Note: If you have raw footage and sample video files, send us a download link in the Instruction box or you can upload them
+                    through our Upload Page. Please mention Quote Details in the message.
+                </p>
+
+                <div class="flex gap-0 mt-8 border border-slate-200 rounded overflow-hidden text-xs font-black uppercase tracking-widest">
+                    <a href="{{ route('graphics.video-pricing') }}"
+                       class="flex-1 py-3 text-slate-500 hover:bg-slate-50 border-r border-slate-200 transition-colors">
+                        &laquo; Previous
+                    </a>
+                    <a href="{{ route('graphics.video-quote') }}"
+                       class="flex-1 py-3 text-slate-500 hover:bg-slate-50 transition-colors">
+                        Next &raquo;
+                    </a>
+                </div>
+
+                <p class="text-[11px] text-slate-400 mt-6">
+                    By submitting Quote you are automatically agreeing with our
+                    <a href="#" class="text-[#3ab1d8] hover:underline">Terms and Conditions</a> and
+                    <a href="#" class="text-[#3ab1d8] hover:underline">Privacy Policy</a>
+                </p>
+            </div>
+
         </div>
     </section>
 

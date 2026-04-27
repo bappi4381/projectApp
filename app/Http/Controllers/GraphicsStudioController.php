@@ -228,6 +228,7 @@ class GraphicsStudioController extends Controller
     public function offers() { return view('graphics.offers'); }
     public function payment() { return view('graphics.payment'); }
     public function getQuote() { return view('graphics.get-quote'); }
+    public function getVideoQuote() { return view('graphics.video-quote'); }
     public function upload() { return view('graphics.upload'); }
     public function ecommerce() {
         $page = \App\Models\EcommercePage::settings();

@@ -39,10 +39,35 @@ class BlogController extends Controller
     /**
      * Display a listing of all published blog posts.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = BlogPost::published()->latest()->paginate(9);
-        return view('graphics.blog', compact('posts'));
+        $search = $request->input('search');
+        $category = $request->input('category');
+
+        $query = BlogPost::published()->latest();
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('content', 'LIKE', "%{$search}%")
+                  ->orWhere('category', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if ($category) {
+            $query->where('category', 'LIKE', "{$category}%");
+        }
+
+        $posts = $query->paginate(9)->withQueryString();
+
+        // Fetch 3 latest "Image Editing" posts separately for the special section
+        $latestImageEditingPosts = BlogPost::published()
+            ->where('category', 'LIKE', 'Image Editing%')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('graphics.blog', compact('posts', 'latestImageEditingPosts', 'search', 'category'));
     }
 
     /**

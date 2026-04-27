@@ -1,4 +1,9 @@
 @extends('layouts.app')
+
+@section('custom_navbar')
+    @include('graphics.partials.video-navbar', ['videoSubCategories' => $videoSubCategories])
+@endsection
+
 @section('title', 'Video Editing Cost & Pricing | Graphics Studio')
 @section('meta_description', 'Professional video editing cost and pricing plans. Transparent rates for Basic, Medium and Advanced video production services.')
 
@@ -23,7 +28,7 @@
                 Transparent and Flexible Pricing for Professional Video Production Services
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="{{ route('graphics.get-quote') }}"
+                <a href="{{ route('graphics.video-quote') }}"
                     class="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-white font-black uppercase tracking-widest text-xs rounded-xl transition-all shadow-xl shadow-cyan-500/30 active:scale-95">
                     Get A Quote
                 </a>
@@ -47,21 +52,7 @@
     {{-- ── PRICING SECTION ── --}}
     <div class="bg-[#f4f8fb] min-h-screen pb-24" x-data="{ activeTab: 0 }">
 
-        {{-- Service Tab Navigation --}}
-        @if($videoServices->count() > 0)
-            <div class="max-w-5xl mx-auto px-6 -mt-6 relative z-30">
-                <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-2 flex flex-wrap justify-center gap-2">
-                    @foreach($videoServices as $index => $svc)
-                        <button @click="activeTab = {{ $index }}" :class="activeTab === {{ $index }}
-                                ? 'bg-[#0b1f3a] text-white shadow-lg shadow-slate-900/20'
-                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'"
-                            class="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300">
-                            {{ $svc->service_name }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        @endif
+
 
         <div class="max-w-6xl mx-auto px-6 pt-16">
 
@@ -142,7 +133,7 @@
 
                                     {{-- CTA --}}
                                     <div class="px-6 py-7">
-                                        <a href="{{ route('graphics.get-quote') }}"
+                                        <a href="{{ route('graphics.video-quote') }}"
                                             class="block w-full py-3 text-center rounded-full font-black text-xs uppercase tracking-widest transition-all duration-300
                                             {{ $isHighlight
                                                 ? 'bg-[#12537e] text-white hover:bg-[#0e4266] shadow-lg'
@@ -170,137 +161,52 @@
         </div>
     </div>
 
-    {{-- ── PRICING FACTORS ── --}}
-    <div class="bg-white py-20">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="bg-[#f4f8fb] rounded-[3rem] overflow-hidden shadow-xl border border-slate-100">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                    <div class="p-12 md:p-16 flex flex-col justify-center">
-                        <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Pricing Variables</span>
-                        <h2 class="text-3xl md:text-4xl font-black text-[#0b1f3a] leading-tight mb-6">
-                            Pricing varies based on the <span class="text-[#3ab1d8] underline underline-offset-4 decoration-[#3ab1d8]/30">following factors</span>
-                        </h2>
-                        <p class="text-slate-500 mb-10 leading-relaxed">Understanding what affects your video production cost helps you plan your budget accurately.</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            @foreach([
-                                ['icon' => 'ri-time-line',      'title' => 'Duration of Video', 'desc' => 'Length of the final edit'],
-                                ['icon' => 'ri-magic-line',      'title' => 'Visual Graphics',   'desc' => '2D/3D motion elements'],
-                                ['icon' => 'ri-swap-box-line',   'title' => 'Transitions',       'desc' => 'Scene change complexity'],
-                                ['icon' => 'ri-palette-line',    'title' => 'Color Grading',     'desc' => 'Cinematic look & feel'],
-                                ['icon' => 'ri-flashlight-line', 'title' => 'Turn Around Time',  'desc' => 'Rush delivery premium'],
-                                ['icon' => 'ri-user-smile-line', 'title' => 'Character Design',  'desc' => 'Custom animated characters'],
-                            ] as $f)
-                            <div class="flex items-start gap-3 p-4 rounded-2xl hover:bg-white transition-colors group">
-                                <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#3ab1d8]/20 shrink-0 group-hover:bg-[#3ab1d8] transition-colors">
-                                    <i class="{{ $f['icon'] }} text-[#3ab1d8] group-hover:text-white transition-colors"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-[#0b1f3a] text-sm">{{ $f['title'] }}</h4>
-                                    <p class="text-[11px] text-slate-400 font-medium mt-0.5">{{ $f['desc'] }}</p>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="relative hidden lg:block min-h-[480px]">
-                        <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=900&q=80"
-                             alt="Video Editing" class="absolute inset-0 w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-[#f4f8fb]/30 to-transparent"></div>
-                        <div class="absolute bottom-10 left-10 bg-[#0b1f3a] text-white p-8 rounded-2xl shadow-2xl">
-                            <div class="text-4xl font-black text-[#3ab1d8] mb-1">100%</div>
-                            <div class="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Satisfaction Guaranteed</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    {{-- ── VIDEO SUB-CATEGORIES ── --}}
-    @if(isset($videoSubCategories) && $videoSubCategories->count() > 0)
-    <div class="bg-[#f4f8fb] py-20">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">What We Offer</span>
-                <h2 class="text-3xl md:text-4xl font-black text-[#0b1f3a] uppercase tracking-tight mb-4">
-                    {{ $videoCategory->name ?? 'Video Production' }} Services
-                </h2>
-                <div class="flex justify-center gap-2 mb-4">
-                    <span class="w-4 h-1.5 bg-green-400 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-yellow-400 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-cyan-500 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-[#0b1f3a] rounded-full"></span>
-                </div>
-                <p class="text-slate-500 text-sm max-w-xl mx-auto">Explore all our professional video production services tailored to your needs.</p>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @foreach($videoSubCategories as $sub)
-                <a href="{{ route('graphics.service-detail', $sub->slug) }}"
-                   class="group block bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="aspect-[4/3] bg-gradient-to-br from-[#3ab1d8]/10 to-[#0b1f3a]/10 relative overflow-hidden">
-                        @if($sub->services->first()?->image_after)
-                            <img src="{{ asset('storage/'.$sub->services->first()->image_after) }}"
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center">
-                                <i class="ri-vidicon-line text-5xl text-[#3ab1d8]/30 group-hover:text-[#3ab1d8]/60 transition-colors"></i>
-                            </div>
-                        @endif
-                        <div class="absolute inset-0 bg-[#0b1f3a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <span class="text-white text-xs font-black uppercase tracking-widest border border-white/50 px-4 py-2 rounded-full">View Service</span>
-                        </div>
-                    </div>
-                    <div class="px-5 py-4">
-                        <h3 class="text-sm font-black text-[#0b1f3a] uppercase tracking-tight group-hover:text-[#3ab1d8] transition-colors leading-tight">{{ $sub->name }}</h3>
-                        @if($sub->services->count() > 0)
-                        <p class="text-[11px] text-slate-400 mt-1">{{ $sub->services->count() }} service{{ $sub->services->count() > 1 ? 's' : '' }}</p>
-                        @endif
-                    </div>
-                </a>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    @endif
+
 
     {{-- ── TESTIMONIALS ── --}}
     @php $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('sort_order')->limit(4)->get(); @endphp
     @if($testimonials->count() > 0)
-    <div class="bg-white py-20">
+    <div class="bg-white py-24">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-14">
-                <h2 class="text-3xl md:text-4xl font-black text-[#0b1f3a] uppercase tracking-tight">What Our Client's Say</h2>
-                <div class="flex justify-center gap-2 mt-4">
-                    <span class="w-4 h-1.5 bg-green-400 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-yellow-400 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-cyan-500 rounded-full"></span>
-                    <span class="w-4 h-1.5 bg-[#0b1f3a] rounded-full"></span>
+            <div class="text-center mb-16">
+                <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Testimonials</span>
+                <h2 class="text-3xl md:text-5xl font-black text-[#0b1f3a] uppercase tracking-tight">What Our <span class="text-[#3ab1d8]">Client's Say</span></h2>
+                <div class="flex justify-center gap-2 mt-6">
+                    <span class="w-10 h-1 bg-[#3ab1d8] rounded-full"></span>
+                    <span class="w-4 h-1 bg-yellow-400 rounded-full"></span>
+                    <span class="w-4 h-1 bg-green-400 rounded-full"></span>
                 </div>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 @foreach($testimonials as $t)
-                <div class="bg-[#f4f8fb] rounded-[2rem] p-10 border border-slate-100 relative hover:shadow-xl transition-all duration-300 group">
-                    <i class="ri-double-quotes-r absolute top-8 right-8 text-7xl text-slate-200 group-hover:text-[#3ab1d8]/10 transition-colors"></i>
-                    <div class="flex gap-1 text-yellow-400 text-sm mb-5">
-                        @for($s=0; $s < ($t->rating ?? 5); $s++) <i class="ri-star-fill"></i> @endfor
+                <div class="bg-white rounded-[2.5rem] p-10 md:p-12 border border-slate-100 shadow-[0_10px_50px_rgba(0,0,0,0.04)] relative group hover:-translate-y-2 transition-all duration-500">
+                    <div class="absolute -top-6 -left-6 w-12 h-12 bg-[#3ab1d8] rounded-2xl flex items-center justify-center shadow-lg shadow-[#3ab1d8]/20 z-10 group-hover:rotate-12 transition-transform">
+                        <i class="ri-double-quotes-l text-2xl text-white"></i>
                     </div>
-                    <p class="text-slate-600 leading-relaxed mb-8 italic relative z-10">"{{ $t->content }}"</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#3ab1d8] to-[#0b1f3a] p-0.5 shrink-0">
-                            <div class="w-full h-full rounded-full bg-white p-0.5">
-                                @if($t->avatar)
-                                    <img src="{{ asset('storage/'.$t->avatar) }}" class="w-full h-full rounded-full object-cover">
-                                @else
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t->name) }}&background=0b1f3a&color=fff" class="w-full h-full rounded-full object-cover">
-                                @endif
-                            </div>
+
+                    <div class="flex gap-1 text-[#fbbf24] text-sm mb-6">
+                        @for($s=0; $s < ($t->rating ?? 5); $s++)
+                            <i class="ri-star-fill"></i>
+                        @endfor
+                    </div>
+
+                    <p class="text-slate-600 text-lg leading-relaxed mb-10 font-medium">"{{ $t->content }}"</p>
+
+                    <div class="flex items-center gap-5 pt-8 border-t border-slate-50">
+                        <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md shrink-0">
+                            @if($t->avatar)
+                                <img src="{{ asset('storage/'.$t->avatar) }}" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($t->name) }}&background=0b1f3a&color=fff&bold=true" class="w-full h-full object-cover">
+                            @endif
                         </div>
                         <div>
-                            <div class="font-black text-[#0b1f3a] uppercase text-sm tracking-tight">{{ $t->name }}</div>
-                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">{{ $t->designation ?? 'Verified Client' }}</div>
-                        </div>
-                        <div class="ml-auto">
-                            <i class="ri-checkbox-circle-fill text-2xl text-[#3ab1d8]"></i>
+                            <div class="font-black text-[#0b1f3a] uppercase text-sm tracking-widest leading-none mb-1.5">{{ $t->name }}</div>
+                            <div class="flex items-center gap-2 text-[10px] font-black text-[#3ab1d8] uppercase tracking-[0.1em] bg-[#3ab1d8]/10 px-2.5 py-1 rounded-full">
+                                <i class="ri-checkbox-circle-fill"></i> Verified Client
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -311,57 +217,64 @@
     @endif
 
     {{-- ── BLOG POSTS ── --}}
-    @php $blogPosts = \App\Models\BlogPost::where('is_published', true)->latest()->limit(4)->get(); @endphp
+    @php 
+        $blogPosts = \App\Models\BlogPost::where('is_published', true)
+            ->where(function($q) {
+                $q->where('title', 'LIKE', '%video%')
+                  ->orWhere('category', 'LIKE', '%video%');
+            })
+            ->latest()
+            ->limit(4)
+            ->get(); 
+    @endphp
     @if($blogPosts->count() > 0)
-    <div class="bg-[#f4f8fb] py-20">
+    <div class="bg-[#f8fafc] py-24">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-14">
-                <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Our Experts</span>
-                <h2 class="text-3xl font-black uppercase text-[#0b1f3a] tracking-tight">Latest Blog Updates</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($blogPosts as $post)
-                <a href="{{ route('graphics.blog.single', $post->slug) }}"
-                   class="group block bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="aspect-video overflow-hidden relative">
-                        <img src="{{ Str::startsWith($post->featured_image ?? '', 'http') ? $post->featured_image : asset('storage/'.($post->featured_image ?? '')) }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute top-3 left-3 px-2.5 py-1 bg-[#3ab1d8] text-white text-[9px] font-black uppercase rounded">
-                            {{ strtoupper($post->category ?? 'Video') }}
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <h4 class="text-sm font-bold text-slate-800 leading-snug group-hover:text-[#3ab1d8] transition-colors line-clamp-2 mb-3">{{ $post->title }}</h4>
-                        <div class="flex items-center gap-2 text-[11px] text-slate-400">
-                            <i class="ri-calendar-line"></i> {{ $post->created_at->format('M d, Y') }}
-                        </div>
-                    </div>
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div class="max-w-xl">
+                    <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-3 block">Knowledge Base</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-[#0b1f3a] uppercase tracking-tight">Latest <span class="text-[#3ab1d8]">Blog Updates</span></h2>
+                </div>
+                <a href="{{ route('graphics.blog') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 text-[#0b1f3a] font-black text-xs uppercase tracking-widest rounded-xl hover:bg-slate-50 transition-colors shrink-0">
+                    View All Posts <i class="ri-arrow-right-line"></i>
                 </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                @foreach($blogPosts as $post)
+                <article class="group relative bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_60px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500">
+                    <a href="{{ route('graphics.blog.single', $post->slug) }}" class="block">
+                        <div class="aspect-video overflow-hidden relative">
+                            <img src="{{ Str::startsWith($post->featured_image ?? '', 'http') ? $post->featured_image : asset('storage/'.($post->featured_image ?? '')) }}"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-[#0b1f3a]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute top-4 left-4">
+                                <span class="px-3 py-1.5 bg-white/90 backdrop-blur text-[#0b1f3a] text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm">
+                                    {{ $post->category ?? 'Video' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-7">
+                            <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                                <i class="ri-calendar-event-line text-[#3ab1d8]"></i> {{ $post->created_at->format('M d, Y') }}
+                            </div>
+                            <h3 class="text-base font-black text-[#0b1f3a] leading-snug group-hover:text-[#3ab1d8] transition-colors line-clamp-2 mb-6">
+                                {{ $post->title }}
+                            </h3>
+                            <div class="flex items-center text-[11px] font-black text-[#3ab1d8] uppercase tracking-widest gap-1 group-hover:gap-2 transition-all">
+                                Read Article <i class="ri-arrow-right-s-line text-base"></i>
+                            </div>
+                        </div>
+                    </a>
+                </article>
                 @endforeach
             </div>
         </div>
     </div>
     @endif
 
-    {{-- ── FINAL CTA ── --}}
-    <div class="bg-[#0b1f3a] py-20 relative overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <span class="text-xs font-black text-[#3ab1d8] uppercase tracking-[0.3em] mb-4 block">Get Started Today</span>
-            <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">Ready to Start Your Project?</h2>
-            <p class="text-white/60 text-lg max-w-2xl mx-auto mb-12">Get a custom quote tailored to your specific video production needs. We usually reply within 10 minutes.</p>
-            <div class="flex flex-wrap justify-center gap-6">
-                <a href="{{ route('graphics.get-quote') }}"
-                   class="px-10 py-5 bg-[#3ab1d8] hover:bg-[#2e99bc] text-white font-black text-sm uppercase tracking-widest rounded-2xl transition-all shadow-xl active:scale-95">
-                    Get A Quote
-                </a>
-                <a href="{{ route('graphics.portfolio') }}"
-                   class="px-10 py-5 bg-white/10 hover:bg-white/20 text-white font-black text-sm uppercase tracking-widest rounded-2xl border border-white/20 transition-all">
-                    View Portfolio
-                </a>
-            </div>
-        </div>
-    </div>
+
 
 <style>
     [x-cloak] { display: none !important; }

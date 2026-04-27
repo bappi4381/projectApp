@@ -32,6 +32,7 @@ Route::prefix('graphics-studio')->name('graphics.')->group(function () {
     Route::get('/offers', [GraphicsStudioController::class, 'offers'])->name('offers');
     Route::get('/payment', [GraphicsStudioController::class, 'payment'])->name('payment');
     Route::get('/get-quote', [GraphicsStudioController::class, 'getQuote'])->name('get-quote');
+    Route::get('/get-video-quote', [GraphicsStudioController::class, 'getVideoQuote'])->name('video-quote');
     Route::get('/upload', [GraphicsStudioController::class, 'upload'])->name('upload');
     Route::get('/ecommerce', [GraphicsStudioController::class, 'ecommerce'])->name('ecommerce');
 
