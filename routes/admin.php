@@ -43,6 +43,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::delete('/{service}', [GraphicsController::class, 'servicesDestroy'])->name('destroy');
             });
 
+            // Quotes & Payments Management
+            Route::resource('quotes', \App\Http\Controllers\Admin\QuoteController::class)->except(['create', 'store', 'show']);
+
             // Price List Management
             Route::get('/price-list', [GraphicsController::class, 'priceListIndex'])->name('price-list.index');
             Route::post('/price-list/{service}/toggle-pricing', [GraphicsController::class, 'togglePricing'])->name('price-list.toggle');

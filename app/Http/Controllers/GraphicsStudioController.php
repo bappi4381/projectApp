@@ -227,7 +227,68 @@ class GraphicsStudioController extends Controller
     }
     public function offers() { return view('graphics.offers'); }
     public function payment() { return view('graphics.payment'); }
-    public function getQuote() { return view('graphics.get-quote'); }
+    public function getQuote() {
+        $services = \App\Models\Service::where('is_active', true)->whereNull('parent_id')->get();
+        return view('graphics.get-quote', compact('services'));
+    }
+
+    public function submitQuote(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'website' => 'nullable|url',
+            'return_type' => 'nullable|string|max:50',
+            'services' => 'required|array',
+            'instructions' => 'required|string',
+            'files.*' => 'nullable|file|max:512000'
+        ]);
+
+        // Generate an Invoice ID
+        $invoiceId = 'INV-' . strtoupper(\Illuminate\Support\Str::random(6));
+
+        // Handle file uploads
+        $uploadedFiles = [];
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('quotes', 'public');
+                $uploadedFiles[] = asset('storage/' . $path);
+            }
+        }
+
+        // Create a pending payment record
+        \App\Models\Payment::create([
+            'invoice_id' => $invoiceId,
+            'amount' => 0.00, // Price to be decided later
+            'status' => \App\Models\Payment::STATUS_PENDING,
+            'payer_name' => $request->name,
+            'payer_email' => $request->email,
+            'payer_phone' => $request->phone,
+            'payment_details' => [
+                'instructions' => $request->instructions,
+                'return_type' => $request->return_type,
+                'website' => $request->website,
+                'uploaded_files' => $uploadedFiles
+            ],
+            'notes' => 'Quote Request. Services: ' . implode(', ', $request->services)
+        ]);
+
+        // Add uploaded files to the email data
+        $validated['uploaded_files'] = $uploadedFiles;
+
+        // Send Email (You need to ensure mail settings are configured in .env)
+        try {
+            \Illuminate\Support\Facades\Mail::to($request->email)->send(new \App\Mail\QuoteRequestMail($validated, $invoiceId));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Mail failed: ' . $e->getMessage());
+        }
+
+        return back()->with('quote_success', [
+            'invoice_id' => $invoiceId,
+            'email' => $request->email
+        ]);
+    }
     public function getVideoQuote() { return view('graphics.video-quote'); }
     public function upload() { return view('graphics.upload'); }
     public function ecommerce() {

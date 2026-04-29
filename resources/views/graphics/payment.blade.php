@@ -156,7 +156,7 @@ function paymentApp() {
     return {
         tab: 'primary',
         amount: '',
-        invoiceId: '',
+        invoiceId: '{{ request()->query("invoice_id", "") }}',
         processing: false,
         paymentSuccess: false,
         paymentError: '',

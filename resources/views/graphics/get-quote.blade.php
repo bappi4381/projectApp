@@ -20,6 +20,48 @@
     </div>
 
     {{-- ── QUOTE FORM SECTION ─────────────────────────────── --}}
+    {{-- ── SUCCESS MESSAGE OVERLAY ───────────────────────── --}}
+    @if(session('quote_success'))
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm" x-data="{ show: true }" x-show="show">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-center relative overflow-hidden" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 bg-green-50 rounded-full text-green-500 shadow-inner">
+                <i class="ri-checkbox-circle-fill text-5xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Request Received!</h2>
+            <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                Thank you! Your quote request has been successfully submitted. Our team will review your requirements and get back to you within 30 minutes.
+            </p>
+            
+            <div class="bg-slate-50 rounded-xl p-5 mb-8 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Invoice ID</span>
+                    <span class="text-sm font-bold text-blue-600">#{{ session('quote_success')['invoice_id'] }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirmation Sent To</span>
+                    <span class="text-sm font-bold text-slate-700">{{ session('quote_success')['email'] }}</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button @click="show = false" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] rounded-xl transition-all shadow-lg">
+                    Got it, Thanks
+                </button>
+                <p class="text-[10px] text-slate-400 italic">
+                    You can close this window to submit another request.
+                </p>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="container mx-auto px-6 max-w-4xl pb-20">
 
         <form action="{{ route('graphics.get-quote.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -99,15 +141,14 @@
 
                 {{-- Services --}}
                 <div class="space-y-1">
-                    <label class="block text-sm font-bold text-[#444]">Services:</label>
+                    <label class="block text-sm font-bold text-[#444]">Services:<span class="text-red-500 font-bold">*</span></label>
                     <div class="relative">
-                        <select name="service"
+                        <select name="services[]" required
                                 class="w-full border border-[#ddd] rounded px-4 py-2 text-sm text-[#666] focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 appearance-none bg-white">
                             <option value="">Select Services</option>
-                            <option value="clipping_path">Clipping Path</option>
-                            <option value="background_removal">Background Removal</option>
-                            <option value="image_masking">Image Masking</option>
-                            <option value="photo_retouching">Photo Retouching</option>
+                            @foreach($services as $svc)
+                                <option value="{{ $svc->name }}">{{ $svc->name }}</option>
+                            @endforeach
                         </select>
                         <i class="ri-arrow-down-s-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
                     </div>

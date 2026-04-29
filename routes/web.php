@@ -54,9 +54,7 @@ Route::prefix('graphics-studio')->name('graphics.')->group(function () {
     Route::get('/variant/{slug}', [GraphicsStudioController::class, 'variantDetail'])->name('service-variant');
 
     // Actions
-    Route::post('/get-quote', function () {
-        return back()->with('success', 'Thank you! We will get back to you within 30 minutes.');
-    })->name('get-quote.post');
+    Route::post('/get-quote', [GraphicsStudioController::class, 'submitQuote'])->name('get-quote.post');
 
     // Payment API (PayPal)
     Route::post('/payment/create-order', [PaymentController::class, 'createPaypalOrder'])->name('payment.create-order');

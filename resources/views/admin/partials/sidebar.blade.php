@@ -116,6 +116,20 @@
                     <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
                 @endif
             </a>
+            <a href="{{ route('admin.graphics.quotes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                {{ request()->routeIs('admin.graphics.quotes.*')
+    ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
+    : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                <div
+                    class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                    {{ request()->routeIs('admin.graphics.quotes.*') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                    <i class="ri-file-list-3-line"></i>
+                </div>
+                <span class="text-[13px]">Quotes & Payments</span>
+                @if(request()->routeIs('admin.graphics.quotes.*'))
+                    <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                @endif
+            </a>
         </div>
 
         {{-- Menu Group: Service Architecture --}}
