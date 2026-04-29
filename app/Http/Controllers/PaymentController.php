@@ -144,31 +144,57 @@ class PaymentController extends Controller
         ]);
 
         if (!$captureResponse || !isset($captureResponse['status'])) {
+            \Log::error("PayPal Capture Error: No status in response", ['response' => $captureResponse]);
             return response()->json(['error' => 'Failed to capture PayPal payment'], 500);
         }
 
         // 3. Update payment record
         $payment = Payment::where('transaction_id', $request->order_id)->first();
 
-        if ($payment && $captureResponse['status'] === 'COMPLETED') {
+        if (!$payment) {
+            \Log::error("PayPal Capture Error: Payment record not found for Order ID: " . $request->order_id);
+            return response()->json(['error' => 'Payment record not found'], 404);
+        }
+
+        if ($captureResponse['status'] === 'COMPLETED') {
             $capture = $captureResponse['purchase_units'][0]['payments']['captures'][0] ?? null;
             $payer = $captureResponse['payer'] ?? null;
 
-            $payment->update([
+            $updateData = [
                 'status' => Payment::STATUS_COMPLETED,
-                'payer_name' => $payer ? ($payer['name']['given_name'] ?? '') . ' ' . ($payer['name']['surname'] ?? '') : null,
-                'payer_email' => $payer['email_address'] ?? null,
+                'payer_name' => $payer ? ($payer['name']['given_name'] ?? '') . ' ' . ($payer['name']['surname'] ?? '') : $payment->payer_name,
+                'payer_email' => $payer['email_address'] ?? $payment->payer_email,
                 'payment_details' => $captureResponse,
                 'paid_at' => now(),
-            ]);
+            ];
+
+            // If we have a specific capture ID, store it
+            if ($capture && isset($capture['id'])) {
+                $updateData['transaction_id'] = $capture['id'];
+            }
+
+            $payment->update($updateData);
+            
+            \Log::info("PayPal Payment Successful for Invoice: " . $payment->invoice_id);
 
             // Send confirmation emails
-            $this->sendPaymentConfirmation($payment);
+            try {
+                $this->sendPaymentConfirmation($payment);
+            } catch (\Exception $e) {
+                \Log::error("Failed to send payment confirmation email: " . $e->getMessage());
+            }
+
+            return response()->json([
+                'status' => 'COMPLETED',
+                'invoice_id' => $payment->invoice_id
+            ]);
         }
+
+        \Log::warning("PayPal Payment Not Completed. Status: " . $captureResponse['status'], ['response' => $captureResponse]);
 
         return response()->json([
             'status' => $captureResponse['status'],
-            'details' => $captureResponse,
+            'message' => 'Payment is not completed'
         ]);
     }
 
