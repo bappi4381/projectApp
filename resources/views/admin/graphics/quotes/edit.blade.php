@@ -137,11 +137,73 @@
                 </div>
             </div>
             @endif
+
+            {{-- Payment Transaction Details --}}
+            @if($quote->status === 'completed' || $quote->transaction_id)
+            <div class="glass-card rounded-2xl overflow-hidden border-white/5 shadow-xl">
+                <div class="p-8 border-b border-white/5 bg-white/[0.02]">
+                    <h3 class="text-sm font-black text-emerald-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <i class="ri-bank-card-line"></i>
+                        Payment Transaction Information
+                    </h3>
+                </div>
+                
+                <div class="p-0">
+                    <table class="w-full text-left border-collapse">
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest w-1/3">Transaction ID</td>
+                                <td class="px-8 py-4">
+                                    <span class="font-mono text-emerald-400 font-bold bg-emerald-400/10 px-3 py-1 rounded-md text-xs border border-emerald-400/20">
+                                        {{ $quote->transaction_id }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Payment Method</td>
+                                <td class="px-8 py-4">
+                                    <div class="flex items-center gap-2 text-white font-bold">
+                                        <i class="ri-paypal-fill text-blue-400 text-lg"></i>
+                                        <span>PayPal</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Paid Amount</td>
+                                <td class="px-8 py-4 text-white font-black text-lg">
+                                    ${{ number_format($quote->amount, 2) }} <span class="text-[10px] text-slate-500 ml-1">USD</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Payment Date</td>
+                                <td class="px-8 py-4 text-slate-200 font-bold">
+                                    {{ $quote->paid_at ? $quote->paid_at->format('M d, Y | h:i A') : 'N/A' }}
+                                </td>
+                            </tr>
+                            @if(isset($quote->payment_details['payer']))
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Verified Payer</td>
+                                <td class="px-8 py-4">
+                                    <div class="flex flex-col">
+                                        <span class="text-white font-bold text-sm">{{ $quote->payer_name }}</span>
+                                        <span class="text-xs text-slate-400">{{ $quote->payer_email }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 bg-emerald-500/5 text-center">
+                    <span class="text-[9px] font-black text-emerald-500/60 uppercase tracking-[0.3em]">Securely Processed via PayPal API v2</span>
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Action Sidebar (Col 1) -->
-        <div class="space-y-8">
-            <div class="glass-card rounded-2xl p-8 border-white/5 sticky top-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+        <div class="space-y-8 lg:sticky lg:top-8">
+            <div class="glass-card rounded-2xl p-8 border-white/5 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
                 <h3 class="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Action Panel</h3>
 
                 <form action="{{ route('admin.graphics.quotes.update', $quote->id) }}" method="POST" class="space-y-6">

@@ -62,7 +62,7 @@
                 <form @submit.prevent="sendMessage()" class="flex items-center gap-2">
                     <input type="text" x-model="messageBody" placeholder="Message..." class="flex-grow bg-gray-100 border-0 rounded-full px-4 py-2 text-sm focus:ring-0 outline-none text-gray-900">
                     <button type="submit" class="text-blue-600 hover:text-blue-700 p-1 flex items-center justify-center">
-                        <svg class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20 font-bold"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                        <svg class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                     </button>
                 </form>
             </div>

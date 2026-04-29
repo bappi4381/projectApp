@@ -54,6 +54,11 @@ class PaymentController extends Controller
         // 2. Create order
         $orderData = [
             'intent' => 'CAPTURE',
+            'application_context' => [
+                'shipping_preference' => 'NO_SHIPPING',
+                'user_action' => 'PAY_NOW',
+                'brand_name' => 'Graphics Studio'
+            ],
             'purchase_units' => [[
                 'amount' => [
                     'currency_code' => 'USD',
@@ -79,15 +84,17 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Failed to create PayPal order'], 500);
         }
 
-        // Save pending payment
-        Payment::create([
-            'invoice_id' => $request->invoice_id,
-            'amount' => $request->amount,
-            'currency' => 'USD',
-            'payment_method' => Payment::METHOD_PAYPAL,
-            'status' => Payment::STATUS_PENDING,
-            'transaction_id' => $orderResponse['id'],
-        ]);
+        // Update existing record or create new one
+        Payment::updateOrCreate(
+            ['invoice_id' => $request->invoice_id],
+            [
+                'amount' => $request->amount,
+                'currency' => 'USD',
+                'payment_method' => Payment::METHOD_PAYPAL,
+                'status' => Payment::STATUS_PENDING,
+                'transaction_id' => $orderResponse['id'],
+            ]
+        );
 
         return response()->json([
             'id' => $orderResponse['id'],
