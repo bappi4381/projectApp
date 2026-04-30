@@ -18,6 +18,11 @@
 <body>
     <div class="container">
         <div class="header">
+            <div style="margin-bottom: 15px;">
+                <span style="background: {{ ($quoteData['request_type'] ?? '') === 'FREE TRIAL' ? '#22c55e' : '#5188b8' }}; color: #fff; padding: 5px 15px; rounded-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; border-radius: 50px;">
+                    {{ $quoteData['request_type'] ?? 'Standard Quote' }}
+                </span>
+            </div>
             <h1>Quote Request Received</h1>
             <p>Thank you for reaching out to Graphics Studio.</p>
         </div>

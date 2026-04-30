@@ -10,7 +10,47 @@
 @section('title', ($service->hero_heading ?? $service->name) . ' | Video Production | Graphics Studio')
 
 @section('content')
-<div class="bg-white min-h-screen text-slate-800 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
+@section('content')
+    {{-- ── SUCCESS MESSAGE OVERLAY ───────────────────────── --}}
+    @if(session('quote_success'))
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm" x-data="{ show: true }" x-show="show">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-center relative overflow-hidden" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-blue-600"></div>
+            
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 bg-emerald-50 rounded-full text-emerald-500 shadow-inner">
+                <i class="ri-checkbox-circle-fill text-5xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Request Received!</h2>
+            <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                Thank you! Your video production quote request has been successfully submitted. Our team will review your requirements and get back to you within 30 minutes.
+            </p>
+            
+            <div class="bg-slate-50 rounded-xl p-5 mb-8 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Invoice ID</span>
+                    <span class="text-sm font-bold text-blue-600">#{{ session('quote_success')['invoice_id'] }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirmation Sent To</span>
+                    <span class="text-sm font-bold text-slate-700">{{ session('quote_success')['email'] }}</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button @click="show = false" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] rounded-xl transition-all shadow-lg">
+                    Got it, Thanks
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <div class="bg-white min-h-screen text-slate-800 font-sans selection:bg-emerald-500 selection:text-white overflow-x-hidden">
 
     {{-- ── 1. HERO SECTION ── --}}
     <section class="relative pt-44 pb-32 bg-[#0b2b3d] text-white overflow-hidden">
@@ -231,12 +271,61 @@
                 <h3 class="text-xl md:text-2xl font-black text-[#0b1f3a] mb-1">Need Accurate Pricing? Send Us a Quote Request</h3>
                 <p class="text-[#3ab1d8] font-bold italic text-sm mb-8">We Usually Reply Within 10 Minutes</p>
 
-                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 mb-6">
-                    <p class="text-[#3ab1d8] font-semibold text-sm mb-4">Upload Your Files (max 600mb/file, 6 files only)</p>
-                    <a href="{{ route('graphics.upload') }}"
-                       class="inline-flex items-center gap-2 px-8 py-3 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md transition-all">
-                        <i class="ri-upload-cloud-2-line text-base"></i> Upload Files
-                    </a>
+                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 mb-6 bg-slate-50/50" id="upload-section" x-data="{ dragging: false, files: [], loading: false }">
+                    <form action="{{ route('graphics.get-quote.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6" @submit="loading = true">
+                        @csrf
+                        <input type="file" name="files[]" multiple class="hidden" x-ref="fileInput" @change="files = [...$event.target.files]">
+                        
+                        <div x-show="files.length === 0" class="text-center py-4">
+                            <p class="text-[#3ab1d8] font-semibold text-sm mb-6">Upload Your Files (max 600mb/file, 6 files only)</p>
+                            <button type="button" @click="$refs.fileInput.click()"
+                               class="inline-flex items-center gap-3 px-10 py-4 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs rounded-md shadow-xl transition-all active:scale-95">
+                                <i class="ri-upload-cloud-2-line text-xl"></i> Select Files
+                            </button>
+                        </div>
+
+                        <div x-show="files.length > 0" class="space-y-6" x-cloak>
+                            <div class="flex items-center justify-center gap-3 text-emerald-600 font-bold text-sm">
+                                <i class="ri-checkbox-circle-fill text-xl"></i>
+                                <span x-text="files.length + ' file(s) selected'"></span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input type="text" name="name" required placeholder="Full Name"
+                                       class="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+                                <input type="email" name="email" required placeholder="Email Address"
+                                       class="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-all">
+                            </div>
+
+                            <textarea name="instructions" required rows="3" placeholder="Project details or video links (Drive/WeTransfer)..."
+                                      class="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-all resize-none"></textarea>
+
+                            <input type="hidden" name="services[]" value="Video Production Service">
+                            <input type="hidden" name="request_type" value="free_trial">
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button type="submit" :disabled="loading"
+                                        class="flex-1 bg-[#1ebba3] hover:bg-[#18a08d] text-white font-black uppercase tracking-widest text-xs py-4 rounded-md shadow-lg transition-all active:scale-95 disabled:opacity-70 disabled:cursor-wait flex items-center justify-center gap-3">
+                                    <template x-if="!loading">
+                                        <span>Submit Request</span>
+                                    </template>
+                                    <template x-if="loading">
+                                        <div class="flex items-center gap-2">
+                                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <span>Processing...</span>
+                                        </div>
+                                    </template>
+                                </button>
+                                <button type="button" @click="files = []; $refs.fileInput.value = ''"
+                                        class="px-6 py-4 bg-slate-200 hover:bg-slate-300 text-slate-600 font-black uppercase tracking-widest text-xs rounded-md transition-all">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 <p class="text-xs text-slate-400 leading-relaxed max-w-lg mx-auto">
@@ -244,12 +333,22 @@
                     through our Upload Page. Please mention Quote Details in the message.
                 </p>
 
+                @php
+                    $currentIndex = $videoSubCategories->search(fn($item) => $item->id === $service->id);
+                    $prevLink = ($currentIndex !== false && $currentIndex > 0) 
+                        ? route('graphics.service-detail', $videoSubCategories[$currentIndex - 1]->slug) 
+                        : route('graphics.video-pricing');
+                    $nextLink = ($currentIndex !== false && $currentIndex < $videoSubCategories->count() - 1) 
+                        ? route('graphics.service-detail', $videoSubCategories[$currentIndex + 1]->slug) 
+                        : ( ($currentIndex === false && $videoSubCategories->isNotEmpty()) ? route('graphics.service-detail', $videoSubCategories->first()->slug) : route('graphics.video-quote') );
+                @endphp
+
                 <div class="flex gap-0 mt-8 border border-slate-200 rounded overflow-hidden text-xs font-black uppercase tracking-widest">
-                    <a href="{{ route('graphics.video-pricing') }}"
+                    <a href="{{ $prevLink }}"
                        class="flex-1 py-3 text-slate-500 hover:bg-slate-50 border-r border-slate-200 transition-colors">
                         &laquo; Previous
                     </a>
-                    <a href="{{ route('graphics.video-quote') }}"
+                    <a href="{{ $nextLink }}"
                        class="flex-1 py-3 text-slate-500 hover:bg-slate-50 transition-colors">
                         Next &raquo;
                     </a>
@@ -445,6 +544,7 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+    [x-cloak] { display: none !important; }
     .font-sans { font-family: 'Outfit', sans-serif; }
     
     @keyframes float {

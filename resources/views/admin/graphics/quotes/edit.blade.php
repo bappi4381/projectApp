@@ -10,7 +10,12 @@
                 <i class="ri-arrow-left-line"></i>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-white mb-1">Quote <span class="text-indigo-400">#{{ $quote->invoice_id }}</span></h1>
+                <h1 class="text-3xl font-bold text-white mb-1 flex items-center gap-3">
+                    Quote <span class="text-indigo-400">#{{ $quote->invoice_id }}</span>
+                    @if(($quote->payment_details['request_type'] ?? '') === 'FREE TRIAL')
+                        <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black uppercase tracking-widest">Free Trial</span>
+                    @endif
+                </h1>
                 <p class="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Management & Pricing</p>
             </div>
         </div>

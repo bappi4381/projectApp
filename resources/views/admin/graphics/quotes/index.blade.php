@@ -42,7 +42,12 @@
                                     <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
                                         <i class="ri-file-list-3-line"></i>
                                     </div>
-                                    <span class="font-bold text-white tracking-tight">{{ $quote->invoice_id }}</span>
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-white tracking-tight">{{ $quote->invoice_id }}</span>
+                                        @if(($quote->payment_details['request_type'] ?? '') === 'FREE TRIAL')
+                                            <span class="inline-flex items-center mt-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 w-fit">Free Trial</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-5">

@@ -3,6 +3,45 @@
 @section('meta_description', 'High-quality ' . $page->hero_title . '. Price starts from $' . number_format($page->hero_price_from, 2) . ' ' . $page->hero_price_unit)
 
 @section('content')
+    {{-- ── SUCCESS MESSAGE OVERLAY ───────────────────────── --}}
+    @if(session('quote_success'))
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm" x-data="{ show: true }" x-show="show">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-center relative overflow-hidden" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 bg-green-50 rounded-full text-green-500 shadow-inner">
+                <i class="ri-checkbox-circle-fill text-5xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Request Received!</h2>
+            <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                Thank you! Your files have been uploaded and your request has been successfully submitted. Our team will review your requirements and get back to you within 30 minutes.
+            </p>
+            
+            <div class="bg-slate-50 rounded-xl p-5 mb-8 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Invoice ID</span>
+                    <span class="text-sm font-bold text-blue-600">#{{ session('quote_success')['invoice_id'] }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirmation Sent To</span>
+                    <span class="text-sm font-bold text-slate-700">{{ session('quote_success')['email'] }}</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button @click="show = false" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] rounded-xl transition-all shadow-lg">
+                    Got it, Thanks
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="bg-[#f0f9ff] min-h-screen text-slate-800 font-sans selection:bg-[#7F2DF7] selection:text-white pb-20">
 
         {{-- ── HERO SECTION ────────────────────────────────── --}}
@@ -39,7 +78,7 @@
                                 <h3 class="text-[16.5px] font-bold text-white mb-2">We Can Deliver</h3>
                                 <div class="text-[16px] text-[#4ade80] font-medium mb-0.5">{{ $page->hero_delivery_capacity }}</div>
                                 <div class="text-[14px] text-slate-300">{{ $page->hero_delivery_subtitle }}</div>
-                                <a href="{{ route('graphics.upload') }}"
+                                <a href="#upload-section"
                                     class="inline-flex items-center justify-center px-7 py-3 mt-8 rounded-full bg-white text-slate-900 font-bold text-[13px] tracking-[0.15em] shadow-lg hover:bg-slate-100 transition-colors">
                                     FREE TRIAL
                                 </a>
@@ -83,34 +122,88 @@
                     Get your photos edited in less than 24 hours
                 </h3>
 
-                {{-- Upload Widget Mockup --}}
-                <div class="max-w-3xl mx-auto">
-                    <div class="bg-[#e9f7ef] rounded-lg p-6 border border-[#d1ebd8] relative shadow-sm">
-                        {{-- Dotted Inner Box --}}
-                        <div
-                            class="border-2 border-dashed border-[#b3dab9] rounded-lg py-12 px-6 flex flex-col items-center justify-center">
-                            <p class="text-[#51855a] font-bold text-[16px] md:text-[18px] mb-2">Upload Your Files (max
-                                500mb/file, 10 files only)</p>
-                            <p class="text-[#51855a] italic text-[14px] mb-8">*No credit card required.*</p>
+                {{-- Upload Widget (Dynamic) --}}
+                <div class="max-w-3xl mx-auto" id="upload-section" x-data="{ dragging: false, files: [], loading: false }">
+                    <form action="{{ route('graphics.get-quote.post') }}" method="POST" enctype="multipart/form-data" @submit="loading = true">
+                        @csrf
+                        <div class="bg-[#e9f7ef] rounded-lg p-6 border border-[#d1ebd8] relative shadow-sm transition-all"
+                             :class="dragging ? 'border-[#4d86b8] bg-[#f0f9ff] scale-[1.01]' : ''"
+                             @dragover.prevent="dragging = true"
+                             @dragleave.prevent="dragging = false"
+                             @drop.prevent="dragging = false; files = [...$event.dataTransfer.files]; $refs.fileInput.files = $event.dataTransfer.files">
+                            
+                            <input type="file" name="files[]" multiple class="hidden" x-ref="fileInput" @change="files = [...$event.target.files]">
 
-                            <a href="{{ route('graphics.upload') }}"
-                                class="bg-[#4d86b8] hover:bg-[#3d6b94] text-white px-10 py-3.5 rounded flex items-center gap-3 transition-colors shadow-md group">
-                                <i class="ri-upload-cloud-2-line text-2xl group-hover:scale-110 transition-transform"></i>
-                                <span class="font-bold uppercase tracking-wider text-sm">Upload Files</span>
-                            </a>
+                            {{-- Dotted Inner Box --}}
+                            <div class="border-2 border-dashed border-[#b3dab9] rounded-lg py-12 px-6 flex flex-col items-center justify-center">
+                                <p class="text-[#51855a] font-bold text-[16px] md:text-[18px] mb-2">Upload Your Files (max 500mb/file, 10 files only)</p>
+                                <p class="text-[#51855a] italic text-[14px] mb-8">*No credit card required.*</p>
+
+                                <div x-show="files.length === 0">
+                                    <button type="button" @click="$refs.fileInput.click()"
+                                        class="bg-[#4d86b8] hover:bg-[#3d6b94] text-white px-10 py-3.5 rounded flex items-center gap-3 transition-colors shadow-md group">
+                                        <i class="ri-upload-cloud-2-line text-2xl group-hover:scale-110 transition-transform"></i>
+                                        <span class="font-bold uppercase tracking-wider text-sm">Upload Files</span>
+                                    </button>
+                                </div>
+
+                                <div x-show="files.length > 0" class="w-full" x-cloak>
+                                    <div class="mb-6 text-[#51855a] font-bold flex flex-col items-center gap-2">
+                                        <div class="w-12 h-12 bg-[#b3dab9] rounded-full flex items-center justify-center text-white">
+                                            <i class="ri-check-line text-2xl"></i>
+                                        </div>
+                                        <span x-text="files.length + ' file(s) ready to upload'"></span>
+                                    </div>
+                                    
+                                    <div class="max-w-sm mx-auto space-y-4">
+                                        <div class="text-left">
+                                            <label class="block text-[11px] font-bold text-[#51855a] uppercase tracking-widest mb-1.5 ml-1">Your Email Address</label>
+                                            <input type="email" name="email" required placeholder="example@email.com"
+                                                   class="w-full bg-white border border-[#b3dab9] rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4d86b8] shadow-inner">
+                                        </div>
+
+                                        {{-- Hidden defaults for required fields --}}
+                                        <input type="hidden" name="name" value="Ecommerce Quick User">
+                                        <input type="hidden" name="services[]" value="Ecommerce Product Photo Editing">
+                                        <input type="hidden" name="instructions" value="Free trial upload from Ecommerce page.">
+                                        <input type="hidden" name="request_type" value="free_trial">
+
+                                        <button type="submit" :disabled="loading"
+                                            class="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white py-4 rounded-md font-black uppercase tracking-[0.2em] text-[12px] transition-all shadow-lg hover:shadow-green-500/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-wait flex items-center justify-center gap-3">
+                                            <template x-if="!loading">
+                                                <span>Start Free Trial</span>
+                                            </template>
+                                            <template x-if="loading">
+                                                <div class="flex items-center gap-2">
+                                                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                    <span>Uploading...</span>
+                                                </div>
+                                            </template>
+                                        </button>
+                                        
+                                        <button type="button" @click="files = []; $refs.fileInput.value = ''" 
+                                                class="text-[11px] font-bold text-[#51855a] hover:text-red-500 uppercase tracking-widest transition-colors">
+                                            Change Files
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
-                    {{-- Previous/Next Pagination Buttons --}}
+                    {{-- Previous/Next Navigation Buttons --}}
                     <div class="grid grid-cols-2 mt-4 rounded-lg overflow-hidden border border-[#d1ebd8] shadow-sm">
-                        <button
+                        <a href="{{ route('graphics.services') }}"
                             class="bg-[#e9f7ef] hover:bg-[#dff0e5] py-4 text-[12px] font-bold text-[#51855a] uppercase tracking-widest flex items-center justify-center transition-colors border-r border-[#d1ebd8]">
                             <i class="ri-arrow-left-s-line text-xl mr-2"></i> PREVIOUS
-                        </button>
-                        <button
+                        </a>
+                        <a href="{{ route('graphics.get-quote') }}"
                             class="bg-[#e9f7ef] hover:bg-[#dff0e5] py-4 text-[12px] font-bold text-[#51855a] uppercase tracking-widest flex items-center justify-center transition-colors">
                             NEXT <i class="ri-arrow-right-s-line text-xl ml-2"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -146,7 +239,7 @@
                                 {{ $wf['cta_label'] }}
                             </a>
                             @if($wf['reverse_layout'])
-                            <a href="{{ route('graphics.upload') }}"
+                            <a href="#upload-section"
                                 class="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-white border-2 border-[#0ea5e9] text-slate-800 font-bold text-[12px] uppercase tracking-widest shadow-sm hover:bg-slate-50 transition-colors">
                                 FREE TRIAL
                             </a>
@@ -308,7 +401,7 @@
                     class="inline-flex items-center justify-center px-10 py-3 rounded-full bg-gradient-to-r from-[#1ea4e6] to-[#25d3a5] text-white font-bold text-[12px] uppercase shadow-md">
                     GET QUOTE
                 </a>
-                <a href="{{ route('graphics.upload') }}"
+                <a href="#upload-section"
                     class="inline-flex items-center justify-center px-10 py-3 rounded-full bg-white border border-[#23c3be] text-[#333] font-bold text-[12px] uppercase shadow-sm hover:bg-slate-50 transition-colors">
                     FREE TRIAL
                 </a>
@@ -437,6 +530,7 @@
     </div>
 
     <style>
+        [x-cloak] { display: none !important; }
         .checkered-bg {
             background: repeating-conic-gradient(#e2e8f0 0% 25%, #ffffff 0% 50%) 50% / 14px 14px;
         }

@@ -257,6 +257,8 @@ class GraphicsStudioController extends Controller
             }
         }
 
+        $requestType = $request->request_type === 'free_trial' ? 'FREE TRIAL' : 'Standard Quote';
+
         // Create a pending payment record
         \App\Models\Payment::create([
             'invoice_id' => $invoiceId,
@@ -269,19 +271,31 @@ class GraphicsStudioController extends Controller
                 'instructions' => $request->instructions,
                 'return_type' => $request->return_type,
                 'website' => $request->website,
-                'uploaded_files' => $uploadedFiles
+                'uploaded_files' => $uploadedFiles,
+                'request_type' => $requestType
             ],
-            'notes' => 'Quote Request. Services: ' . implode(', ', $request->services)
+            'notes' => "[{$requestType}] Services: " . implode(', ', $request->services)
         ]);
 
-        // Add uploaded files to the email data
-        $validated['uploaded_files'] = $uploadedFiles;
+        // Add uploaded files to the email data and remove raw file objects to allow serialization
+        $emailData = $validated;
+        unset($emailData['files']);
+        $emailData['uploaded_files'] = $uploadedFiles;
+        $emailData['request_type'] = $requestType;
 
         // Send Email (You need to ensure mail settings are configured in .env)
         try {
-            \Illuminate\Support\Facades\Mail::to($request->email)->send(new \App\Mail\QuoteRequestMail($validated, $invoiceId));
+            \Illuminate\Support\Facades\Mail::to($request->email)->queue(new \App\Mail\QuoteRequestMail($emailData, $invoiceId));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Mail failed: ' . $e->getMessage());
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'invoice_id' => $invoiceId,
+                'email' => $request->email
+            ]);
         }
 
         return back()->with('quote_success', [
