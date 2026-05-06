@@ -172,47 +172,53 @@ class GraphicsController extends Controller
             'show_on_pricing'   => 'boolean',
         ]);
 
-        $subCat = SubCategory::find($validated['sub_category_id']);
-        if ($subCat) {
-            $validated['category_id'] = $subCat->category_id;
-        }
-
-        if ($request->hasFile('image_before')) {
-            $validated['image_before'] = $request->file('image_before')->store('services', 'public');
-        }
-        if ($request->hasFile('image_after')) {
-            $validated['image_after'] = $request->file('image_after')->store('services', 'public');
-        }
-        if ($request->hasFile('audio_file')) {
-            $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
-        }
-
-        // Handle Method Images
-        $validated['methods'] = $this->handleMethodImages($request);
-
-        // Handle Work Samples
-        $validated['work_samples'] = $this->handleWorkSampleFiles($request);
-
-        // Optimized Slug Generation: Single query instead of a loop
-        $slug = Str::slug($validated['name']);
-        $similarSlugs = Service::where('slug', 'like', $slug . '%')->pluck('slug')->toArray();
-        
-        if (in_array($slug, $similarSlugs)) {
-            $count = 1;
-            $originalSlug = $slug;
-            while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
-                $count++;
+        try {
+            $subCat = SubCategory::find($validated['sub_category_id']);
+            if ($subCat) {
+                $validated['category_id'] = $subCat->category_id;
             }
-            $slug = $originalSlug . '-' . $count;
+
+            if ($request->hasFile('image_before')) {
+                $validated['image_before'] = $request->file('image_before')->store('services', 'public');
+            }
+            if ($request->hasFile('image_after')) {
+                $validated['image_after'] = $request->file('image_after')->store('services', 'public');
+            }
+            if ($request->hasFile('audio_file')) {
+                $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+            }
+
+            // Handle Method Images
+            $validated['methods'] = $this->handleMethodImages($request);
+
+            // Handle Work Samples
+            $validated['work_samples'] = $this->handleWorkSampleFiles($request);
+
+            // Optimized Slug Generation: Single query instead of a loop
+            $slug = Str::slug($validated['name']);
+            $similarSlugs = Service::where('slug', 'like', $slug . '%')->pluck('slug')->toArray();
+            
+            if (in_array($slug, $similarSlugs)) {
+                $count = 1;
+                $originalSlug = $slug;
+                while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
+                    $count++;
+                }
+                $slug = $originalSlug . '-' . $count;
+            }
+            $validated['slug'] = $slug;
+
+            $validated['is_active'] = $request->has('is_active');
+            $validated['has_details'] = $request->has('has_details');
+            $validated['show_on_pricing'] = $request->has('show_on_pricing');
+
+            $service = Service::create($validated);
+            return redirect()->route('admin.graphics.services.show', $service->id)->with('success', 'Service created successfully.');
+            
+        } catch (\Exception $e) {
+            \Log::error('Error creating service: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Failed to create service. Please check if the file size is too large or server permissions are correct. Error: ' . $e->getMessage());
         }
-        $validated['slug'] = $slug;
-
-        $validated['has_details'] = $request->has('has_details');
-        $validated['show_on_pricing'] = $request->has('show_on_pricing');
-        $validated['is_active'] = $request->has('is_active', true);
-
-        $newService = Service::create($validated);
-        return redirect()->route('admin.graphics.services.show', $newService->id)->with('success', 'Service created successfully.');
     }
 
     public function show(Service $service)
@@ -268,55 +274,61 @@ class GraphicsController extends Controller
             'show_on_pricing'   => 'boolean',
         ]);
 
-        $subCat = SubCategory::find($validated['sub_category_id']);
-        if ($subCat) {
-            $validated['category_id'] = $subCat->category_id;
-        }
-
-        if ($request->hasFile('image_before')) {
-            if ($service->image_before) Storage::disk('public')->delete($service->image_before);
-            $validated['image_before'] = $request->file('image_before')->store('services', 'public');
-        }
-        if ($request->hasFile('image_after')) {
-            if ($service->image_after) Storage::disk('public')->delete($service->image_after);
-            $validated['image_after'] = $request->file('image_after')->store('services', 'public');
-        }
-        if ($request->hasFile('audio_file')) {
-            if ($service->audio_file) Storage::disk('public')->delete($service->audio_file);
-            $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
-        }
-
-        // Handle Method Images
-        $validated['methods'] = $this->handleMethodImages($request, $service->methods);
-
-        // Handle Work Samples
-        $validated['work_samples'] = $this->handleWorkSampleFiles($request, $service->work_samples);
-
-        // Optimized Slug Generation for Update
-        if ($request->name !== $service->name) {
-            $slug = Str::slug($request->name);
-            $similarSlugs = Service::where('slug', 'like', $slug . '%')
-                ->where('id', '!=', $service->id)
-                ->pluck('slug')
-                ->toArray();
-            
-            if (in_array($slug, $similarSlugs)) {
-                $count = 1;
-                $originalSlug = $slug;
-                while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
-                    $count++;
-                }
-                $slug = $originalSlug . '-' . $count;
+        try {
+            $subCat = SubCategory::find($validated['sub_category_id']);
+            if ($subCat) {
+                $validated['category_id'] = $subCat->category_id;
             }
-            $validated['slug'] = $slug;
+
+            if ($request->hasFile('image_before')) {
+                if ($service->image_before) Storage::disk('public')->delete($service->image_before);
+                $validated['image_before'] = $request->file('image_before')->store('services', 'public');
+            }
+            if ($request->hasFile('image_after')) {
+                if ($service->image_after) Storage::disk('public')->delete($service->image_after);
+                $validated['image_after'] = $request->file('image_after')->store('services', 'public');
+            }
+            if ($request->hasFile('audio_file')) {
+                if ($service->audio_file) Storage::disk('public')->delete($service->audio_file);
+                $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+            }
+
+            // Handle Method Images
+            $validated['methods'] = $this->handleMethodImages($request, $service->methods);
+
+            // Handle Work Samples
+            $validated['work_samples'] = $this->handleWorkSampleFiles($request, $service->work_samples);
+
+            // Optimized Slug Generation for Update
+            if ($request->name !== $service->name) {
+                $slug = Str::slug($request->name);
+                $similarSlugs = Service::where('slug', 'like', $slug . '%')
+                    ->where('id', '!=', $service->id)
+                    ->pluck('slug')
+                    ->toArray();
+                
+                if (in_array($slug, $similarSlugs)) {
+                    $count = 1;
+                    $originalSlug = $slug;
+                    while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
+                        $count++;
+                    }
+                    $slug = $originalSlug . '-' . $count;
+                }
+                $validated['slug'] = $slug;
+            }
+
+            $validated['is_active'] = $request->has('is_active');
+            $validated['has_details'] = $request->has('has_details');
+            $validated['show_on_pricing'] = $request->has('show_on_pricing');
+
+            $service->update($validated);
+            return redirect()->route('admin.graphics.services.show', $service->id)->with('success', 'Service updated successfully.');
+
+        } catch (\Exception $e) {
+            \Log::error('Error updating service: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Failed to update service. Error: ' . $e->getMessage());
         }
-
-        $validated['is_active'] = $request->has('is_active');
-        $validated['has_details'] = $request->has('has_details');
-        $validated['show_on_pricing'] = $request->has('show_on_pricing');
-
-        $service->update($validated);
-        return redirect()->route('admin.graphics.services.show', $service->id)->with('success', 'Service updated successfully.');
     }
 
     /* -------------------------------------------------------------------------- */
