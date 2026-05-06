@@ -147,8 +147,15 @@ class GraphicsController extends Controller
             'features'          => 'nullable|array',
             'pricing_tiers'     => 'nullable|array',
             'faqs'              => 'nullable|array',
+            'faqs.*.question'   => 'required_with:faqs|string',
+            'faqs.*.answer'     => 'required_with:faqs|string',
             'methods'           => 'nullable|array',
+            'methods.*.title'   => 'required_with:methods|string|max:255',
+            'methods.*.description' => 'required_with:methods|string',
+            'methods.*.image'   => 'nullable|image|max:10240',
             'work_samples'      => 'nullable|array',
+            'work_samples.*.type'  => 'required_with:work_samples|in:image,video,audio',
+            'work_samples.*.title' => 'required_with:work_samples|string|max:255',
             'delivery_capacity' => 'nullable|integer',
             'delivery_unit'     => 'nullable|string|max:255',
             'discount_upto'     => 'nullable|integer',
@@ -186,18 +193,23 @@ class GraphicsController extends Controller
         // Handle Work Samples
         $validated['work_samples'] = $this->handleWorkSampleFiles($request);
 
+        // Optimized Slug Generation: Single query instead of a loop
         $slug = Str::slug($validated['name']);
-        $originalSlug = $slug;
-        $counter = 1;
-        while (Service::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
+        $similarSlugs = Service::where('slug', 'like', $slug . '%')->pluck('slug')->toArray();
+        
+        if (in_array($slug, $similarSlugs)) {
+            $count = 1;
+            $originalSlug = $slug;
+            while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
+                $count++;
+            }
+            $slug = $originalSlug . '-' . $count;
         }
         $validated['slug'] = $slug;
 
         $validated['has_details'] = $request->has('has_details');
         $validated['show_on_pricing'] = $request->has('show_on_pricing');
-        $validated['is_active'] = $request->has('is_active') ?: true;
+        $validated['is_active'] = $request->has('is_active', true);
 
         $newService = Service::create($validated);
         return redirect()->route('admin.graphics.services.show', $newService->id)->with('success', 'Service created successfully.');
@@ -230,7 +242,15 @@ class GraphicsController extends Controller
             'features'          => 'nullable|array',
             'pricing_tiers'     => 'nullable|array',
             'faqs'              => 'nullable|array',
+            'faqs.*.question'   => 'required_with:faqs|string',
+            'faqs.*.answer'     => 'required_with:faqs|string',
             'methods'           => 'nullable|array',
+            'methods.*.title'   => 'required_with:methods|string|max:255',
+            'methods.*.description' => 'required_with:methods|string',
+            'methods.*.image'   => 'nullable|image|max:10240',
+            'work_samples'      => 'nullable|array',
+            'work_samples.*.type'  => 'required_with:work_samples|in:image,video,audio',
+            'work_samples.*.title' => 'required_with:work_samples|string|max:255',
             'delivery_capacity' => 'nullable|integer',
             'delivery_unit'     => 'nullable|string|max:255',
             'discount_upto'     => 'nullable|integer',
@@ -272,13 +292,21 @@ class GraphicsController extends Controller
         // Handle Work Samples
         $validated['work_samples'] = $this->handleWorkSampleFiles($request, $service->work_samples);
 
+        // Optimized Slug Generation for Update
         if ($request->name !== $service->name) {
             $slug = Str::slug($request->name);
-            $originalSlug = $slug;
-            $counter = 1;
-            while (Service::where('slug', $slug)->where('id', '!=', $service->id)->exists()) {
-                $slug = $originalSlug . '-' . $counter;
-                $counter++;
+            $similarSlugs = Service::where('slug', 'like', $slug . '%')
+                ->where('id', '!=', $service->id)
+                ->pluck('slug')
+                ->toArray();
+            
+            if (in_array($slug, $similarSlugs)) {
+                $count = 1;
+                $originalSlug = $slug;
+                while (in_array($originalSlug . '-' . $count, $similarSlugs)) {
+                    $count++;
+                }
+                $slug = $originalSlug . '-' . $count;
             }
             $validated['slug'] = $slug;
         }

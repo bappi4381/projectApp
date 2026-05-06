@@ -23,6 +23,7 @@
         @endif
 
         <div x-data="{ 
+                isSubmitting: false,
                 hasDetails: {{ $service->has_details ? 'true' : 'false' }},
                 serviceType: '{{ old('service_type', $service->service_type ?? 'image') }}',
                 features: {{ json_encode($service->features ?? []) }},
@@ -48,7 +49,7 @@
                     }
                 }
             }">
-                <form action="{{ route('admin.graphics.services.update', $service->id) }}" method="POST" enctype="multipart/form-data" class="space-y-10">
+                <form action="{{ route('admin.graphics.services.update', $service->id) }}" method="POST" enctype="multipart/form-data" class="space-y-10" @submit="isSubmitting = true">
                     @csrf
                     @method('PUT')
 
@@ -433,8 +434,15 @@
                         </div>
 
                         <a href="{{ route('admin.graphics.services.index') }}" class="px-8 py-4 bg-slate-900 border border-white/5 rounded-2xl text-slate-400 font-bold hover:bg-slate-800 transition-all text-sm">Cancel</a>
-                        <button type="submit" class="px-12 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95">
-                            Commit Changes
+                        <button type="submit" :disabled="isSubmitting"
+                            class="px-12 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-xl shadow-indigo-500/20 active:scale-95 flex items-center gap-3">
+                            <template x-if="!isSubmitting"><span>Commit Changes</span></template>
+                            <template x-if="isSubmitting">
+                                <div class="flex items-center gap-2">
+                                    <i class="ri-loader-4-line animate-spin text-lg"></i>
+                                    <span>Saving...</span>
+                                </div>
+                            </template>
                         </button>
                     </div>
                 </form>

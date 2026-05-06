@@ -154,17 +154,48 @@ class GraphicsStudioController extends Controller
 
         $level = $service->parent_id ? 'variant' : 'service';
 
-        // Detect Video Context
-        $categoryName = $service->subCategory->category->name ?? '';
-        $isVedio = \Illuminate\Support\Str::contains(strtolower($categoryName), 'video') || \Illuminate\Support\Str::contains(strtolower($service->name), 'video');
+        // Detect Groups
+        $category = $service->subCategory->category ?? null;
+        $categoryName = $category->name ?? '';
+        $subCatName = strtolower($service->subCategory->name ?? '');
+        $categoryNameLower = strtolower($categoryName);
+        $serviceNameLower = strtolower($service->name);
+        
+        $isVedio = \Illuminate\Support\Str::contains($categoryNameLower, 'video') || \Illuminate\Support\Str::contains($serviceNameLower, 'video');
+        $isAudio = \Illuminate\Support\Str::contains($subCatName, 'audio') || \Illuminate\Support\Str::contains($categoryNameLower, 'audio');
+        $isStoryBoard = \Illuminate\Support\Str::contains($subCatName, 'story') || \Illuminate\Support\Str::contains($categoryNameLower, 'story');
+        $isAnimation = \Illuminate\Support\Str::contains($subCatName, 'animation') || \Illuminate\Support\Str::contains($categoryNameLower, 'animation');
 
-        if ($isVedio) {
-            $catId = $service->subCategory->category_id ?? null;
+        if ($isVedio || $isAudio || $isStoryBoard || $isAnimation) {
+            // Ensure we get the correct "Video Production" category ID for the navbar
+            $catId = $category->id ?? null;
+            
+            // If for some reason the category is not set, try to find the Video Production category
+            if (!$catId) {
+                $videoCat = \App\Models\Category::where('name', 'like', '%Video%')->first();
+                $catId = $videoCat->id ?? null;
+            }
+
             $videoSubCategories = \App\Models\SubCategory::where('category_id', $catId)
                 ->where('is_active', true)
-                ->with(['services' => function($q){ $q->where('is_active', true); }])
+                ->with(['services' => function($q){ 
+                    $q->where('is_active', true)->orderBy('id'); 
+                }])
                 ->get();
+            
             $videoPricings = \App\Models\VideoPricing::where('is_active', true)->orderBy('order_column')->get();
+
+            // Custom views for specific groups
+            if ($isAudio) {
+                return view('graphics.audio-editing', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
+            }
+            if ($isStoryBoard) {
+                return view('graphics.story-boarding', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
+            }
+            if ($isAnimation) {
+                return view('graphics.animation', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
+            }
+
             return view('graphics.video-detail', compact('service', 'level', 'popularServices', 'videoSubCategories', 'videoPricings'));
         }
 

@@ -42,9 +42,6 @@
                         <a href="{{ route('graphics.video-quote') }}" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-1 transition-all duration-300">
                             Get A Quote
                         </a>
-                        <a href="{{ route('graphics.get-quote') }}" class="px-8 py-4 bg-white text-slate-700 font-bold rounded-lg border border-slate-200 hover:border-blue-500 hover:text-blue-600 transition-all duration-300 flex items-center gap-2">
-                            <i class="ri-play-circle-line text-xl"></i> See Examples
-                        </a>
                     </div>
                     
                     <div class="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm font-medium text-slate-500">
@@ -100,45 +97,104 @@
     </section>
 
     {{-- ── 2. PROCESS SECTION ── --}}
-    <section class="py-24 bg-slate-50 border-y border-slate-100">
-        <div class="container mx-auto px-6 max-w-7xl">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Our Process</h2>
-                <p class="text-slate-500 text-lg">We always prefer the simplest way for our clients. No hassle! Experience a seamless workflow designed for efficiency.</p>
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-6xl">
+            {{-- Section Header --}}
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-[#082f49] uppercase tracking-tight mb-4">Video Editing Process</h2>
+                <p class="text-slate-500 font-medium text-lg">We always prefer the simpliest way for our clients.<br>No hassle!</p>
+                
+                {{-- Colored Dots Separator --}}
+                <div class="flex justify-center gap-2 mt-8">
+                    <span class="w-3 h-3 bg-[#1ebba3] rounded-sm"></span>
+                    <span class="w-3 h-3 bg-[#facc15] rounded-sm"></span>
+                    <span class="w-3 h-3 bg-[#3ab1d8] rounded-sm"></span>
+                    <span class="w-3 h-3 bg-[#0b1f3a] rounded-sm"></span>
+                </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                @if($service->methods && count($service->methods) > 0)
-                    @foreach($service->methods as $index => $method)
-                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors overflow-hidden">
-                                @if(isset($method['image']) && $method['image'])
-                                    <img src="{{ asset('storage/' . $method['image']) }}" class="w-full h-full object-cover">
-                                @else
-                                    <i class="ri-settings-4-line"></i>
-                                @endif
+            {{-- Process Flow --}}
+            <div class="relative">
+                {{-- Row 1: Steps 1-3 --}}
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-20 mb-20">
+                    {{-- Step 1 --}}
+                    <div class="flex flex-col items-center group">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-white shadow-[0_0_50px_rgba(58,177,216,0.15)] flex items-center justify-center border border-blue-50 group-hover:shadow-[0_0_60px_rgba(58,177,216,0.3)] transition-all duration-500">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-b from-white to-blue-50 flex items-center justify-center text-[#082f49]">
+                                    <i class="ri-folder-upload-fill text-5xl"></i>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">{{ $index + 1 }}. {{ $method['title'] }}</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed">{{ $method['description'] }}</p>
                         </div>
-                    @endforeach
-                @else
-                    {{-- Default Steps --}}
-                    @foreach([
-                        ['icon' => 'ri-upload-cloud-2-line', 'color' => 'blue', 'title' => 'Upload Raw Files', 'desc' => 'Securely upload your raw footage, product images, and instructions via our easy-to-use portal.'],
-                        ['icon' => 'ri-scissors-cut-line', 'color' => 'green', 'title' => 'Expert Editing', 'desc' => 'Our seasoned editors get to work, cutting, color grading, and adding animations to make your product shine.'],
-                        ['icon' => 'ri-search-eye-line', 'color' => 'orange', 'title' => 'Review & Revise', 'desc' => 'Receive your draft and request any tweaks. We ensure the final cut perfectly aligns with your brand vision.'],
-                        ['icon' => 'ri-download-cloud-2-line', 'color' => 'purple', 'title' => 'Download Final', 'desc' => 'Get the final, high-converting video in your desired format, ready to be published on your e-commerce platforms.']
-                    ] as $i => $step)
-                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
-                            <div class="w-14 h-14 bg-{{ $step['color'] }}-50 text-{{ $step['color'] }}-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-{{ $step['color'] }}-600 group-hover:text-white transition-colors">
-                                <i class="{{ $step['icon'] }}"></i>
+                        <h3 class="mt-6 text-xl font-black text-[#082f49] uppercase tracking-tighter text-center leading-tight">Upload<br>Videos</h3>
+                    </div>
+
+                    {{-- Arrow --}}
+                    <div class="hidden md:block text-blue-200">
+                        <i class="ri-arrow-right-wide-line text-5xl"></i>
+                    </div>
+
+                    {{-- Step 2 --}}
+                    <div class="flex flex-col items-center group">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-white shadow-[0_0_50px_rgba(58,177,216,0.15)] flex items-center justify-center border border-blue-50 group-hover:shadow-[0_0_60px_rgba(58,177,216,0.3)] transition-all duration-500">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-b from-white to-blue-50 flex items-center justify-center text-[#082f49]">
+                                    <i class="ri-macbook-fill text-5xl"></i>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">{{ $i + 1 }}. {{ $step['title'] }}</h3>
-                            <p class="text-slate-500 text-sm leading-relaxed">{{ $step['desc'] }}</p>
                         </div>
-                    @endforeach
-                @endif
+                        <h3 class="mt-6 text-xl font-black text-[#082f49] uppercase tracking-tighter text-center leading-tight">Video<br>Editing</h3>
+                    </div>
+
+                    {{-- Arrow --}}
+                    <div class="hidden md:block text-blue-200">
+                        <i class="ri-arrow-right-wide-line text-5xl"></i>
+                    </div>
+
+                    {{-- Step 3 --}}
+                    <div class="flex flex-col items-center group">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-white shadow-[0_0_50px_rgba(58,177,216,0.15)] flex items-center justify-center border border-blue-50 group-hover:shadow-[0_0_60px_rgba(58,177,216,0.3)] transition-all duration-500">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-b from-white to-blue-50 flex items-center justify-center text-[#082f49]">
+                                    <i class="ri-loop-right-fill text-5xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="mt-6 text-xl font-black text-[#082f49] uppercase tracking-tighter text-center leading-tight">Review</h3>
+                    </div>
+                </div>
+
+                {{-- Row 2: Steps 4-5 --}}
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-20">
+                    {{-- Step 4 --}}
+                    <div class="flex flex-col items-center group">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-white shadow-[0_0_50px_rgba(58,177,216,0.15)] flex items-center justify-center border border-blue-50 group-hover:shadow-[0_0_60px_rgba(58,177,216,0.3)] transition-all duration-500">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-b from-white to-blue-50 flex items-center justify-center text-[#082f49]">
+                                    <i class="ri-bank-card-2-fill text-5xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="mt-6 text-xl font-black text-[#082f49] uppercase tracking-tighter text-center leading-tight">Payment</h3>
+                    </div>
+
+                    {{-- Arrow --}}
+                    <div class="hidden md:block text-blue-200">
+                        <i class="ri-arrow-right-wide-line text-5xl"></i>
+                    </div>
+
+                    {{-- Step 5 --}}
+                    <div class="flex flex-col items-center group">
+                        <div class="relative">
+                            <div class="w-32 h-32 rounded-full bg-white shadow-[0_0_50px_rgba(58,177,216,0.15)] flex items-center justify-center border border-blue-50 group-hover:shadow-[0_0_60px_rgba(58,177,216,0.3)] transition-all duration-500">
+                                <div class="w-24 h-24 rounded-full bg-gradient-to-b from-white to-blue-50 flex items-center justify-center text-[#082f49]">
+                                    <i class="ri-folder-download-fill text-5xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="mt-6 text-xl font-black text-[#082f49] uppercase tracking-tighter text-center leading-tight">Download</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
