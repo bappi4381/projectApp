@@ -99,7 +99,7 @@ class GraphicsController extends Controller
                     if (isset($existingMethods[$index]['image'])) {
                         Storage::disk('public')->delete($existingMethods[$index]['image']);
                     }
-                    $methods[$index]['image'] = $request->file("methods.{$index}.image")->store('methods', 'public');
+                    $methods[$index]['image'] = Storage::disk('public')->putFile('methods', $request->file("methods.{$index}.image"));
                 } 
                 // If no new image, keep the old one
                 elseif (isset($method['old_image'])) {
@@ -124,7 +124,7 @@ class GraphicsController extends Controller
                     if (isset($existingSamples[$index]['file'])) {
                         Storage::disk('public')->delete($existingSamples[$index]['file']);
                     }
-                    $samples[$index]['file'] = $request->file("work_samples.{$index}.file")->store('work_samples', 'public');
+                    $samples[$index]['file'] = Storage::disk('public')->putFile('work_samples', $request->file("work_samples.{$index}.file"));
                 } elseif (isset($sample['old_file'])) {
                     $samples[$index]['file'] = $sample['old_file'];
                 }
@@ -179,13 +179,13 @@ class GraphicsController extends Controller
             }
 
             if ($request->hasFile('image_before')) {
-                $validated['image_before'] = $request->file('image_before')->store('services', 'public');
+                $validated['image_before'] = Storage::disk('public')->putFile('services', $request->file('image_before'));
             }
             if ($request->hasFile('image_after')) {
-                $validated['image_after'] = $request->file('image_after')->store('services', 'public');
+                $validated['image_after'] = Storage::disk('public')->putFile('services', $request->file('image_after'));
             }
             if ($request->hasFile('audio_file')) {
-                $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+                $validated['audio_file'] = Storage::disk('public')->putFile('services/audio', $request->file('audio_file'));
             }
 
             // Handle Method Images
@@ -282,15 +282,15 @@ class GraphicsController extends Controller
 
             if ($request->hasFile('image_before')) {
                 if ($service->image_before) Storage::disk('public')->delete($service->image_before);
-                $validated['image_before'] = $request->file('image_before')->store('services', 'public');
+                $validated['image_before'] = Storage::disk('public')->putFile('services', $request->file('image_before'));
             }
             if ($request->hasFile('image_after')) {
                 if ($service->image_after) Storage::disk('public')->delete($service->image_after);
-                $validated['image_after'] = $request->file('image_after')->store('services', 'public');
+                $validated['image_after'] = Storage::disk('public')->putFile('services', $request->file('image_after'));
             }
             if ($request->hasFile('audio_file')) {
                 if ($service->audio_file) Storage::disk('public')->delete($service->audio_file);
-                $validated['audio_file'] = $request->file('audio_file')->store('services/audio', 'public');
+                $validated['audio_file'] = Storage::disk('public')->putFile('services/audio', $request->file('audio_file'));
             }
 
             // Handle Method Images
