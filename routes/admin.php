@@ -99,6 +99,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // IT Solutions Domain
         Route::prefix('it')->name('it.')->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'itIndex'])->name('dashboard');
+            
+            // IT Services CRUD
+            Route::resource('services', \App\Http\Controllers\Admin\IT\ServiceController::class);
+
+            // IT Dynamic Content
+            Route::resource('metrics', \App\Http\Controllers\Admin\IT\SuccessMetricController::class);
+            Route::resource('sliders', \App\Http\Controllers\Admin\IT\HeroSliderController::class);
+
+            // Real-time Chat Management for IT
+            Route::prefix('chat')->name('chat.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\ChatController::class, 'index'])->name('index');
+                Route::get('/messages/{guestId}', [\App\Http\Controllers\Admin\ChatController::class, 'messages'])->name('messages');
+                Route::post('/send', [\App\Http\Controllers\Admin\ChatController::class, 'send'])->name('send');
+            });
         });
     });
 });

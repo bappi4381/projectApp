@@ -62,9 +62,12 @@ Route::prefix('graphics-studio')->name('graphics.')->group(function () {
 });
 
 // IT Solutions Domain
-Route::get('/it-solutions', function () {
-    return view('it.index');
-})->name('it.index');
+Route::prefix('it-solutions')->name('it.')->group(function () {
+    Route::get('/', [App\Http\Controllers\ITSolutionsController::class, 'index'])->name('index');
+    Route::get('/about-us', [App\Http\Controllers\ITSolutionsController::class, 'about'])->name('about');
+    Route::get('/contact-us', [App\Http\Controllers\ITSolutionsController::class, 'contact'])->name('contact');
+    Route::get('/services/{slug}', [App\Http\Controllers\ITSolutionsController::class, 'serviceDetail'])->name('service-detail');
+});
 
 // Chat System Routes
 Route::prefix('chat')->name('chat.')->group(function () {

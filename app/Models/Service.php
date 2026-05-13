@@ -86,4 +86,9 @@ class Service extends Model
     {
         return $query->where('category', $category);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

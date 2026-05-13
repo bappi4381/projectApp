@@ -31,7 +31,7 @@
                     <p class="text-slate-400 leading-relaxed mb-10 flex-grow font-medium">Design management, portfolio updates, client assets, and visual campaign orchestration.</p>
 
                     <a href="{{ route('admin.graphics.dashboard') }}" 
-                        class="w-full py-4 px-6 bg-slate-900/80 hover:bg-indigo-600 text-white font-bold rounded-2xl border border-white/5 transition-all text-center group/btn flex items-center justify-center gap-2 group-hover:shadow-[0_0_30px_rgba(79,70,229,0.3)]">
+                        class="w-full py-4 px-6 bg-slate-900/80 hover:bg-indigo-600 text-white font-bold rounded-2xl border border-white/5 transition-all text-center group/btn flex items-center justify-center gap-2 group-hover:shadow-[0_0_30px_rgba(79,70,229,0.3)] active:scale-[0.98]">
                         <span>Launch Workspace</span>
                         <i class="ri-arrow-right-up-line transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"></i>
                     </a>
@@ -56,7 +56,7 @@
                     <p class="text-slate-400 leading-relaxed mb-10 flex-grow font-medium">Software deployment, infrastructure monitoring, cloud solutions, and technical support ticketing.</p>
 
                     <a href="{{ route('admin.it.dashboard') }}" 
-                        class="w-full py-4 px-6 bg-slate-900/80 hover:bg-cyan-600 text-white font-bold rounded-2xl border border-white/5 transition-all text-center group/btn flex items-center justify-center gap-2 group-hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                        class="w-full py-4 px-6 bg-slate-900/80 hover:bg-cyan-600 text-white font-bold rounded-2xl border border-white/5 transition-all text-center group/btn flex items-center justify-center gap-2 group-hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] active:scale-[0.98]">
                         <span>Launch Workspace</span>
                         <i class="ri-arrow-right-up-line transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"></i>
                     </a>

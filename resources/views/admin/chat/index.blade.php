@@ -148,7 +148,7 @@
 
     @push('scripts')
         <script>
-            let activeGuestId = null;
+            const baseUrl = window.location.pathname.includes('/it/') ? '/admin/it/chat' : '/admin/graphics/chat';
 
             function loadMessages(guestId) {
                 activeGuestId = guestId;
@@ -164,7 +164,7 @@
                 document.getElementById('activeUserName').innerText = userName;
                 document.getElementById('activeUserAvatar').innerText = userName.charAt(0).toUpperCase();
 
-                fetch(`/admin/graphics/chat/messages/${guestId}`)
+                fetch(`${baseUrl}/messages/${guestId}`)
                     .then(res => res.json())
                     .then(data => {
                         renderMessages(data.messages);
@@ -231,7 +231,7 @@
 
                 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-                fetch('/admin/graphics/chat/send', {
+                fetch(`${baseUrl}/send`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -258,7 +258,7 @@
             // Polling Fallback (Backup for messages)
             setInterval(() => {
                 if (activeGuestId) {
-                    fetch(`/admin/graphics/chat/messages/${activeGuestId}`)
+                    fetch(`${baseUrl}/messages/${activeGuestId}`)
                         .then(res => res.json())
                         .then(data => {
                             if (data.status === 'success') {

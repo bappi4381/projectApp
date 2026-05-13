@@ -86,104 +86,197 @@
                     <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
                 @endif
             </a>
-
-            <a href="{{ route('admin.graphics.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
-                {{ request()->routeIs('admin.graphics.dashboard')
-    ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
-    : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
-                <div
-                    class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
-                    {{ request()->routeIs('admin.graphics.dashboard') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
-                    <i class="ri-dashboard-line"></i>
-                </div>
-                <span class="text-[13px]">Dashboard</span>
-                @if(request()->routeIs('admin.graphics.dashboard'))
-                    <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
-                @endif
-            </a>
-
-            <a href="{{ route('admin.graphics.chat.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
-                {{ request()->routeIs('admin.graphics.chat.*')
-    ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
-    : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
-                <div
-                    class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
-                    {{ request()->routeIs('admin.graphics.chat.*') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
-                    <i class="ri-messenger-line"></i>
-                </div>
-                <span class="text-[13px]">Live Chat</span>
-                @if(request()->routeIs('admin.graphics.chat.*'))
-                    <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
-                @endif
-            </a>
-            <a href="{{ route('admin.graphics.quotes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
-                {{ request()->routeIs('admin.graphics.quotes.*')
-    ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
-    : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
-                <div
-                    class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
-                    {{ request()->routeIs('admin.graphics.quotes.*') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
-                    <i class="ri-file-list-3-line"></i>
-                </div>
-                <span class="text-[13px]">Quotes & Payments</span>
-                @if(request()->routeIs('admin.graphics.quotes.*'))
-                    <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
-                @endif
-            </a>
         </div>
 
-        {{-- Menu Group: Service Architecture --}}
-        @php $isServiceMgmt = request()->routeIs('admin.graphics.categories.*') || request()->routeIs('admin.graphics.subcategories.*') || request()->routeIs('admin.graphics.services.*') || request()->routeIs('admin.graphics.variants.*'); @endphp
+        {{-- WORKSPACE: GRAPHICS --}}
+        @if(request()->routeIs('admin.graphics.*'))
+            <div class="space-y-8">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 pl-4">Graphics Workspace</p>
 
-        <div x-data="{ open: @json($isServiceMgmt) }" class="space-y-1">
-            <button @click="open = !open"
-                class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.04] rounded-xl transition-all group/btn border border-transparent hover:border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Service Architecture</p>
+                    <a href="{{ route('admin.graphics.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.graphics.dashboard')
+            ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.graphics.dashboard') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        <span class="text-[13px]">Dashboard</span>
+                        @if(request()->routeIs('admin.graphics.dashboard'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                        @endif
+                    </a>
+
+                    <a href="{{ route('admin.graphics.chat.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.graphics.chat.*')
+            ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.graphics.chat.*') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-messenger-line"></i>
+                        </div>
+                        <span class="text-[13px]">Live Chat</span>
+                        @if(request()->routeIs('admin.graphics.chat.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                        @endif
+                    </a>
+                    <a href="{{ route('admin.graphics.quotes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.graphics.quotes.*')
+            ? 'bg-indigo-500/10 text-indigo-400 font-bold shadow-[inset_0_0_20px_rgba(99,102,241,0.05)] border border-indigo-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.graphics.quotes.*') ? 'bg-indigo-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-file-list-3-line"></i>
+                        </div>
+                        <span class="text-[13px]">Quotes & Payments</span>
+                        @if(request()->routeIs('admin.graphics.quotes.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]"></div>
+                        @endif
+                    </a>
                 </div>
-                <i class="ri-arrow-down-s-line text-slate-600 transition-transform duration-300"
-                    :class="open ? 'rotate-180' : ''"></i>
-            </button>
- 
-            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                class="pt-2 space-y-1 pl-3 border-l border-white/5 ml-4">
-                {!! renderSidebarItem('admin.graphics.categories.index', 'ri-node-tree', 'L1 Verticals', 'Category') !!}
-                {!! renderSidebarItem('admin.graphics.subcategories.index', 'ri-survey-line', 'L2 Groups', 'SubGroup') !!}
-                {!! renderSidebarItem('admin.graphics.services.index', 'ri-scissors-2-line', 'L3 Core Services', 'Service') !!}
-                {!! renderSidebarItem('admin.graphics.variants.index', 'ri-bubble-chart-line', 'L4 Detail Variants', 'Variant') !!}
+
+                {{-- Menu Group: Service Architecture --}}
+                @php $isServiceMgmt = request()->routeIs('admin.graphics.categories.*') || request()->routeIs('admin.graphics.subcategories.*') || request()->routeIs('admin.graphics.services.*') || request()->routeIs('admin.graphics.variants.*'); @endphp
+
+                <div x-data="{ open: @json($isServiceMgmt) }" class="space-y-1">
+                    <button @click="open = !open"
+                        class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.04] rounded-xl transition-all group/btn border border-transparent hover:border-white/5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"></div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Service Architecture</p>
+                        </div>
+                        <i class="ri-arrow-down-s-line text-slate-600 transition-transform duration-300"
+                            :class="open ? 'rotate-180' : ''"></i>
+                    </button>
+        
+                    <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                        class="pt-2 space-y-1 pl-3 border-l border-white/5 ml-4">
+                        {!! renderSidebarItem('admin.graphics.categories.index', 'ri-node-tree', 'L1 Verticals', 'Category') !!}
+                        {!! renderSidebarItem('admin.graphics.subcategories.index', 'ri-survey-line', 'L2 Groups', 'SubGroup') !!}
+                        {!! renderSidebarItem('admin.graphics.services.index', 'ri-scissors-2-line', 'L3 Core Services', 'Service') !!}
+                        {!! renderSidebarItem('admin.graphics.variants.index', 'ri-bubble-chart-line', 'L4 Detail Variants', 'Variant') !!}
+                    </div>
+                </div>
+
+                {{-- Menu Group: Pricing & Rates --}}
+                <div class="space-y-1">
+                    {!! renderSidebarItem('admin.graphics.price-list.index', 'ri-price-tag-3-line', 'Pricing List', 'Pricing', 'emerald') !!}
+                    {!! renderSidebarItem('admin.graphics.video-pricing.index', 'ri-video-line', 'Video Pricing', 'NEW', 'emerald') !!}
+                </div>
+
+                {{-- Menu Group: Studio Content --}}
+                @php $isStudio = request()->routeIs('admin.graphics.blog.*') || request()->routeIs('admin.graphics.testimonials.*') || request()->routeIs('admin.graphics.brands.*') || request()->routeIs('admin.graphics.ecommerce-page.*') || request()->routeIs('admin.graphics.portfolios.*') || request()->routeIs('admin.graphics.home-page.*'); @endphp
+
+                <div x-data="{ open: @json($isStudio) }" class="space-y-1">
+                    <button @click="open = !open"
+                        class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.02] rounded-xl transition-all group/btn">
+                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Studio Content</p>
+                        <i class="ri-arrow-down-s-line text-slate-600 transition-transform duration-300"
+                            :class="open ? 'rotate-180' : ''"></i>
+                    </button>
+
+                    <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                        class="pt-2 space-y-1">
+                        {!! renderSidebarItem('admin.graphics.blog.index', 'ri-article-line', 'Blog Articles', null, 'emerald') !!}
+                        {!! renderSidebarItem('admin.graphics.testimonials.index', 'ri-chat-quote-line', 'Client Reviews', null, 'emerald') !!}
+                        {!! renderSidebarItem('admin.graphics.brands.index', 'ri-verified-badge-line', 'Brand/Client Logos', null, 'emerald') !!}
+                        {!! renderSidebarItem('admin.graphics.portfolios.index', 'ri-gallery-line', 'Portfolio Items', null, 'emerald') !!}
+                        {!! renderSidebarItem('admin.graphics.home-page.edit', 'ri-slideshow-line', 'Home Slider', null, 'emerald') !!}
+                        {!! renderSidebarItem('admin.graphics.ecommerce-page.edit', 'ri-pages-line', 'Ecommerce Page', null, 'emerald') !!}
+                    </div>
+                </div>
             </div>
-        </div>
+        @endif
 
-        {{-- Menu Group: Pricing & Rates --}}
-        <div class="space-y-1">
-            {!! renderSidebarItem('admin.graphics.price-list.index', 'ri-price-tag-3-line', 'Pricing List', 'Pricing', 'emerald') !!}
-            {!! renderSidebarItem('admin.graphics.video-pricing.index', 'ri-video-line', 'Video Pricing', 'NEW', 'emerald') !!}
-        </div>
+        {{-- WORKSPACE: IT SOLUTIONS --}}
+        @if(request()->routeIs('admin.it.*'))
+            <div class="space-y-8">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 pl-4">IT Workspace</p>
 
-        {{-- Menu Group: Studio Content --}}
-        @php $isStudio = request()->routeIs('admin.graphics.blog.*') || request()->routeIs('admin.graphics.testimonials.*') || request()->routeIs('admin.graphics.brands.*') || request()->routeIs('admin.graphics.ecommerce-page.*') || request()->routeIs('admin.graphics.portfolios.*') || request()->routeIs('admin.graphics.home-page.*'); @endphp
+                    <a href="{{ route('admin.it.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.dashboard')
+            ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.it.dashboard') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        <span class="text-[13px]">Command Center</span>
+                        @if(request()->routeIs('admin.it.dashboard'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+                        @endif
+                    </a>
 
-        <div x-data="{ open: @json($isStudio) }" class="space-y-1">
-            <button @click="open = !open"
-                class="w-full flex items-center justify-between px-4 py-2 hover:bg-white/[0.02] rounded-xl transition-all group/btn">
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Studio Content</p>
-                <i class="ri-arrow-down-s-line text-slate-600 transition-transform duration-300"
-                    :class="open ? 'rotate-180' : ''"></i>
-            </button>
+                    <a href="{{ route('admin.it.services.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.services.*')
+            ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.it.services.*') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-server-line"></i>
+                        </div>
+                        <span class="text-[13px]">Managed Services</span>
+                        @if(request()->routeIs('admin.it.services.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+                        @endif
+                    </a>
 
-            <div x-show="open" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                class="pt-2 space-y-1">
-                {!! renderSidebarItem('admin.graphics.blog.index', 'ri-article-line', 'Blog Articles', null, 'emerald') !!}
-                {!! renderSidebarItem('admin.graphics.testimonials.index', 'ri-chat-quote-line', 'Client Reviews', null, 'emerald') !!}
-                {!! renderSidebarItem('admin.graphics.brands.index', 'ri-verified-badge-line', 'Brand/Client Logos', null, 'emerald') !!}
-                {!! renderSidebarItem('admin.graphics.portfolios.index', 'ri-gallery-line', 'Portfolio Items', null, 'emerald') !!}
-                {!! renderSidebarItem('admin.graphics.home-page.edit', 'ri-slideshow-line', 'Home Slider', null, 'emerald') !!}
-                {!! renderSidebarItem('admin.graphics.ecommerce-page.edit', 'ri-pages-line', 'Ecommerce Page', null, 'emerald') !!}
+                    <a href="{{ route('admin.it.chat.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.chat.*')
+            ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.it.chat.*') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-messenger-line"></i>
+                        </div>
+                        <span class="text-[13px]">Live Chat</span>
+                        @if(request()->routeIs('admin.it.chat.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+                        @endif
+                    </a>
+
+                    <a href="{{ route('admin.it.sliders.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.sliders.*')
+            ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.it.sliders.*') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-slideshow-line"></i>
+                        </div>
+                        <span class="text-[13px]">Hero Sliders</span>
+                        @if(request()->routeIs('admin.it.sliders.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+                        @endif
+                    </a>
+
+                    <a href="{{ route('admin.it.metrics.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.metrics.*')
+            ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
+            : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
+                        <div
+                            class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
+                            {{ request()->routeIs('admin.it.metrics.*') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            <i class="ri-bar-chart-box-line"></i>
+                        </div>
+                        <span class="text-[13px]">Success Metrics</span>
+                        @if(request()->routeIs('admin.it.metrics.*'))
+                            <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
+                        @endif
+                    </a>
+                </div>
             </div>
-        </div>
+        @endif
 
     </div>
 
