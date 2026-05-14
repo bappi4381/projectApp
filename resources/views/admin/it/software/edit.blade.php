@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Create IT Service | Admin')
+@section('title', 'Edit IT Service | Admin')
 
 @section('content')
     <div class="p-8">
@@ -8,8 +8,8 @@
                 class="text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-2 mb-4">
                 <i class="ri-arrow-left-line"></i> Back to IT Services
             </a>
-            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Create IT Service</h1>
-            <p class="text-slate-400 font-medium text-sm italic">Define a new technical solution or enterprise service.</p>
+            <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Edit IT Service</h1>
+            <p class="text-slate-400 font-medium text-sm italic">Modifying enterprise solution: {{ $service->name }}</p>
         </div>
 
         @if ($errors->any())
@@ -24,17 +24,18 @@
 
         <div x-data="{ 
                 isSubmitting: false,
-                hasDetails: {{ old('has_details') ? 'true' : 'false' }},
-                features: {{ json_encode(old('features', [])) }},
-                faqs: {{ json_encode(old('faqs', [])) }},
+                hasDetails: {{ $service->has_details ? 'true' : 'false' }},
+                features: @json($service->features ?? []),
+                faqs: @json($service->faqs ?? []),
                 addFeature() { this.features.push('') },
                 removeFeature(index) { this.features.splice(index, 1) },
                 addFaq() { this.faqs.push({ question: '', answer: '' }) },
                 removeFaq(index) { this.faqs.splice(index, 1) },
             }">
-            <form action="{{ route('admin.it.services.store') }}" method="POST"
+            <form action="{{ route('admin.it.services.update', $service->id) }}" method="POST"
                 class="space-y-10" @submit="isSubmitting = true">
                 @csrf
+                @method('PUT')
 
                 {{-- 1. General Information --}}
                 <div class="glass-card rounded-[32px] border-white/5 shadow-2xl p-10 reveal reveal-delay-1">
@@ -46,13 +47,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Service Name</label>
-                            <input type="text" name="name" value="{{ old('name') }}" required
+                            <input type="text" name="name" value="{{ old('name', $service->name) }}" required
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-cyan-500 transition-all shadow-inner">
                         </div>
 
                         <div>
                             <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Icon Class (Remix Icon)</label>
-                            <input type="text" name="icon" value="{{ old('icon', 'ri-server-line') }}"
+                            <input type="text" name="icon" value="{{ old('icon', $service->icon) }}"
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white focus:outline-none focus:border-cyan-500 transition-all shadow-inner">
                         </div>
                     </div>
@@ -60,7 +61,7 @@
                     <div class="mt-8">
                         <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-3 ml-1">Short Description</label>
                         <textarea name="description" rows="3"
-                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-slate-300 focus:outline-none focus:border-cyan-500 transition-all resize-none shadow-inner">{{ old('description') }}</textarea>
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-slate-300 focus:outline-none focus:border-cyan-500 transition-all resize-none shadow-inner">{{ old('description', $service->description) }}</textarea>
                     </div>
 
                     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -70,7 +71,7 @@
                                 <h4 class="text-sm font-bold text-white mb-1">Is Active?</h4>
                                 <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">Enable visibility in frontend</p>
                                 <label class="relative inline-flex items-center cursor-pointer mt-4">
-                                    <input type="checkbox" name="is_active" class="sr-only peer" value="1" checked>
+                                    <input type="checkbox" name="is_active" class="sr-only peer" value="1" {{ $service->is_active ? 'checked' : '' }}>
                                     <div class="w-14 h-7 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
@@ -100,23 +101,23 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="space-y-3">
                             <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Starting Price ($)</label>
-                            <input type="number" step="0.01" name="starting_price" value="{{ old('starting_price') }}"
+                            <input type="number" step="0.01" name="starting_price" value="{{ old('starting_price', $service->starting_price) }}"
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white shadow-inner">
-                            <input type="text" name="price_unit" value="{{ old('price_unit', 'per month') }}"
+                            <input type="text" name="price_unit" value="{{ old('price_unit', $service->price_unit ?? 'per month') }}"
                                 class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400">
                         </div>
                         <div class="space-y-3">
                             <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Support Capacity</label>
-                            <input type="number" name="delivery_capacity" value="{{ old('delivery_capacity') }}"
+                            <input type="number" name="delivery_capacity" value="{{ old('delivery_capacity', $service->delivery_capacity) }}"
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white shadow-inner">
-                            <input type="text" name="delivery_unit" value="{{ old('delivery_unit', 'Tickets/Month') }}"
+                            <input type="text" name="delivery_unit" value="{{ old('delivery_unit', $service->delivery_unit ?? 'Tickets/Month') }}"
                                 class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400">
                         </div>
                         <div class="space-y-3">
                             <label class="block text-[11px] uppercase tracking-widest font-black text-slate-500 ml-1">Service Discount (%)</label>
-                            <input type="number" name="discount_upto" value="{{ old('discount_upto') }}"
+                            <input type="number" name="discount_upto" value="{{ old('discount_upto', $service->discount_upto) }}"
                                 class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm font-bold text-white shadow-inner">
-                            <input type="text" name="discount_tag" value="{{ old('discount_tag', 'Annual Billing') }}"
+                            <input type="text" name="discount_tag" value="{{ old('discount_tag', $service->discount_tag ?? 'Annual Billing') }}"
                                 class="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-[10px] font-medium text-slate-400">
                         </div>
                     </div>
@@ -179,11 +180,11 @@
                         class="px-8 py-4 bg-slate-900 border border-white/5 rounded-2xl text-slate-400 font-bold hover:bg-slate-800 transition-all text-sm">Cancel</a>
                     <button type="submit" :disabled="isSubmitting"
                         class="px-12 py-4 bg-cyan-600 hover:bg-cyan-500 disabled:bg-cyan-400 disabled:cursor-not-allowed text-white font-black uppercase tracking-widest text-[11px] rounded-2xl shadow-xl shadow-cyan-500/20 active:scale-95 flex items-center gap-3">
-                        <template x-if="!isSubmitting"><span>Save IT Solution</span></template>
+                        <template x-if="!isSubmitting"><span>Update IT Solution</span></template>
                         <template x-if="isSubmitting">
                             <div class="flex items-center gap-2">
                                 <i class="ri-loader-4-line animate-spin text-lg"></i>
-                                <span>Deploying...</span>
+                                <span>Updating...</span>
                             </div>
                         </template>
                     </button>

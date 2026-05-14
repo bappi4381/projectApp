@@ -28,39 +28,21 @@ class ITSolutionsController extends Controller
 
     public function serviceDetail($slug)
     {
-        // For now, if the service isn't in DB, we can use fallback data or check DB
-        $service = Service::byCategory('it')->where('slug', $slug)->first();
-        
-        if (!$service) {
-            // Fallback for the specific ones mentioned if not yet created in Admin
-            $fallbacks = [
-                'custom-software-development' => [
-                    'name' => 'Custom Software Development',
-                    'description' => 'Tailored software solutions designed to meet your specific business needs and technical requirements.',
-                    'icon' => 'ri-code-s-slash-line'
-                ],
-                'web-application-development' => [
-                    'name' => 'Web Application Development',
-                    'description' => 'High-performance, scalable web applications built with modern technologies like React, Laravel, and Vue.',
-                    'icon' => 'ri-window-line'
-                ],
-                'mobile-application-development' => [
-                    'name' => 'Mobile Application Development',
-                    'description' => 'Native and cross-platform mobile apps for iOS and Android that deliver exceptional user experiences.',
-                    'icon' => 'ri-smartphone-line'
-                ],
-                'quality-assurance-testing' => [
-                    'name' => 'Quality Assurance & Testing',
-                    'description' => 'Comprehensive software testing and QA services to ensure your applications are bug-free and reliable.',
-                    'icon' => 'ri-shield-check-line'
-                ]
-            ];
+        $viewMap = [
+            'custom-software-development' => 'it.services.custom-software',
+            'web-application-development' => 'it.services.web-development',
+            'mobile-application-development' => 'it.services.mobile-app',
+            'quality-assurance-testing' => 'it.services.qa-testing',
+        ];
 
-            if (isset($fallbacks[$slug])) {
-                $service = (object) $fallbacks[$slug];
-            } else {
-                abort(404);
-            }
+        if (isset($viewMap[$slug])) {
+            return view($viewMap[$slug]);
+        }
+
+        // Fallback for dynamic services from DB
+        $service = Service::byCategory('it')->where('slug', $slug)->first();
+        if (!$service) {
+            abort(404);
         }
 
         return view('it.service-detail', compact('service'));

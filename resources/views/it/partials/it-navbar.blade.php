@@ -135,6 +135,7 @@
             <div class="flex items-center gap-12">
                 <a href="{{ route('it.index') }}" class="nav-link-it {{ request()->routeIs('it.index') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('it.about') }}" class="nav-link-it {{ request()->routeIs('it.about') ? 'active' : '' }}">About Us</a>
+                <a href="{{ route('it.service-detail', 'custom-software-development') }}" class="nav-link-it {{ request()->is('it-solutions/services/custom-software-development') ? 'active' : '' }}">Software</a>
                 
                 {{-- Services Dropdown --}}
                 <div class="relative group" x-data="{ dropdownOpen: false }" @mouseenter="dropdownOpen = true" @mouseleave="dropdownOpen = false">
@@ -197,6 +198,7 @@
         <div class="space-y-4">
             <a href="{{ route('it.index') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">Home</a>
             <a href="{{ route('it.about') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">About Us</a>
+            <a href="{{ route('it.service-detail', 'custom-software-development') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">Software</a>
             
             <div x-data="{ subOpen: false }">
                 <button @click="subOpen = !subOpen" class="w-full flex items-center justify-between p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">

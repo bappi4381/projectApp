@@ -103,6 +103,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // IT Services CRUD
             Route::resource('services', \App\Http\Controllers\Admin\IT\ServiceController::class);
 
+            // Software Catalog (React Demo)
+            Route::view('/software/catalog', 'admin.it.software.catalog')->name('software.catalog');
+
             // IT Dynamic Content
             Route::resource('metrics', \App\Http\Controllers\Admin\IT\SuccessMetricController::class);
             Route::resource('sliders', \App\Http\Controllers\Admin\IT\HeroSliderController::class);
