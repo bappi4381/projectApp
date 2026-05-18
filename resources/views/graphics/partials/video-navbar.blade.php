@@ -41,10 +41,10 @@
             </div>
             <div class="flex items-center gap-8 text-white/90 font-bold text-[11px] uppercase tracking-widest">
                 <a href="{{ route('graphics.blog') }}" class="hover:text-yellow-400 transition-all">Blog</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">Glossary</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">About Us</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">Contact Us</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">FAQ</a>
+                <a href="{{ route('graphics.services') }}" class="hover:text-yellow-400 transition-all">Glossary</a>
+                <a href="{{ route('home') }}" class="hover:text-yellow-400 transition-all">About Us</a>
+                <a href="#footer" class="hover:text-yellow-400 transition-all">Contact Us</a>
+                <a href="{{ route('graphics.offers') }}#faq" class="hover:text-yellow-400 transition-all">FAQ</a>
             </div>
         </div>
     </div>
@@ -206,7 +206,7 @@
                         Payment
                         <span class="studio-link-dot" :class="activeSection === 'payment' ? 'active-dot' : ''"></span>
                     </a>
-                    <a href="#" class="studio-nav-link transition-colors">
+                    <a href="#footer" class="studio-nav-link transition-colors">
                         Contact Us
                         <span class="studio-link-dot"></span>
                     </a>
@@ -215,7 +215,7 @@
                         <div x-data="{ isOpen: false }" @mouseenter="isOpen = true" @mouseleave="isOpen = false" class="relative group">
                             {{-- Level 1: SubCategory --}}
                             @php
-                                $subUrl = $subCategory->has_details ? route('graphics.service-detail', $subCategory->slug) : '#';
+                                $subUrl = $subCategory->has_details ? route('graphics.service-detail', $subCategory->slug) : route('graphics.services') . '#' . \Illuminate\Support\Str::slug($subCategory->name);
                             @endphp
                             <a href="{{ $subUrl }}" class="studio-nav-link transition-colors flex items-center gap-1 cursor-pointer" :class="isOpen ? 'text-yellow-400' : ''">
                                 {{ strtoupper($subCategory->name) }}
@@ -244,10 +244,10 @@
                                                         {{ $svc->name }}
                                                     </a>
                                                 @else
-                                                    <span class="text-[12px] font-bold text-slate-400 flex items-center gap-3">
+                                                    <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($svc->name) }}" class="text-[12px] font-bold text-slate-400 hover:text-indigo-600 flex items-center gap-3 transition-colors">
                                                         <i class="ri-checkbox-blank-circle-fill text-[5px] text-slate-300"></i>
                                                         {{ $svc->name }}
-                                                    </span>
+                                                    </a>
                                                 @endif
                                             </li>
                                         @endforeach
@@ -324,7 +324,7 @@
                         class="block text-2xl font-black tracking-tighter uppercase transition-colors"
                         :class="activeSection === 'payment' ? 'text-yellow-400' : 'text-white hover:text-yellow-400'">PAYMENT</a>
 
-                    <a href="#" @click="open = false"
+                    <a href="#footer" @click="open = false"
                         class="block text-2xl font-black tracking-tighter uppercase transition-colors text-white hover:text-yellow-400">CONTACT
                         US</a>
                 @else
@@ -333,7 +333,7 @@
                             {{-- Level 1 --}}
                             <div class="flex items-center justify-between w-full text-2xl font-black tracking-tighter uppercase transition-colors text-white/70 hover:text-white">
                                 @php
-                                    $subUrl = $subCategory->has_details ? route('graphics.service-detail', $subCategory->slug) : '#';
+                                    $subUrl = $subCategory->has_details ? route('graphics.service-detail', $subCategory->slug) : route('graphics.services') . '#' . \Illuminate\Support\Str::slug($subCategory->name);
                                 @endphp
                                 <a href="{{ $subUrl }}" class="flex-1 text-left" @click="open = false">{{ $subCategory->name }}</a>
                                 @if($subCategory->services->count())
@@ -355,10 +355,11 @@
                                                     {{ $svc->name }}
                                                 </a>
                                             @else
-                                                <span class="text-sm font-bold text-white/30 flex items-center gap-2">
+                                                <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($svc->name) }}" @click="open = false"
+                                                    class="text-sm font-bold text-white/30 hover:text-white transition-colors flex items-center gap-2">
                                                     <span class="w-1 h-1 rounded-full bg-white/10"></span>
                                                     {{ $svc->name }}
-                                                </span>
+                                                </a>
                                             @endif
                                         </div>
                                     @endforeach
@@ -385,7 +386,7 @@
                         QUOTE</a>
 
                     <div class="pt-8">
-                        <a href="#"
+                        <a href="{{ route('graphics.upload') }}" @click="open = false"
                             class="block w-full py-5 rounded-3xl bg-yellow-400 text-slate-900 font-black text-center text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">
                             UPLOAD FILES
                         </a>

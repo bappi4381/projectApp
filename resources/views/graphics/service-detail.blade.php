@@ -14,6 +14,45 @@
 @section('meta_description', Str::limit(strip_tags($service->description ?? ''), 160))
 
 @section('content')
+    {{-- ── SUCCESS MESSAGE OVERLAY ───────────────────────── --}}
+    @if(session('quote_success'))
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm" x-data="{ show: true }" x-show="show">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-center relative overflow-hidden" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0ea5e9] to-cyan-500"></div>
+            
+            <div class="mb-6 inline-flex items-center justify-center w-20 h-20 bg-green-50 rounded-full text-green-500 shadow-inner">
+                <i class="ri-checkbox-circle-fill text-5xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Request Received!</h2>
+            <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                Thank you! Your quote request has been successfully submitted. Our team will review your requirements and get back to you within 30 minutes.
+            </p>
+            
+            <div class="bg-slate-50 rounded-xl p-5 mb-8 border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Invoice ID</span>
+                    <span class="text-sm font-bold text-[#0ea5e9]">#{{ session('quote_success')['invoice_id'] }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Confirmation Sent To</span>
+                    <span class="text-sm font-bold text-slate-700">{{ session('quote_success')['email'] }}</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button @click="show = false" class="w-full py-4 bg-slate-800 hover:bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] rounded-xl transition-all shadow-lg">
+                    Got it, Thanks
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="bg-white min-h-screen text-slate-800 font-sans selection:bg-[#0ea5e9] selection:text-white pb-20">
 
         {{-- ── HERO SECTION ────────────────────────────────── --}}
@@ -169,17 +208,29 @@
                 </h2>
                 <p class="text-[#0ea5e9] font-bold text-sm italic mb-12">We Usually Reply Within 30 Minutes</p>
 
-                <form action="#" method="POST" class="text-left space-y-8">
+                <form action="{{ route('graphics.get-quote.post') }}" method="POST" enctype="multipart/form-data" class="text-left space-y-8" x-data="{ files: [] }">
                     @csrf
                     <p class="text-slate-400 text-[11px] text-center italic mb-8">Please Fill up the Required (*) Fields to Submit the Form Properly.</p>
 
                     {{-- Upload Area --}}
-                    <div class="border-2 border-dashed border-slate-200 rounded-lg p-10 text-center bg-slate-50/30 group hover:border-[#0ea5e9] transition-colors">
+                    <div class="border-2 border-dashed border-slate-200 rounded-lg p-10 text-center bg-slate-50/30 group hover:border-[#0ea5e9] transition-colors relative"
+                         x-data="{ dragging: false }"
+                         @dragover.prevent="dragging = true"
+                         @dragleave.prevent="dragging = false"
+                         @drop.prevent="dragging = false; files = [...$event.dataTransfer.files]"
+                         :class="dragging ? 'border-blue-500 bg-blue-50' : ''">
+                        <input type="file" id="file-input" name="files[]" multiple accept="image/*,.psd,.ai,.pdf,.zip"
+                                class="hidden" @change="files = [...$event.target.files]">
                         <p class="text-slate-500 text-sm font-bold mb-4 uppercase tracking-widest">Upload Your Files (max 500mb/file, 10 files only)</p>
-                        <button type="button" class="inline-flex items-center gap-2 px-8 py-3 bg-[#5487ab] text-white rounded font-black text-[11px] uppercase tracking-widest shadow-md hover:bg-[#436d8a] transition-all">
+                        <button type="button" 
+                                onclick="document.getElementById('file-input').click()"
+                                class="inline-flex items-center gap-2 px-8 py-3 bg-[#5487ab] text-white rounded font-black text-[11px] uppercase tracking-widest shadow-md hover:bg-[#436d8a] transition-all">
                             <i class="ri-upload-cloud-2-line text-lg"></i>
                             Upload Files
                         </button>
+                        <div x-show="files.length > 0" class="mt-4 text-[#0ea5e9] font-bold text-sm" x-cloak>
+                            <span x-text="files.length + ' file(s) selected'"></span>
+                        </div>
                     </div>
 
                     {{-- Form Fields --}}
@@ -192,9 +243,9 @@
                             </div>
                         </div>
                         <div class="relative">
-                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Phone<span class="text-red-500">*</span></label>
+                            <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Phone</label>
                             <div class="relative">
-                                <input type="text" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                                <input type="text" name="phone" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
                                 <i class="ri-phone-line absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             </div>
                         </div>
@@ -207,12 +258,12 @@
                         </div>
                         <div class="relative">
                             <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Return File Type</label>
-                            <input type="text" name="file_type" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
+                            <input type="text" name="return_type" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner">
                         </div>
                         <div class="relative">
                             <label class="block text-[11px] font-bold text-slate-700 uppercase mb-2">Services<span class="text-red-500">*</span></label>
-                            <select name="service" class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner appearance-none cursor-pointer">
-                                <option value="{{ $service->slug }}" selected>{{ $service->name }}</option>
+                            <select name="services[]" required class="w-full bg-slate-50 border border-slate-200 rounded py-3 px-4 focus:ring-1 focus:ring-[#0ea5e9] focus:outline-none text-sm transition-all shadow-inner appearance-none cursor-pointer">
+                                <option value="{{ $service->name }}" selected>{{ $service->name }}</option>
                             </select>
                         </div>
                         <div class="relative">

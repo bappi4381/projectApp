@@ -259,7 +259,25 @@ class GraphicsStudioController extends Controller
     public function offers() { return view('graphics.offers'); }
     public function payment() { return view('graphics.payment'); }
     public function getQuote() {
-        $services = \App\Models\Service::where('is_active', true)->whereNull('parent_id')->get();
+        $services = \App\Models\Service::where('is_active', true)
+            ->whereNull('parent_id')
+            ->where(function($query) {
+                $query->whereHas('serviceCategory', function($q) {
+                    $q->where('name', 'not like', '%Video%')
+                      ->where('name', 'not like', '%Production%')
+                      ->where('name', 'not like', '%Audio%')
+                      ->where('name', 'not like', '%Animation%')
+                      ->where('name', 'not like', '%Story%');
+                })
+                ->orWhereHas('subCategory.category', function($q) {
+                    $q->where('name', 'not like', '%Video%')
+                      ->where('name', 'not like', '%Production%')
+                      ->where('name', 'not like', '%Audio%')
+                      ->where('name', 'not like', '%Animation%')
+                      ->where('name', 'not like', '%Story%');
+                });
+            })
+            ->get();
         return view('graphics.get-quote', compact('services'));
     }
 

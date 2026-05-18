@@ -40,10 +40,10 @@
             </div>
             <div class="flex items-center gap-8 text-white/90 font-bold text-[11px] uppercase tracking-widest">
                 <a href="{{ route('graphics.blog') }}" class="hover:text-yellow-400 transition-all">Blog</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">Glossary</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">About Us</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">Contact Us</a>
-                <a href="#" class="hover:text-yellow-400 transition-all">FAQ</a>
+                <a href="{{ route('graphics.services') }}" class="hover:text-yellow-400 transition-all">Glossary</a>
+                <a href="{{ route('home') }}" class="hover:text-yellow-400 transition-all">About Us</a>
+                <a href="#footer" class="hover:text-yellow-400 transition-all">Contact Us</a>
+                <a href="{{ route('graphics.offers') }}#faq" class="hover:text-yellow-400 transition-all">FAQ</a>
             </div>
         </div>
     </div>
@@ -193,7 +193,7 @@
                         Payment
                         <span class="studio-link-dot" :class="activeSection === 'payment' ? 'active-dot' : ''"></span>
                     </a>
-                    <a href="#" class="studio-nav-link transition-colors">
+                    <a href="#footer" class="studio-nav-link transition-colors">
                         Contact Us
                         <span class="studio-link-dot"></span>
                     </a>
@@ -240,7 +240,7 @@
                                                 @if($group['has_details'])
                                                     <a href="{{ route('graphics.service-detail', $group['slug']) }}" class="hover:text-indigo-600 transition-colors uppercase font-bold">{{ $group['name'] }}</a>
                                                 @else
-                                                    <span>{{ $group['name'] }}</span>
+                                                    <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($group['name']) }}" class="hover:text-indigo-600 transition-colors uppercase font-bold">{{ $group['name'] }}</a>
                                                 @endif
                                             </h4>
                                             <ul class="space-y-3">
@@ -254,10 +254,11 @@
                                                                 {{ $svc['name'] }}
                                                             </a>
                                                         @else
-                                                            <span class="flex items-center gap-3 text-[13px] text-slate-400 font-medium">
+                                                            <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($svc['name']) }}"
+                                                                class="group/item flex items-center gap-3 text-[13px] text-slate-400 hover:text-indigo-600 transition-all font-semibold">
                                                                 <i class="ri-checkbox-blank-circle-fill text-[5px] text-slate-300"></i>
                                                                 {{ $svc['name'] }}
-                                                            </span>
+                                                            </a>
                                                         @endif
                                                     </li>
                                                 @endforeach
@@ -407,7 +408,7 @@
                                             @if($group['has_details'])
                                                 <a href="{{ route('graphics.service-detail', $group['slug']) }}" @click="open = false">{{ $group['name'] }}</a>
                                             @else
-                                                <span>{{ $group['name'] }}</span>
+                                                <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($group['name']) }}" @click="open = false">{{ $group['name'] }}</a>
                                             @endif
                                         </h4>
                                         <div class="flex flex-col gap-4 pl-2 border-l border-white/5">
@@ -421,10 +422,11 @@
                                                             {{ $svc['name'] }}
                                                         </a>
                                                     @else
-                                                        <span class="text-sm font-bold text-white/30 flex items-center gap-2">
+                                                        <a href="{{ route('graphics.services') }}#{{ \Illuminate\Support\Str::slug($svc['name']) }}" @click="open = false"
+                                                            class="text-sm font-bold text-white/30 hover:text-white transition-colors flex items-center gap-2">
                                                             <span class="w-1 h-1 rounded-full bg-white/10"></span>
                                                             {{ $svc['name'] }}
-                                                        </span>
+                                                        </a>
                                                     @endif
                                                 </div>
 @endforeach
@@ -474,7 +476,7 @@
                         QUOTE</a>
 
                     <div class="pt-8">
-                        <a href="#"
+                        <a href="{{ route('graphics.upload') }}" @click="open = false"
                             class="block w-full py-5 rounded-3xl bg-yellow-400 text-slate-900 font-black text-center text-sm uppercase tracking-widest hover:scale-[1.02] transition-transform">
                             UPLOAD FILES
                         </a>
