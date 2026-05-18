@@ -67,6 +67,7 @@ Route::prefix('it-solutions')->name('it.')->group(function () {
     Route::get('/about-us', [App\Http\Controllers\ITSolutionsController::class, 'about'])->name('about');
     Route::get('/contact-us', [App\Http\Controllers\ITSolutionsController::class, 'contact'])->name('contact');
     Route::get('/services/{slug}', [App\Http\Controllers\ITSolutionsController::class, 'serviceDetail'])->name('service-detail');
+    Route::get('/software/{slug}', [App\Http\Controllers\ITSolutionsController::class, 'softwareDetail'])->name('software-detail');
 });
 
 // Chat System Routes

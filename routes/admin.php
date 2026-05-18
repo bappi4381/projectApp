@@ -99,12 +99,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // IT Solutions Domain
         Route::prefix('it')->name('it.')->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'itIndex'])->name('dashboard');
-            
+
             // IT Services CRUD
             Route::resource('services', \App\Http\Controllers\Admin\IT\ServiceController::class);
 
-            // Software Catalog (React Demo)
-            Route::view('/software/catalog', 'admin.it.software.catalog')->name('software.catalog');
+            // Software Catalog CRUD
+            Route::resource('software', \App\Http\Controllers\Admin\IT\SoftwareController::class);
 
             // IT Dynamic Content
             Route::resource('metrics', \App\Http\Controllers\Admin\IT\SuccessMetricController::class);

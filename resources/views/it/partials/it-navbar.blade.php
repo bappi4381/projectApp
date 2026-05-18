@@ -1,4 +1,7 @@
 {{-- resources/views/it/partials/it-navbar.blade.php --}}
+@php
+    $softwareList = \App\Models\Software::where('is_active', true)->get();
+@endphp
 <header id="it-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" x-data="{ open: false, scrolled: false }" 
         @scroll.window="scrolled = (window.pageYOffset > 20)">
 
@@ -135,7 +138,35 @@
             <div class="flex items-center gap-12">
                 <a href="{{ route('it.index') }}" class="nav-link-it {{ request()->routeIs('it.index') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('it.about') }}" class="nav-link-it {{ request()->routeIs('it.about') ? 'active' : '' }}">About Us</a>
-                <a href="{{ route('it.service-detail', 'custom-software-development') }}" class="nav-link-it {{ request()->is('it-solutions/services/custom-software-development') ? 'active' : '' }}">Software</a>
+                
+                {{-- Software Dropdown --}}
+                <div class="relative group" x-data="{ softOpen: false }" @mouseenter="softOpen = true" @mouseleave="softOpen = false">
+                    <button class="nav-link-it {{ request()->routeIs('it.software-detail') ? 'active' : '' }}">
+                        Software
+                        <i class="ri-arrow-down-s-line transition-transform duration-300" :class="softOpen ? 'rotate-180' : ''"></i>
+                    </button>
+                    
+                    <div x-show="softOpen" style="display: none;"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 translate-y-4"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-4"
+                         class="absolute left-1/2 -translate-x-1/2 top-full w-[280px] bg-white border-t-2 border-cyan-500 shadow-2xl rounded-b-2xl overflow-hidden py-2">
+                        
+                        @forelse($softwareList as $soft)
+                        <a href="{{ route('it.software-detail', $soft->slug) }}" class="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition-all group/item {{ $loop->first ? '' : 'border-t border-slate-50' }}">
+                            <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover/item:bg-cyan-500 group-hover/item:text-white transition-colors">
+                                <i class="ri-app-store-line"></i>
+                            </div>
+                            <span class="text-[13px] font-bold text-slate-700">{{ $soft->name }}</span>
+                        </a>
+                        @empty
+                        <div class="px-6 py-4 text-xs text-slate-500 text-center">No software available</div>
+                        @endforelse
+                    </div>
+                </div>
                 
                 {{-- Services Dropdown --}}
                 <div class="relative group" x-data="{ dropdownOpen: false }" @mouseenter="dropdownOpen = true" @mouseleave="dropdownOpen = false">
@@ -198,7 +229,20 @@
         <div class="space-y-4">
             <a href="{{ route('it.index') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">Home</a>
             <a href="{{ route('it.about') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">About Us</a>
-            <a href="{{ route('it.service-detail', 'custom-software-development') }}" class="block p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">Software</a>
+            
+            <div x-data="{ softSubOpen: false }">
+                <button @click="softSubOpen = !softSubOpen" class="w-full flex items-center justify-between p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">
+                    Software
+                    <i class="ri-arrow-down-s-line transition-transform" :class="softSubOpen ? 'rotate-180' : ''"></i>
+                </button>
+                <div x-show="softSubOpen" class="pl-4 py-2 space-y-2 mt-2" x-collapse style="display: none;">
+                    @forelse($softwareList as $soft)
+                    <a href="{{ route('it.software-detail', $soft->slug) }}" class="block p-4 rounded-xl text-slate-600 font-bold text-xs uppercase tracking-wider">{{ $soft->name }}</a>
+                    @empty
+                    <span class="block p-4 text-xs text-slate-500">No software</span>
+                    @endforelse
+                </div>
+            </div>
             
             <div x-data="{ subOpen: false }">
                 <button @click="subOpen = !subOpen" class="w-full flex items-center justify-between p-4 rounded-2xl bg-slate-50 text-slate-900 font-black uppercase text-sm">

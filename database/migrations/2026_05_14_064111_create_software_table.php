@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('software', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('category')->nullable();
+            $table->string('image_url')->nullable();
+            $table->string('short_desc')->nullable();
+            $table->text('long_desc')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

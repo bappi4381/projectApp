@@ -230,17 +230,17 @@
                         @endif
                     </a>
 
-                    <a href="{{ route('admin.it.software.catalog') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
-                        {{ request()->routeIs('admin.it.software.catalog')
+                    <a href="{{ route('admin.it.software.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group/item
+                        {{ request()->routeIs('admin.it.software.*')
             ? 'bg-cyan-500/10 text-cyan-400 font-bold shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] border border-cyan-500/20'
             : 'text-slate-400 hover:bg-white/[0.03] hover:text-white' }}">
                         <div
                             class="w-8 h-8 rounded-xl flex items-center justify-center transition-all 
-                            {{ request()->routeIs('admin.it.software.catalog') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
+                            {{ request()->routeIs('admin.it.software.*') ? 'bg-cyan-500/20' : 'bg-slate-800/50 group-hover/item:bg-white/10' }}">
                             <i class="ri-app-store-line"></i>
                         </div>
                         <span class="text-[13px]">Software Catalog</span>
-                        @if(request()->routeIs('admin.it.software.catalog'))
+                        @if(request()->routeIs('admin.it.software.*'))
                             <div class="ml-auto w-1 h-1 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></div>
                         @endif
                     </a>

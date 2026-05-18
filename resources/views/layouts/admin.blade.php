@@ -44,7 +44,7 @@
         @endif
     @endauth
 
-    <main id="app" class="flex-grow min-w-0">
+    <main id="app" class="flex-grow min-w-0 order-last">
         @yield('content')
     </main>
 

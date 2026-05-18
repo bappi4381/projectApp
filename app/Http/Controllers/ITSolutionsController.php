@@ -12,8 +12,9 @@ class ITSolutionsController extends Controller
         $sliders = \App\Models\HeroSlider::byCategory('it')->active()->orderBy('sort_order')->get();
         $metrics = \App\Models\SuccessMetric::byCategory('it')->active()->orderBy('sort_order')->get();
         $services = \App\Models\Service::byCategory('it')->whereNull('parent_id')->active()->get();
+        $softwareList = \App\Models\Software::where('is_active', true)->get();
         
-        return view('it.index', compact('sliders', 'metrics', 'services'));
+        return view('it.index', compact('sliders', 'metrics', 'services', 'softwareList'));
     }
 
     public function about()
@@ -46,5 +47,17 @@ class ITSolutionsController extends Controller
         }
 
         return view('it.service-detail', compact('service'));
+    }
+
+    public function softwareDetail($slug)
+    {
+        $software = \App\Models\Software::where('slug', $slug)->firstOrFail();
+        
+        // Ensure only active software is shown
+        if (!$software->is_active) {
+            abort(404);
+        }
+
+        return view('it.software-detail', compact('software'));
     }
 }
